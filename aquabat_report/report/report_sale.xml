@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="aquabat_report.report_saleorder_document">
+        <t t-call="__export__.external_layout_custom_hpr"> 
+           <t t-set="doc" t-value="doc.with_context({'lang':doc.partner_id.lang})"/>
+            <div class="page">
+                <style>
+                    th{
+                        border-bottom:1px solid black;background:#2798C6;
+                    }
+                </style>
+                <div class="oe_structure"/>
+                <div class="row main-row" style="margin-right:0px;">
+                    <div class="col-4">
+                        <span t-field="doc.partner_id.ref"/>
+                    </div>
+                    <div class="col-4">
+                        <div t-field="doc.name"/>
+                        <t t-if="doc.state in ['draft', 'sent']">
+                            <div t-field="doc.date_order" t-options="{'format':'dd/MM/YYYY'}"/>
+                        </t>
+                        <t t-if="not doc.state in ['draft', 'sent']">
+                            <div t-field="doc.confirmation_date" t-options="{'format':'dd/MM/YYYY'}"/>
+                        </t>
+                    </div>
+                    <div class="col-4 border-date" style="border:1px solid black; margin: 0px 5px 5px 5px; padding-bottom: 15px">
+                        <div t-field="doc.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                        <div t-if="doc.partner_id.vat"><t t-esc="doc.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="doc.partner_id.vat"/></div>
+                    </div>
+                </div>
+
+
+                <div style="min-height:8cm; border:1px solid black;" class="mt32">
+                    <table width="100%">
+                        <thead>
+                            <tr>
+                                <th width="55%" style="padding-left:3px;">Description</th>
+                                <th>Code Article</th>
+                                <th class="text-right">Quantité</th>
+                                <th class="text-center">Unité</th>
+                                <th class="text-right">Prix</th>
+                                <th class="text-right" style="padding-right:3px;">Sous-total</th>
+                                <th class="text-right blueth" style="padding-right:3px;">TVA</th>
+                            </tr>
+                       </thead>
+                       <tbody>
+                            <t t-foreach="doc.order_line" t-as="l">
+                                <tr style="">
+                                    <td style="padding-left:3px;"><span t-esc="l.name.replace(('[%s]'%l.product_id.default_code),'')"/></td>
+                                    <td><span t-field="l.product_id.default_code"/></td>
+                                    <td class="text-right">
+                                        <span t-esc="'%.2f'%l.product_uom_qty"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="l.product_uom"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-if="l.discount">
+                                            <span t-esc="l.price_unit - (l.price_unit*(l.discount/100))" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-field="l.price_unit" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-right" style="padding-right:3px;">
+                                        <span t-field="l.price_subtotal"/>
+                                    </td>
+                                    <td class="text-right"><span t-field="l.product_id.taxes_id.description"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Odoo support ticket 2025922 --> 
+                <data inherit_id="sale.report_saleorder_document">
+                    <xpath expr="//div[hasclass('page')]/p[@id='fiscal_position_remark']" position="after">
+                        <div t-if="doc.sale_order_option_ids and doc.state in ['draft', 'sent']">
+                            <t t-set="has_option_discount" t-value="any(doc.sale_order_option_ids.filtered(lambda o: o.discount != 0.0))"/>
+                            <h4>
+                                <span>Optional Products</span>
+                            </h4>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Description</th>
+                                        <th t-if="has_option_discount" groups="sale.group_discount_per_so_line" class="text-left"/>
+                                        <th class="text-right">Unit Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="sale_tbody">
+                                    <tr t-foreach="doc.sale_order_option_ids" t-as="option">
+                                        <td>
+                                            <span t-field="option.name"/>
+                                        </td>
+                                        <td t-if="has_option_discount" groups="sale.group_discount_per_so_line">
+                                            <strong t-if="option.discount != 0.0" class="text-info">
+                                                <t t-esc="((option.discount % 1) and '%s' or '%d') % option.discount"/>% discount
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <strong class="text-right">
+                                                <div t-field="option.price_unit" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}" t-att-style="option.discount and 'text-decoration: line-through' or None" t-att-class="option.discount and 'text-danger' or None"/>
+                                                <div t-if="option.discount">
+                                                    <t t-esc="'%.2f' % ((1-option.discount / 100.0) * option.price_unit)"/>
+                                                </div>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </xpath>
+                </data>
+                <div class="row" style="margin-left:5px;">
+                    <div class="mt16 col-4" style="border:1px solid black;">
+                        <div>
+                            ref: <span t-field="doc.client_order_ref"/><br/>
+                            Paiement: A définir à la commande<br/>
+                            Validité de l'Offre: 1 Mois<br/>
+                            Mode d’expédition: Franco
+                        </div>
+                        <div style="border-bottom:1px solid black; margin-left:-15px;margin-right:-15px;"/>
+                        <div style="height:85px;">
+                            Le Client, Bon pour commande:<br/>
+                            (date, cachet et signature)
+                        </div>
+                    </div>
+                    <div class="mt32 col-6 offset-2">
+                        <div class="row mt16" style="margin-left:3cm;border:1px solid black; margin-right:0px;">
+                            <div class="col-6">
+                                <strong>
+                                Total HT<br/>
+                                TVA<br/>
+                                Total TTC</strong>
+                            </div>
+                            <div class="col-6 text-right pull-right">
+                                <span t-field="doc.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/><br/>
+                                <span t-field="doc.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/><br/>
+                                <strong>
+                                    <span t-field="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt16" style="margin-left:0px;">
+                    <div style="font-size:8px;">
+                        Nos prix sont établis en fonction des conditions économiques en vigueur à ce jour et sont révisables. Les délais sont indicatifs et ne peuvent en aucun cas engager notre responsabilité.<br/>
+                        En cas de paiement anticipé ou comptant, aucun escompte ne sera accordé.
+                    </div>
+                </div>
+                <p style="page-break-before:always;"> </p>
+                <p style='font-size: 0.45em; text-align: justify; text-justify: inter-word;' type='char' t-field="doc.note"/>
+            </div>
+        </t>
+    </template>
+    <template id="report_sale_custom_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="aquabat_report.report_saleorder_document" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+    <report 
+        id="sale.action_report_saleorder"
+        string="Quotation / Order"
+        model="sale.order" 
+        report_type="qweb-pdf"
+        file="aquabat_report.report_sale_custom_document" 
+        name="aquabat_report.report_sale_custom_document"
+        print_report_name="(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)"
+    />
+
+</odoo>
+

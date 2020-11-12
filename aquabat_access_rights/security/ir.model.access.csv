@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_accounting_payable_manager,accounting.payable.manager,model_account_account,aquabat_access_rights.group_accounting,1,1,1,1

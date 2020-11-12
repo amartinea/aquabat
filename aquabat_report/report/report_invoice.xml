@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="aquabat_report.report_invoice">
+        <t t-call="__export__.external_layout_custom_hpr">
+            <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+            <div class="page">
+                <style>
+                        .blueth{
+                            border-bottom:1px solid black;background:#2798C6;
+                        }
+                </style>
+                <h2/>
+                <span t-if="o.type == 'out_refund'">Refund</span>
+                <div class="oe_structure"/>
+                <div class="row" style="margin-right:0px;">
+                  <div class="col-4">
+                    <div style="font-size: 18px;">Facture</div>
+                  </div>
+                  <div class="col-3 offset-3">
+                    <div style="font-size: 18px; margin-left:-10px;">Adr. de facturation</div>
+                  </div>
+                </div>
+                <div class="row main-row" style="margin-right:0px; font-size: 14px; margin-left:5px;">
+                    <div class="col-7" style="border-left:solid;">
+                      <div class="row" style="margin-right:0px;">
+                        <div class="col-6">
+                            Numéro : <div t-field="o.number"/>
+                        </div>
+                        <div class="col-6">
+                            Date de facturation : <div t-field="o.date_invoice"/>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-3">
+                        <!-- <div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/> -->
+                        <div style="border-left:solid; padding-left:16px">
+                            <div t-field="o.partner_id.name"/>
+                            <div t-field="o.partner_id.street"/>
+                            <div t-field="o.partner_id.street2"/>
+                            <div t-field="o.partner_id.state_id.name"/>
+                            <div><span t-field="o.partner_id.zip"/> <span t-field="o.partner_id.city"/></div>
+                        </div>
+                        <p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat"/></p>
+                        <p t-if="o.partner_id.ref" class="mt16">REF: <span t-field="o.partner_id.ref"/></p>
+                    </div>
+                </div>
+             
+                <div style="min-height:15.5cm; border:1px solid black;margin-top:64px; font-size: 16px">
+                    <table width="100%">
+                        <thead>
+                            <tr>
+                                <th class="blueth">Product Code</th>
+                                <th style="padding-left:3px;" class="blueth">Description</th>
+                                <th class="text-right blueth">Quantity</th>
+                                <th class="text-right blueth">Price</th>
+                                <th class="text-right blueth">Subtotal</th>
+                                <th class="text-right blueth" style="padding-right:3px;">TVA</th>
+                            </tr>
+                       </thead>
+                        <tbody>
+                <t t-set="pickings" t-value="env['stock.picking']"/>
+                <t t-foreach="o.invoice_line_ids" t-as="line">
+                    <t t-set="sale_order" t-value="line.sale_line_ids.filtered(lambda x: x.product_id == line.product_id).mapped('order_id')"/>
+                    <t t-set="pickings_ids" t-value="env['stock.picking'].search([('group_id.sale_id', 'in', sale_order.ids), ('picking_type_code', '=', 'outgoing')])"/>
+                    <t t-set="pickings" t-value="pickings | pickings_ids"/>
+                </t>
+
+                <t t-set="obj_stock" t-value="pickings"/>
+
+                <t t-if="obj_stock">
+                    <t t-foreach="obj_stock" t-as="pick">
+                        <t t-set="total_amount_per_do" t-value="0.00"/>
+
+                        <t t-set="is_header_set" t-value="''"/>
+
+                        <t t-foreach="o.invoice_line_ids" t-as="line">
+                            <t t-set="order_id" t-value="line.sale_line_ids.filtered(lambda x: x.product_id == line.product_id).mapped('order_id')"/>
+                            <t t-set="pick_id" t-value="env['stock.picking'].search([('group_id', 'in', order_id.ids), ('picking_type_code', '=', 'outgoing')])"/>
+                            <t t-if="not is_header_set">
+                                <t t-set="is_header_set" t-value="1"/>
+                                <tr>
+                                    <td colspan="12" style="border-top:1pt solid grey;"><strong>* <span t-esc="pick.name"/> the <span t-esc="pick.date_done" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>  <t t-if="pick.sale_id.client_order_ref">(<span t-esc="pick.sale_id.client_order_ref"/>)</t></strong></td>
+                                </tr>
+                            </t>
+                            <t t-foreach="pick.move_lines.filtered(lambda x:x.product_id.id == line.product_id.id and x.sale_line_id.id in line.sale_line_ids.ids)" t-as="move">
+                                <tr>
+                                    <t t-if="line.quantity == move.quantity_done">
+                                        <td><span t-field="line.product_id.default_code"/></td>
+                                        <td><span t-field="move.product_id.name"/></td>
+                                        <td class="text-right"><span t-field="line.quantity"/></td>
+                                        <td class="text-right"><span t-esc="(line.price_unit - (line.price_unit *  line.discount)/100)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                                        <td class="text-right">
+                                            <t t-set="subtotal" t-value="(line.price_unit * line.quantity) - ((line.price_unit * line.quantity * line.discount)/100)"/>
+                                            <t t-set="total_amount_per_do" t-value="total_amount_per_do + subtotal"/>
+                                            <span t-esc="subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                        </td>
+                                        <td class="text-right"><span t-field="line.product_id.taxes_id.description"/></td>
+                                    </t>
+                                    <t t-if="line.quantity != move.quantity_done">
+                                        <t t-if="line.quantity &lt; move.quantity_done">
+                                            <td><span t-field="line.product_id.default_code"/></td>
+                                            <td><span t-field="move.product_id.name"/></td>
+                                            <td class="text-right"><span t-field="line.quantity"/></td>
+                                            <td class="text-right"><span t-esc="(line.price_unit - (line.price_unit *  line.discount)/100)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                                            <td class="text-right">
+                                                <t t-set="subtotal" t-value="(line.price_unit * line.quantity) - ((line.price_unit * line.quantity * line.discount)/100)"/>
+                                                <t t-set="total_amount_per_do" t-value="total_amount_per_do + subtotal"/>
+                                                <span t-esc="subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                            </td>
+                                            <td class="text-right"><span t-field="line.product_id.taxes_id.description"/></td>
+                                        </t>
+                                        <t t-if="line.quantity &gt; move.quantity_done">
+                                            <td><span t-field="line.product_id.default_code"/></td>
+                                            <td><span t-field="move.product_id.name"/></td>
+                                            <td class="text-right"><span t-field="move.quantity_done"/></td>
+                                            <td class="text-right"><span t-esc="(line.price_unit - (line.price_unit * line.discount)/100)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                                            <td class="text-right">
+                                                <t t-set="subtotal" t-value="(line.price_unit * move.quantity_done) - ((line.price_unit * move.quantity_done * line.discount)/100)"/>
+                                                <t t-set="total_amount_per_do" t-value="total_amount_per_do + subtotal"/>
+                                                <span t-esc="subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                            </td>
+                                            <td class="text-right"><span t-field="line.product_id.taxes_id.description"/></td>
+                                        </t>
+                                    </t>
+                                </tr>
+                            </t>
+                        </t>
+                        <tr t-if="len(obj_stock) &gt; 1" width="100%">
+                            <td colspan="4" align="right"><strong>Total:</strong></td>
+                            <td class="text-right">
+                                <strong>
+                                    <span t-esc="total_amount_per_do" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                </strong>
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+                <t t-if="not obj_stock">
+                    <tr t-foreach="o.invoice_line_ids" t-as="line">
+                        <td><span t-field="line.product_id"/></td>
+                        <td><span t-field="line.product_id.default_code"/></td>
+                        <td class="text-right"><span t-field="line.quantity"/></td>
+                        <td class="text-right"><span t-esc="(line.price_unit - (line.price_unit *  line.discount)/100)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                        <td class="text-right">
+                            <t t-set="subtotal" t-value="(line.price_unit * line.quantity) - ((line.price_unit * line.quantity * line.discount)/100)"/>
+                            <span t-esc="subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </td>
+                    </tr>
+                </t>
+            </tbody>
+                    </table>
+                </div>
+                <div class="row" style="margin-left:5px; page-break-inside: avoid">
+                    <div class="mt32 col-6">
+                        <table style="border: 1px solid black" width="100%">
+                            <thead>
+                                <th class="text-center" style="border-right:1px solid black; border-bottom:1px solid black;">TVA</th>
+                                <th class="text-center" style="border-right:1px solid black; border-bottom:1px solid black;">Montant HA</th>
+                                <th class="text-center" style="border-right:1px solid black; border-bottom:1px solid black;">%TVA</th>
+                                <th class="text-center" style="border-bottom:1px solid black;">Montant TVA</th>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.tax_line_ids" t-as="t">
+                                    <td style="border-right:1px solid black;padding-left:3px;"><span t-esc="t_index + 1"/></td>
+                                    <td class="text-right" style="border-right:1px solid black;padding-right:3px;">
+                                        <span t-field="t.base" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </td>
+                                    <td style="border-right:1px solid black;padding-left:3px;" class="text-right"><span t-field="t.tax_id.description"/></td>
+                                    <td class="text-right" style="padding-right:3px;">
+                                        <span t-field="t.amount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        
+                        <!-- @change by jar -->
+                        <!-- Hidden subtotal table because standard "report_invoice_document" inherited by another standard report -->
+                        <div class="clearfix" style="display:none;">
+                            <div id="total" class="row">
+                                <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                                    <table class="table table-sm">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END -->
+                    </div><div class="mt32 col-6">
+                        <div class="row mt16" style="margin-left:3cm;border:1px solid black; margin-right:0px;">
+                            <div class="col-6">
+                                <strong>
+                                Total HT<br/>
+                                TVA<br/>
+                                Total TTC</strong>
+                            </div>
+                            <div class="col-6 text-right pull-right">
+                                <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/><br/>
+                                <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/><br/>
+                                <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-left:5px;">
+                    <div class="col-12" style="font-size: 12px;">
+                      <div class="row" style="margin-left:2px;">
+                        <div t-if="o.partner_bank_id.journal_id.bank_acc_number">IBAN:  <span t-field="o.partner_bank_id.journal_id.bank_acc_number"/><br/></div>
+                        <div t-if="o.partner_bank_id.journal_id.bank_id.bic">BIC: <span t-field="o.partner_bank_id.journal_id.bank_id.bic"/></div>
+                        
+                      </div>
+                      <div class="row">
+                        <div class="col-7">
+                          <span t-field="o.partner_id.ref"/><br/>
+                          Conditions de règlement: <span t-field="o.payment_term_id.name"/><br/>
+                          Date d'échéance: <span t-field="o.date_due"/>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <p style="page-break-before:always;"> </p>
+                <p style="font-size: 0.45em; text-align: justify; text-justify: inter-word;" type="char" t-field="o.comment"/>
+            </div>
+        </t>
+    </template>
+    <template id="report_invoice_custom_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="aquabat_report.report_invoice" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

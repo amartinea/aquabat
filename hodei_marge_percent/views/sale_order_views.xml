@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_marge_form" model="ir.ui.view">
+            <field name="name">sale.order.marge.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='margin']" position="after">
+                        <field name="marge_percent"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

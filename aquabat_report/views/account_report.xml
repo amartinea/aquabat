@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- QWeb Reports -->
+        <report
+            id="account_invoices_custom_report"
+            model="account.invoice"
+            string="Invoices custom Report"
+            report_type="qweb-pdf"
+            name="aquabat_report.report_invoice_custom_document"
+            file="aquabat_report.report_invoice_custom_document"
+            attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+            print_report_name="(object._get_report_base_filename())"
+        />
+    </data>
+</odoo>

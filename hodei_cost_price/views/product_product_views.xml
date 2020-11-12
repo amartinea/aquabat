@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_template_cost_price_form_view" model="ir.ui.view">
+            <field name="name">product.template.cost.pricecommon.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//div[@name='standard_price_uom']" position="replace">
+                        <div name="standard_price_uom" groups="hodei_cost_price.group_coeflist_manager" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}">
+                            <field name="standard_price" widget='monetary' options="{'currency_field': 'cost_currency_id'}"/>
+                        </div>
+                        <field name="cost_price" widget='monetary' options="{'currency_field': 'cost_currency_id'}"/>
+                    </xpath>
+                    <xpath expr="//label[@for='standard_price']" position="attributes">
+                        <attribute name="groups">hodei_cost_price.group_coeflist_manager</attribute>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <data>
+        <record id="product_coeflist_item_tree_view" model="ir.ui.view">
+            <field name="name">product.coeflist.item.tree</field>
+            <field name="model">product.coeflist.item</field>
+            <field name="arch" type="xml">
+                <tree string="Coeflist Items">
+                    <field colspan="4" name="name"/>
+                    <field name="product_id" groups="product.group_product_variant"/>
+                    <!--<field name="product_tmpl_id"/>-->
+                    <field name="categ_id"/>
+                    <!--<field name="date_start"/>
+                    <field name="date_end"/>-->
+                </tree>
+            </field>
+        </record>
+        <record id="product_coeflist_item_form_view" model="ir.ui.view">
+            <field name="name">product.coeflist.item.form</field>
+            <field name="model">product.coeflist.item</field>
+            <field name="arch" type="xml">
+                <form string="Coeflist Items">
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <group>
+                            <field name="applied_on" widget="radio"/>
+                            <field name="categ_id" attrs="{'invisible':[('applied_on', '!=', '2_product_category')], 'required':[('applied_on', '=', '2_product_category')]}"/>
+                            <field name="product_tmpl_id" attrs="{'invisible':[('applied_on', '!=', '1_product')],'required':[('applied_on', '=', '1_product')]}" string="Product"/>
+                            <!--<field name="product_id" attrs="{'invisible':[('applied_on', '!=', '0_product_variant')],'required':[('applied_on', '=', '0_product_variant')]}" string="Product Variant"/>-->
+                        </group>
+                        <group>
+                            <!--<field name="date_start"/>
+                            <field name="date_end"/>-->
+                            <field name="coef_value"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="product_coeflist_view_search">
+            <field name="name">product.coeflist.search</field>
+            <field name="model">product.coeflist</field>
+            <field name="arch" type="xml">
+                <search string="Products Coef Search">
+                    <field name="name" string="Products Coef"/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                </search>
+            </field>
+        </record>
+        <record id="product_coeflist_view_tree" model="ir.ui.view">
+            <field name="name">product.coeflist.tree</field>
+            <field name="model">product.coeflist</field>
+            <field name="arch" type="xml">
+                <tree string="Products Coef List">
+                    <field name="sequence" widget="handle" />
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="product_coeflist_view" model="ir.ui.view">
+            <field name="name">product.coeflist.form</field>
+            <field name="model">product.coeflist</field>
+            <field name="arch" type="xml">
+                <form string="Products Coef List">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object"
+                                    class="oe_stat_button" icon="fa-archive" groups="sales_team.group_sale_manager">
+                                <field name="active" widget="boolean_button"
+                                    options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <field name="country_group_ids"/>
+                        </group>
+                        <div groups="hodei_cost_price.group_coeflist_manager">
+                            <separator string="Coeflist Items"/>
+                            <field name="item_ids" nolabel="1" context="{'default_base':'list_price'}">
+                                <tree string="Coeflist Items">
+                                    <field name="name" string="Applicable On"/>
+                                    <!--<field name="date_start"/>
+                                    <field name="date_end"/>-->
+                                    <field name="coef" string="Coef"/>
+                                    <field name="applied_on" invisible="1"/>
+                                </tree>
+                            </field>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="inherits_website_sale_country_coef_group_form">
+            <field name="name">website_sale.country_group.form</field>
+            <field name="model">res.country.group</field>
+            <field name="inherit_id" ref="base.view_country_group_form"/>
+            <field name="arch" type="xml">
+                <group name="country_group" position="after">
+                    <field name="coeflist_ids"/>
+                </group>
+            </field>
+        </record>
+        <record id="product_coeflist_action2" model="ir.actions.act_window">
+            <field name="name">Coeflist</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.coeflist</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="product_coeflist_view_search" />
+            <field name="context">{"default_base":'list_price'}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a coeflist.
+              </p><p>
+                A coef list contains rules to be evaluated in order to compute
+                the cost price of the products.
+              </p><p>
+                Each rule include a set of applicability criteria (date range,
+                product category...) and a computation that easily helps to achieve
+                any kind of pricing.
+              </p>
+            </field>
+        </record>
+    </data>
+    <menuitem id="menu_product_coeflist_main" name="Coeflists" parent="sale.product_menu_catalog" action="hodei_cost_price.product_coeflist_action2" sequence="4" groups="hodei_cost_price.group_coeflist_manager" active="True"/>
+</odoo>

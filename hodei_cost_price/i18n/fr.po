@@ -1,0 +1,318 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* hodei_cost_price
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e-20190816\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-18 15:54+0000\n"
+"PO-Revision-Date: 2019-12-18 15:54+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hodei_cost_price
+#: selection:product.coeflist.item,applied_on:0
+msgid " Product Category"
+msgstr "Catégorie de produit"
+
+#. module: hodei_cost_price
+#: code:addons/hodei_cost_price/models/product_coef.py:90
+#, python-format
+msgid "%s coef"
+msgstr ""
+
+#. module: hodei_cost_price
+#: model_terms:ir.actions.act_window,help:hodei_cost_price.product_coeflist_action2
+msgid "A coef list contains rules to be evaluated in order to compute\n"
+"                the cost price of the products."
+msgstr "Une liste de coefficient contient les règles qui permettent d'évaluer le coût de revient du produit sur les commandes"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__active
+msgid "Active"
+msgstr "Actif"
+
+#. module: hodei_cost_price
+#: code:addons/hodei_cost_price/models/product_coef.py:89
+#, python-format
+msgid "All Products"
+msgstr "Tout les produits"
+
+#. module: hodei_cost_price
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_view
+msgid "Applicable On"
+msgstr "Applicable à"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__applied_on
+msgid "Apply On"
+msgstr "Appliqué sur"
+
+#. module: hodei_cost_price
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_view_search
+msgid "Archived"
+msgstr "Archivé"
+
+#. module: hodei_cost_price
+#: code:addons/hodei_cost_price/models/product_coef.py:83
+#, python-format
+msgid "Category: %s"
+msgstr "Catégories: %s"
+
+#. module: hodei_cost_price
+#: model_terms:ir.actions.act_window,help:hodei_cost_price.product_coeflist_action2
+msgid "Click to create a coeflist."
+msgstr "Clique pour créer une liste de coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__coef
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_view
+msgid "Coef"
+msgstr "Coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_product__coef_item_ids
+msgid "Coef Item"
+msgstr "Coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__coef_value
+msgid "Coef Value"
+msgstr "Valeur de coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.actions.act_window,name:hodei_cost_price.product_coeflist_action2
+#: model:ir.model,name:hodei_cost_price.model_product_coeflist
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__coeflist_id
+msgid "Coeflist"
+msgstr "Liste de coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,help:hodei_cost_price.field_product_coeflist_item__applied_on
+msgid "Coeflist Item applicable on selected option"
+msgstr "Coefficient appliquable sur l'option choisit"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__item_ids
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_item_form_view
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_item_tree_view
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_view
+msgid "Coeflist Items"
+msgstr "Item de la liste de coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__name
+msgid "Coeflist Name"
+msgstr "Nom de la liste de coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.model,name:hodei_cost_price.model_product_coeflist_item
+msgid "Coeflist item"
+msgstr "Item de la liste de coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_res_country_group__coeflist_ids
+#: model:ir.ui.menu,name:hodei_cost_price.menu_product_coeflist_main
+msgid "Coeflists"
+msgstr "Listes de coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__company_id
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__company_id
+msgid "Company"
+msgstr "Société"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_product__cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_template__cost_price
+msgid "Cost price"
+msgstr "Coût de revient"
+
+#. module: hodei_cost_price
+#: model:ir.model,name:hodei_cost_price.model_res_country_group
+msgid "Country Group"
+msgstr "Groupe de pays"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__country_group_ids
+msgid "Country Groups"
+msgstr "Groupes de pays"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__create_uid
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__create_date
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__display_name
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__display_name
+msgid "Display Name"
+msgstr "Afficher le nom"
+
+#. module: hodei_cost_price
+#: model_terms:ir.actions.act_window,help:hodei_cost_price.product_coeflist_action2
+msgid "Each rule include a set of applicability criteria (date range,\n"
+"                product category...) and a computation that easily helps to achieve\n"
+"                any kind of pricing."
+msgstr "Chaque règle inclus un ensemble de critères d'applicabilité (plages de dates,\n"
+"catégorie de produits,...) et le calcul qui aide facilement à atteindre\n"
+"n'importe quel prix."
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__date_end
+msgid "End Date"
+msgstr "Date de fin"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,help:hodei_cost_price.field_product_coeflist_item__date_end
+msgid "Ending valid for the coeflist item validation"
+msgstr ""
+
+#. module: hodei_cost_price
+#: code:addons/hodei_cost_price/models/product_coef.py:76
+#, python-format
+msgid "Error! You cannot assign the Main Coeflist as Other Coeflist in Coeflist Item!"
+msgstr ""
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,help:hodei_cost_price.field_product_coeflist_item__coef
+#: model:ir.model.fields,help:hodei_cost_price.field_product_coeflist_item__name
+msgid "Explicit rule name for this coeflist line."
+msgstr ""
+
+#. module: hodei_cost_price
+#: selection:product.coeflist.item,applied_on:0
+msgid "Global"
+msgstr ""
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__id
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__id
+msgid "ID"
+msgstr ""
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,help:hodei_cost_price.field_product_coeflist__active
+msgid "If unchecked, it will allow you to hide the coeflist without removing it."
+msgstr ""
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist____last_update
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item____last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__write_uid
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__write_date
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: hodei_cost_price
+#: model:res.groups,name:hodei_cost_price.group_coeflist_manager
+msgid "Manage Coeflist Items"
+msgstr "Configuration Liste de coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__base_coeflist_id
+msgid "Other Coeflist"
+msgstr "Autres liste de coefficient"
+
+#. module: hodei_cost_price
+#: model:ir.model,name:hodei_cost_price.model_product_product
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__product_id
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_item_form_view
+#: selection:product.coeflist.item,applied_on:0
+msgid "Product"
+msgstr "Article"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__categ_id
+msgid "Product Category"
+msgstr "Catégorie d'article"
+
+#. module: hodei_cost_price
+#: model:ir.model,name:hodei_cost_price.model_product_template
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__product_tmpl_id
+msgid "Product Template"
+msgstr "Modèle d'article"
+
+#. module: hodei_cost_price
+#: selection:product.coeflist.item,applied_on:0
+msgid "Product Variant"
+msgstr "Variante de produit"
+
+#. module: hodei_cost_price
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_view_search
+msgid "Products Coef"
+msgstr "Coefficient de produit"
+
+#. module: hodei_cost_price
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_view
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_view_tree
+msgid "Products Coef List"
+msgstr "Liste de coefficient produit"
+
+#. module: hodei_cost_price
+#: model_terms:ir.ui.view,arch_db:hodei_cost_price.product_coeflist_view_search
+msgid "Products Coef Search"
+msgstr ""
+
+#. module: hodei_cost_price
+#: model:res.groups,name:hodei_cost_price.group_coeflist
+msgid "Sales Coeflists"
+msgstr "Liste de coefficient de vente"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist__sequence
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,help:hodei_cost_price.field_product_coeflist_item__categ_id
+msgid "Specify a product category if this rule only applies to products belonging to this category or its children categories. Keep empty otherwise."
+msgstr "Indiquez une catégorie d'articles si cette règle ne s'applique qu'à cette catégorie et à ses enfants. Laissez vide dans le cas contraire."
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,help:hodei_cost_price.field_product_coeflist_item__product_id
+msgid "Specify a product if this rule only applies to one product. Keep empty otherwise."
+msgstr "Indiquez un article si cette règle ne s'applique qu'à lui. Laissez vide dans le cas contraire."
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,help:hodei_cost_price.field_product_coeflist_item__product_tmpl_id
+msgid "Specify a template if this rule only applies to one product template. Keep empty otherwise."
+msgstr "Indiquez un modèle si cette règle ne s'applique qu'à un modèle de produit. Laissez vide dans le cas contraire."
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,field_description:hodei_cost_price.field_product_coeflist_item__date_start
+msgid "Start Date"
+msgstr "Date de début"
+
+#. module: hodei_cost_price
+#: model:ir.model.fields,help:hodei_cost_price.field_product_coeflist_item__date_start
+msgid "Starting date for the coeflist item validation"
+msgstr ""
+

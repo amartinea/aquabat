@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="account.menu_finance_payables" name="Vendors" parent="account.account_account_menu" sequence="3" groups="aquabat_access_rights.group_accounting"/>
+    </data>
+</odoo>

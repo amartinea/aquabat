@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_line_marge_form" model="ir.ui.view">
+            <field name="name">sale.order.line.marge.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_subtotal']" position="after">
+                        <field name="marge" invisible="True"/>
+                        <field name="marge_percent"/>
+                    </xpath>
+                    <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+                        <field name="marge" invisible="True"/>
+                        <field name="marge_percent"/>
+                    </xpath>
+                    <xpath expr="//field[@name='order_line']/tree" position="attributes">
+                        <attribute name="decoration-danger">marge &lt; 0</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='name']" position="after">
+                        <field name="marge_negative" invisible="1"/>
+                    </xpath>
+                    <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+                        <attribute name="attrs">{'invisible': ['|', ('marge_negative', '!=', False), ('state', 'not in', ['sent'])]}</attribute>
+                    </xpath>
+                    <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+                        <attribute name="attrs">{'invisible': ['|', ('marge_negative', '!=', False), ('state', 'not in', ['draft'])]}</attribute>
+                    </xpath>
+                    <xpath expr="//button[@name='action_confirm'][2]" position="after">
+                        <button name="action_confirm" id="action_confirm" string="Confirm" class="btn-primary" type="object" 
+                            attrs="{'invisible': ['|', ('marge_negative', '!=', True), ('state', 'not in', ['sent'])]}" confirm="Are you sure you want to valid with some order line with negative marge ?"/>
+                        <button name="action_confirm" string="Confirm" type="object" 
+                            attrs="{'invisible': ['|', ('marge_negative', '!=', True), ('state', 'not in', ['draft'])]}" confirm="Are you sure you want to valid with some order line with negative marge ?"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>
