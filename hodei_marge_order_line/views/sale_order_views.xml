@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="//button[@id='action_confirm']" position="before">
-                        <button name="update_purchase_price_lines" string="MAJ des coûts" type="object" class="btn-primary"/>
+                        <button name="update_purchase_price_lines" string="MAJ des coûts" type="object"/>
                     </xpath>
                     <xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_subtotal']" position="after">
                         <field name="marge" invisible="True"/>

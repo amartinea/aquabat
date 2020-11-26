@@ -18,5 +18,5 @@ class SaleOrder(models.Model):
                 self.marge_negative = False
     def update_purchase_price_lines(self):
         for lines in self.order_line:
-            if line.product_id.standard_price != 0:
-                lines.purchase_price = line.product_id.standard_price
+            if lines.product_id.standard_price != 0:
+                lines.purchase_price = lines.product_id.standard_price
