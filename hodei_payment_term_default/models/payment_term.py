@@ -32,4 +32,4 @@ class AccountPaymentTerm(models.Model):
                 if already_set:
                     raise UserError(_('An other payment term is set to be the default one : %s') % already_set)
                     vals['default_term'] = False
-    	return super(AccountPaymentTerm, self).write(vals)
+        return super(AccountPaymentTerm, self).write(vals)
