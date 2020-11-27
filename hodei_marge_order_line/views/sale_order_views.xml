@@ -23,6 +23,7 @@
                     </xpath>
                     <xpath expr="//field[@name='name']" position="after">
                         <field name="marge_negative" invisible="1"/>
+                        <field name="one_line_consu" invisible="1"/>
                     </xpath>
                     <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
                         <attribute name="attrs">{'invisible': ['&amp;', '|', ('marge_negative', '!=', False), ('one_line_consu', '!=', False), ('state', 'not in', ['sent'])]}</attribute>
