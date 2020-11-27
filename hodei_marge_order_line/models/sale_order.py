@@ -13,7 +13,8 @@ class SaleOrder(models.Model):
     @api.onchange('order_line')
     def on_change_order_line(self):
         for line in self.order_line:
-            _logger.info(line.margin)
+            _logger.warning("------------------------")
+            _logger.warning(line.margin)
             if line.margin < 0 or self.marge_negative:
                 self.marge_negative = True
                 return False
