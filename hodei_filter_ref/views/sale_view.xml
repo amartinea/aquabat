@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sales_order_customer_ref_filter" model="ir.ui.view">
+            <field name="name">sale.order.list.customer.ref.select</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='name']" position="after">
+                        <field name="customer_name"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>
