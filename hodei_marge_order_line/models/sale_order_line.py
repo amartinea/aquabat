@@ -19,15 +19,6 @@ class SaleOrderLine(models.Model):
                     line.marge_percent = (line.price_subtotal - line.product_uom_qty * line.purchase_price) * 100 / line.price_subtotal
                 else:
                     line.marge_percent = 0
-                if line.marge < 0:
-                    # ne fonctionne pas
-                    return {
-                        'warning': {
-                            'title': 'Warning!',
-                            'message': 'An Order line have a negative marge.'
-                        }
-                    }
-                    #ajouter msg non bloquant
 
     @api.depends('product_id')
     def _compute_type(self):
