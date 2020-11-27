@@ -12,14 +12,15 @@ class SaleOrder(models.Model):
 
     @api.onchange('order_line')
     def on_change_order_line(self):
+        marge_negative = False
         for line in self.order_line:
             _logger.warning("------------------------")
             _logger.warning(line.margin)
-            if line.margin < 0 or self.marge_negative:
-                self.marge_negative = True
-                return False
+            if line.margin < 0 or marge_negative:
+                marge_negative = True
             else:
-                self.marge_negative = False
+                marge_negative = False
+        self.marge_negative = marge_negative
     def update_purchase_price_lines(self):
         for lines in self.order_line:
             if lines.product_id.standard_price != 0:
