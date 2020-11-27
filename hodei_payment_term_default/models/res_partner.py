@@ -13,6 +13,6 @@ class ResPartner(models.Model):
         payment_default = self.env['account.payment.term'].search([('default_term', '=', True)], limit=1)
         _logger.warning("-----------------------")
         _logger.warning(vals)
-        if not 'property_payment_term_id' in vals and payment_default:
+        if vals['property_payment_term_id'] == False and payment_default:
             vals['property_payment_term_id'] = payment_default
         return super(ResPartner, self).create(vals)
