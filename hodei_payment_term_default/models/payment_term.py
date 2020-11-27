@@ -17,8 +17,8 @@ class AccountPaymentTerm(models.Model):
         # Check if an other default_term is set
         already_set = self.env['account.payment.term'].search([('default_term', '=', True)])
         _logger.warning("-------------------")
-        _logger.warning(self['id'])
-        _logger.warning(self[0])
+        _logger.warning(self['default_term'])
+        _logger.warning(self.origin)
         _logger.warning(already_set)
         if already_set:
             raise UserError(_('An other payment term is set to be the default one : %s') % already_set)
