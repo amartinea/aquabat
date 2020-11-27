@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
 
     marge_negative = fields.Boolean('Check marge', default=False)
 
-    @api.onchange('order_line', 'order_line.marge')
+    @api.onchange('order_line')
     def on_change_order_line(self):
         for line in self.order_line:
             _logger.warning("------------------------")
@@ -24,3 +24,4 @@ class SaleOrder(models.Model):
         for lines in self.order_line:
             if lines.product_id.standard_price != 0:
                 lines.purchase_price = lines.product_id.standard_price
+        self.on_change_order_line()
