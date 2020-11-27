@@ -15,7 +15,7 @@ class AccountPaymentTerm(models.Model):
         if self['default_term']:
             already_set = self.env['account.payment.term'].search([('default_term', '=', True)])
             if already_set:
-                raise UserError(_('An other payment term is set to be the default one : %s') % already_set)
+                raise UserError(_('An other payment term is set to be the default one : %s') % already_set.name)
             else:
                 self.default_term = True
 
@@ -25,6 +25,6 @@ class AccountPaymentTerm(models.Model):
                 # Check if an other default_term is set
                 already_set = self.env['account.payment.term'].search([('default_term', '=', True)])
                 if already_set:
-                    raise UserError(_('An other payment term is set to be the default one : %s') % already_set)
+                    raise UserError(_('An other payment term is set to be the default one : %s') % already_set.name)
                     vals['default_term'] = False
         return super(AccountPaymentTerm, self).write(vals)
