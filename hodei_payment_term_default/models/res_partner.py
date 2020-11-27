@@ -10,8 +10,8 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     def _default_payment_term(self):
-    	_logger.warning("--------oui-------------")
-    	_logger.warning(self.env['account.payment.term'].search([('default_term', '=', True)]))
+        _logger.warning("--------oui-------------")
+        _logger.warning(self.env['account.payment.term'].search([('default_term', '=', True)]))
         return self.env['account.payment.term'].search([('default_term', '=', True)])
 
     property_payment_term_id = fields.Many2one('account.payment.term', company_dependent=True,
