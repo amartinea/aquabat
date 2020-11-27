@@ -12,6 +12,6 @@ class ResPartner(models.Model):
 
     def write(self, vals):
     	payment_default = self.env['account.payment.term'].search([('default_term', '=', True)], limit=1)
-    	if not vals['property_payment_term_id'] and payment_default:
+    	if not 'property_payment_term_id' in vals and payment_default:
     		vals['property_payment_term_id'] = payment_default
     	return super(ResPartner, self).write(vals)
