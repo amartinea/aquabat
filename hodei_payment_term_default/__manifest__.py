@@ -12,6 +12,7 @@
     'external_dependencies': {
     },
     'data': [
+        'views/account_payment_view.xml'
     ],
     'demo': [],
     'test': [],
