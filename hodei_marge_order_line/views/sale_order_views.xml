@@ -12,10 +12,12 @@
                     </xpath>
                     <xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_subtotal']" position="after">
                         <field name="marge" invisible="True"/>
+                        <field name="product_type" invisible="True"/>
                         <field name="marge_percent"/>
                     </xpath>
                     <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
                         <field name="marge" invisible="True"/>
+                        <field name="product_type" invisible="True"/>
                         <field name="marge_percent"/>
                     </xpath>
                     <xpath expr="//field[@name='order_line']/tree" position="attributes">
