@@ -33,4 +33,4 @@ class SaleOrderLine(models.Model):
     def _compute_type(self):
         for line in self:
             if line.product_id.type:
-                self.product_type = line.product_id.type
+                line.product_type = line.product_id.type
