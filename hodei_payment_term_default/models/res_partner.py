@@ -9,10 +9,9 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    def _default_payment_term(self):
-        return self.env['account.payment.term'].search([('default_term', '=', True)], limit=1)
 
-    property_payment_term_id = fields.Many2one('account.payment.term', company_dependent=True,
-        string='Customer Payment Terms',
-        help="This payment term will be used instead of the default one for sales orders and customer invoices", 
-        oldname="property_payment_term", default=_default_payment_term)
+    def write(self, vals):
+    	payment_default = self.env['account.payment.term'].search([('default_term', '=', True)], limit=1)
+    	if not vals['property_payment_term_id'] and payment_default:
+    		vals['property_payment_term_id'] = payment_default
+    	return super(ResPartner, self).write(vals)
