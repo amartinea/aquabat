@@ -8,6 +8,7 @@ class SaleOrderLine(models.Model):
 
     marge = fields.Float('Marge', compute='_compute_marge', store=True)
     marge_percent = fields.Float('Marge %', compute='_compute_marge', store=True)
+    product_type = fields.Char('Product type', compute='_compute_type', store=True)
 
     @api.depends('product_uom_qty', 'purchase_price', 'price_subtotal')
     def _compute_marge(self):
@@ -27,3 +28,9 @@ class SaleOrderLine(models.Model):
                         }
                     }
                     #ajouter msg non bloquant
+
+    @api.depends('product_id')
+    def _compute_type(self):
+        for line in self:
+            if line.type:
+                self.product_type = line.type

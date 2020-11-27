@@ -20,6 +20,7 @@
                     </xpath>
                     <xpath expr="//field[@name='order_line']/tree" position="attributes">
                         <attribute name="decoration-danger">marge &lt; 0</attribute>
+                        <attribute name="decoration-danger">product_type == 'consu'</attribute>
                     </xpath>
                     <xpath expr="//field[@name='name']" position="after">
                         <field name="marge_negative" invisible="1"/>
