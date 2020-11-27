@@ -20,7 +20,7 @@ class AccountPaymentTerm(models.Model):
 
     def write(self, vals):
         if vals['default_term']:
-            if vals['default_term'] is True:
+            if vals['default_term'] == True:
                 # Check if an other default_term is set
                 already_set = self.env['account.payment.term'].search([('default_term', '=', True)])
                 if already_set:
