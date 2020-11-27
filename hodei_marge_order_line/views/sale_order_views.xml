@@ -26,26 +26,26 @@
                         <field name="one_line_consu" invisible="1"/>
                     </xpath>
                     <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
-                        <attribute name="attrs">{'invisible': ['&amp;', '|', ('marge_negative', '!=', False), ('one_line_consu', '!=', False), ('state', 'not in', ['sent'])]}</attribute>
+                        <attribute name="attrs">{'invisible': ['|', '|', ('marge_negative', '==', True), ('one_line_consu', '==', True), ('state', 'not in', ['sent'])]}</attribute>
                     </xpath>
                     <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
-                        <attribute name="attrs">{'invisible': ['&amp;', '|', ('marge_negative', '!=', False), ('one_line_consu', '!=', False), ('state', 'not in', ['draft'])]}</attribute>
+                        <attribute name="attrs">{'invisible': ['|', '|', ('marge_negative', '==', True), ('one_line_consu', '==', True), ('state', 'not in', ['draft'])]}</attribute>
                     </xpath>
                     <xpath expr="//button[@name='action_confirm'][2]" position="after">
-                        <button name="action_confirm" id="action_confirm" string="Confirm" class="btn-primary" type="object" 
-                            attrs="{'invisible': ['&amp;', '|', ('marge_negative', '!=', True), ('one_line_consu', '!=', False), ('state', 'not in', ['sent'])]}" confirm="Are you sure you want to valid with some order line with negative marge ?"/>
+                        <button name="action_confirm" id="action_confirm" string="Confirm" type="object" 
+                            attrs="{'invisible': ['|', '|', ('marge_negative', '==', False), ('one_line_consu', '==', True), ('state', 'not in', ['sent'])]}" confirm="Are you sure you want to valid with some order line with negative marge ?"/>
                         <button name="action_confirm" string="Confirm" type="object" 
-                            attrs="{'invisible': ['&amp;', '|', ('marge_negative', '!=', True), ('one_line_consu', '!=', False), ('state', 'not in', ['draft'])]}" confirm="Are you sure you want to valid with some order line with negative marge ?"/>
+                            attrs="{'invisible': ['|', '|', ('marge_negative', '==', False), ('one_line_consu', '==', True), ('state', 'not in', ['draft'])]}" confirm="Are you sure you want to valid with some order line with negative marge ?"/>
 
-                        <button name="action_confirm" id="action_confirm" string="Confirm" class="btn-primary" type="object" 
-                            attrs="{'invisible': ['&amp;', '|', ('marge_negative', '!=', False), ('one_line_consu', '!=', True), ('state', 'not in', ['sent'])]}" confirm="Are you sure you want to valid with some order line with consumable product ?"/>
+                        <button name="action_confirm" id="action_confirm" string="Confirm" type="object" 
+                            attrs="{'invisible': ['|', '|', ('marge_negative', '==', True), ('one_line_consu', '==', False), ('state', 'not in', ['sent'])]}" confirm="Are you sure you want to valid with some order line with consumable product ?"/>
                         <button name="action_confirm" string="Confirm" type="object" 
-                            attrs="{'invisible': ['&amp;', '|', ('marge_negative', '!=', False), ('one_line_consu', '!=', True), ('state', 'not in', ['draft'])]}" confirm="Are you sure you want to valid with some order line with consumable product ?"/>
+                            attrs="{'invisible': ['|', '|', ('marge_negative', '==', True), ('one_line_consu', '==', False), ('state', 'not in', ['draft'])]}" confirm="Are you sure you want to valid with some order line with consumable product ?"/>
 
-                        <button name="action_confirm" id="action_confirm" string="Confirm" class="btn-primary" type="object" 
-                            attrs="{'invisible': ['&amp;', '|', ('marge_negative', '!=', True), ('one_line_consu', '!=', True), ('state', 'not in', ['sent'])]}" confirm="Are you sure you want to valid with some order line with negative marge and some order line with consumable product ?"/>
+                        <button name="action_confirm" id="action_confirm" string="Confirm" type="object" 
+                            attrs="{'invisible': ['|', '|', ('marge_negative', '==', False), ('one_line_consu', '==', False), ('state', 'not in', ['sent'])]}" confirm="Are you sure you want to valid with some order line with negative marge and some order line with consumable product ?"/>
                         <button name="action_confirm" string="Confirm" type="object" 
-                            attrs="{'invisible': ['&amp;', '|', ('marge_negative', '!=', True), ('one_line_consu', '!=', True), ('state', 'not in', ['draft'])]}" confirm="Are you sure you want to valid with some order line with negative marge and some order line with consumable product ?"/>
+                            attrs="{'invisible': ['|', '|', ('marge_negative', '==', False), ('one_line_consu', '==', False), ('state', 'not in', ['draft'])]}" confirm="Are you sure you want to valid with some order line with negative marge and some order line with consumable product ?"/>
                     </xpath>
                     <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
                         <attribute name="attrs">{'invisible': ['|', ('marge_negative', '!=', False), ('state', 'not in', ['sent'])]}</attribute>
