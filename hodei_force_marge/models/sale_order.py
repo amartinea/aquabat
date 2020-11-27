@@ -12,7 +12,6 @@ class SaleOrder(models.Model):
     @api.model
     def create(self, vals):
         if vals['marge_negative'] == True:
-            if vals['force_marge'] == True:
-                return super(SaleOrder, self).create(vals)
-            else:
+            if vals['force_marge'] != True:
                 raise ValidationError("Some line have negative marge. Fix it or check the force marge button")
+        return super(SaleOrder, self).create(vals)
