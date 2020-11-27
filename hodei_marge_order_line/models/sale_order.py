@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class SaleOrder(models.Model):
@@ -12,6 +14,8 @@ class SaleOrder(models.Model):
     def on_change_order_line(self):
         for line in self.order_line:
             if line.margin < 0:
+            _logger.info(line.margin)
+            if line.margin < 0 and self.marge_negative:
                 self.marge_negative = True
                 return False
             else:
