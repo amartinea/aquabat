@@ -32,5 +32,5 @@ class SaleOrderLine(models.Model):
     @api.depends('product_id')
     def _compute_type(self):
         for line in self:
-            if line.type:
-                self.product_type = line.type
+            if line.product_id.type:
+                self.product_type = line.product_id.type
