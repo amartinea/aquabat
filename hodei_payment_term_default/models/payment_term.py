@@ -2,6 +2,9 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class AccountPaymentTerm(models.Model):
@@ -19,6 +22,9 @@ class AccountPaymentTerm(models.Model):
             self.default_term = True
 
     def write(self, vals):
+    	_logger.warning("--------------------")
+    	_logger.warning(vals['default_term'])
+    	_logger.waring(self['default_term'])
         if vals['default_term']:
             if vals['default_term'] == True:
                 # Check if an other default_term is set
