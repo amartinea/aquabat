@@ -13,7 +13,7 @@ class BillingFee(models.Model):
     tax_id = fields.Many2one('account.tax', string='Billing Fee')
 
     def _check_condition_to_apply(self, vals):
-        for line in fee_lines:
+        for line in self.fee_lines:
             if line.condition == 'big' and line._calcul_condition_bigger(vals):
                 return line
             elif line.condition == 'smal' and line._calcul_condition_smaller(vals):
