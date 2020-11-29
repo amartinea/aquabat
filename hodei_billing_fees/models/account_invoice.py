@@ -26,6 +26,6 @@ class AccountInvoice(models.Model):
         self.update_invoice_values(fee_price, self.partner_id.fee_id.tax_id)
 
     def update_invoice_values(self, fee_price, tax_id):
-        amount_untaxed += amount_untaxed + fee_price
-        amount_tax += amount_tax + (fee_price * tax_id.amount / 100) 
-        amount_total += amount_total + fee_price
+        self.amount_untaxed += self.amount_untaxed + fee_price
+        self.amount_tax += self.amount_tax + (fee_price * tax_id.amount / 100) 
+        self.amount_total += self.amount_total + fee_price
