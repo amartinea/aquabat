@@ -6,7 +6,7 @@ from odoo import api, fields, models, _
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
-    fee_price = fields.Float('Value 2', compute="_compute_fee",)
+    fee_price = fields.Float('Billing Fee', compute="_compute_fee",)
     apply_fee = fields.Boolean(string='Apply Fee', default=True)
 
     @api.onchange('apply_fee', 'partner_id')
@@ -23,9 +23,19 @@ class AccountInvoice(models.Model):
         else:
         	fee_price = 0
        	self.fee_price = fee_price
-        self.update_invoice_values(fee_price, self.partner_id.fee_id.tax_id)
 
-    def update_invoice_values(self, fee_price, tax_id):
-        self.amount_untaxed += self.amount_untaxed + fee_price
-        self.amount_tax += self.amount_tax + (fee_price * tax_id.amount / 100) 
-        self.amount_total += self.amount_total + fee_price
+    def _compute_amount(self):
+        round_curr = self.currency_id.round
+        self.amount_untaxed = sum(line.price_subtotal for line in self.invoice_line_ids) + self.fee_price
+        self.amount_tax = sum(round_curr(line.amount_total) for line in self.tax_line_ids) + (fee_price * tax_id.amount / 100) 
+        self.amount_total = self.amount_untaxed + self.amount_tax
+        amount_total_company_signed = self.amount_total
+        amount_untaxed_signed = self.amount_untaxed
+        if self.currency_id and self.company_id and self.currency_id != self.company_id.currency_id:
+            currency_id = self.currency_id
+            amount_total_company_signed = currency_id._convert(self.amount_total, self.company_id.currency_id, self.company_id, self.date_invoice or fields.Date.today())
+            amount_untaxed_signed = currency_id._convert(self.amount_untaxed, self.company_id.currency_id, self.company_id, self.date_invoice or fields.Date.today())
+        sign = self.type in ['in_refund', 'out_refund'] and -1 or 1
+        self.amount_total_company_signed = amount_total_company_signed * sign
+        self.amount_total_signed = self.amount_total * sign
+        self.amount_untaxed_signed = amount_untaxed_signed * sign
