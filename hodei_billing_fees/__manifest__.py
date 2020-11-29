@@ -12,6 +12,7 @@
     'external_dependencies': {
     },
     'data': [
+        'security/ir.model.access.csv',
         'views/account_invoice_view.xml',
         'views/billing_fees_views.xml',
         'views/res_partner_view.xml'
