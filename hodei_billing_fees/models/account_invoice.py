@@ -27,7 +27,7 @@ class AccountInvoice(models.Model):
     def _compute_amount(self):
         round_curr = self.currency_id.round
         self.amount_untaxed = sum(line.price_subtotal for line in self.invoice_line_ids) + self.fee_price
-        self.amount_tax = sum(round_curr(line.amount_total) for line in self.tax_line_ids) + (fee_price * tax_id.amount / 100) 
+        self.amount_tax = sum(round_curr(line.amount_total) for line in self.tax_line_ids) + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100) 
         self.amount_total = self.amount_untaxed + self.amount_tax
         amount_total_company_signed = self.amount_total
         amount_untaxed_signed = self.amount_untaxed
