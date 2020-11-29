@@ -9,7 +9,7 @@ class BillingFee(models.Model):
 
     name = fields.Char('Name')
     sequence = fields.Integer(help='Used to order billing fee', default=10)
-    fee_lines = fields.One2many('billing.fee.lines', 'fee_id', string='Billing Fee lines', readonly=True)
+    fee_lines = fields.One2many('billing.fee.lines', 'fee_id', string='Billing Fee lines', readonly=False)
     tax_id = fields.Many2one('account.tax', string='Billing Fee')
 
     def _check_condition_to_apply(self, vals):
