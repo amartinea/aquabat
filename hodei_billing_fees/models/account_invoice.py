@@ -4,7 +4,7 @@ from odoo import api, fields, models, _
 
 
 class AccountInvoice(models.Model):
-    _name = "account.invoice"
+    _inherit = "account.invoice"
 
     fee_price = fields.Float('Value 2', compute="_compute_fee",)
     apply_fee = fields.Boolean(string='Apply Fee', default=True)
