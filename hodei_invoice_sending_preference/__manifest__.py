@@ -7,7 +7,8 @@
     'description': """ """,
     'depends': [
         'account',
-        'base'
+        'base',
+        'sale',
     ],
     'external_dependencies': {
     },
