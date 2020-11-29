@@ -32,6 +32,11 @@
                         </group>
                         <field name="fee_lines" widget="section_and_note_one2many" mode="tree">
                             <form>
+                                <field name="value_condition1"/>
+                                <field name="condition"/>
+                                <field name="value_condition2" attrs="{'readonly': [('condition', '!=', 'bet')]}"/>
+                                <field name="value_apply"/>
+                                <field name="value_type"/>
                             </form>
                             <tree string="Billing Fee Lines" editable="bottom">
                                 <control>
