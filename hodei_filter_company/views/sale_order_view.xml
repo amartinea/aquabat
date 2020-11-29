@@ -4,7 +4,7 @@
         <record id="view_sales_order_company_filter" model="ir.ui.view">
             <field name="name">sale.order.list.company.select</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="inherit_id" ref="sale.view_sales_order_company_filter"/>
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="//group/filter[@name='salesperson']" position="after">
@@ -12,6 +12,24 @@
                         <filter string="Company" name="company" domain="[]" context="{'group_by': 'company_id'}"/>
                     </xpath>
                 </data>
+            </field>
+        </record>
+        <record id="sale.action_orders_to_invoice" model="ir.actions.act_window">
+            <field name="name">Orders to Invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph,pivot,kanban,activity</field>
+            <field name="context">{'create': False, 'search_default_company': 1}</field>
+            <field name="domain">[('invoice_status','=','to invoice')]</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No orders to invoice found
+              </p><p>
+                You can select all orders and invoice them in batch,<br/>
+                or check every order and invoice them one by one.
+              </p>
             </field>
         </record>
     </data>
