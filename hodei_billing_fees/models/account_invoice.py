@@ -18,6 +18,8 @@ class AccountInvoice(models.Model):
                     fee_price = self.amount_total * fee_line.value_apply / 100
                 elif fee_line.value_type == 'fix':
                     fee_price = fee_line.value_apply
+            else:
+            	fee_price = 0
         else:
         	fee_price = 0
        	self.fee_price = fee_price
