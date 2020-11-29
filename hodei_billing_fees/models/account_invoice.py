@@ -19,12 +19,14 @@ class AccountInvoice(models.Model):
                 elif fee_line.value_type == 'fix':
                     fee_price = fee_line.value_apply
             else:
-            	fee_price = 0
+                fee_price = 0
         else:
-        	fee_price = 0
-       	self.fee_price = fee_price
-       	self._compute_amount()
+            fee_price = 0
+        self.fee_price = fee_price
 
+    @api.one
+    @api.depends('invoice_line_ids.price_subtotal', 'tax_line_ids.amount', 'tax_line_ids.amount_rounding',
+                 'currency_id', 'company_id', 'date_invoice', 'type', 'fee_price')
     def _compute_amount(self):
         round_curr = self.currency_id.round
         self.amount_untaxed = sum(line.price_subtotal for line in self.invoice_line_ids) + self.fee_price
