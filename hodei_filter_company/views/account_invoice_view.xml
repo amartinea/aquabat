@@ -14,6 +14,18 @@
                 </data>
             </field>
         </record>
+        <record id="invoice_company_tree" model="ir.ui.view">
+            <field name="name">account.invoice.company.tree</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='company_id']" position="attributes">
+                        <attribute name="groups"></attribute>
+                    </xpath>
+                </data>
+            </field>
+        </record>
         <record id="account.action_invoice_tree1" model="ir.actions.act_window">
             <field name="name">Invoices</field>
             <field name="res_model">account.invoice</field>
