@@ -1,28 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="sale_order_view_search_company_inherit_quotation" model="ir.ui.view">
-            <field name="name">sale.order.search.company.inherit.quotation</field>
+        <record id="view_sales_order_company_filter" model="ir.ui.view">
+            <field name="name">sale.order.list.company.select</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
             <field name="arch" type="xml">
                 <data>
-                    <xpath expr="//filter[@name='my_quotation']" position="after">
-                    	<separator/>
-                        <filter string="My Company" name="my_company" domain="[('company_id.user_ids.id', '=', uid)]"/>
-                    </xpath>
-                </data>
-            </field>
-        </record>
-        <record id="sale_order_view_search_company_inherit_sale" model="ir.ui.view">
-            <field name="name">sale.order.search.company.inherit.sale</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.sale_order_view_search_inherit_sale"/>
-            <field name="arch" type="xml">
-                <data>
-                    <xpath expr="//filter[@name='to_invoice']" position="before">
-                        <filter string="My Company" name="my_company" domain="[('company_id.user_ids.id', '=', uid)]"/>
+                    <xpath expr="//group/filter[@name='salesperson']" position="after">
                         <separator/>
+                        <filter string="Company" name="company" domain="[]" context="{'group_by': 'company_id'}"/>
                     </xpath>
                 </data>
             </field>

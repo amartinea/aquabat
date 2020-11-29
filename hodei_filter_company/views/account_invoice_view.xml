@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="account_invoice_company_select" model="ir.ui.view">
-            <field name="name">acount.invoice.company.select</field>
+        <record id="view_account_invoice_company_filter" model="ir.ui.view">
+            <field name="name">account.invoice.company.select</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.view_account_invoice_filter"/>
             <field name="arch" type="xml">
                 <data>
-                    <xpath expr="//filter[@name='myinvoices']" position="after">
+                    <xpath expr="//group/filter[@name='group_by_partner_id']" position="after">
                         <separator/>
-                        <filter string="My Company" name="my_company" domain="[('company_id.user_ids.id', '=', uid)]"/>
+                        <filter string="Company" name="company" domain="[]" context="{'group_by': 'company_id'}"/>
                     </xpath>
                 </data>
             </field>
+        </record>
+        <record id="action_invoice_tree" model="ir.actions.act_window">
+            <field name="name">Invoices</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="view_id" ref="invoice_tree"/>
+            <field name="context">{'type':'out_invoice', 'search_default_company': 1}</field>
+            <field name="search_view_id" ref="view_account_invoice_filter"/>
         </record>
     </data>
 </odoo>
