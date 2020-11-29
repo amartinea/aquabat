@@ -12,7 +12,7 @@ class BillingFee(models.Model):
     fee_lines = fields.One2many('billing.fee.lines', 'fee_id', string='Billing Fee lines', readonly=True)
     tax_id = fields.Many2one('account.tax', string='Billing Fee')
 
-    def _check_condition_to_apply(self, vals)
+    def _check_condition_to_apply(self, vals):
         for line in fee_lines:
             if line.condition == 'big' and line._calcul_condition_bigger(vals):
                 return line
@@ -35,18 +35,18 @@ class BillingFeeLines(models.Model):
     fee_id = fields.Many2one('billing.fee', string='Billing Fee')
 
 
-    def _calcul_condition_bigger(self, vals)
+    def _calcul_condition_bigger(self, vals):
         if self.value_condition1 > vals
             return False
         return True
 
 
-    def _calcul_condition_smaller(self, vals)
+    def _calcul_condition_smaller(self, vals):
         if self.value_condition1 < vals
             return False
         return True
 
-    def _calcul_condition_between(self, vals)
+    def _calcul_condition_between(self, vals):
         if self.value_condition1 > vals and self.value_condition2 < vals:
             return False
         return True

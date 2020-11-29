@@ -10,7 +10,7 @@ class AccountInvoice(models.Model):
     apply_fee = fields.Boolean(string='Apply Fee', default=True)
 
     @api.onchange('apply_fee', 'partner_id')
-    def _compute_fee(self)
+    def _compute_fee(self):
         if self.apply_fee:
             fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_total)
 
