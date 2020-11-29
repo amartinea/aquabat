@@ -30,7 +30,7 @@
                                 <field name="tax_id"/>
                             </group>
                         </group>
-                        <field name="fee_lines" widget="section_and_note_one2many" mode="tree"/>
+                        <field name="fee_lines" widget="section_and_note_one2many" mode="tree">
                             <form>
                             </form>
                             <tree string="Billing Fee Lines" editable="bottom">
@@ -44,6 +44,7 @@
                                 <field name="value_apply"/>
                                 <field name="value_type"/>
                             </tree>
+                        </field>
                     </sheet>
                 </form>
             </field>
