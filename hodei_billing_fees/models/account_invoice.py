@@ -23,6 +23,7 @@ class AccountInvoice(models.Model):
         else:
         	fee_price = 0
        	self.fee_price = fee_price
+       	self._compute_amount()
 
     def _compute_amount(self):
         round_curr = self.currency_id.round
