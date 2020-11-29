@@ -40,7 +40,7 @@
                                 <field name="sequence" widget="handle"/>
                                 <field name="value_condition1"/>
                                 <field name="condition"/>
-                                <field name="value_condition2" attrs="{'readonly': [('condition', '!=', 'bet'}"/>
+                                <field name="value_condition2" attrs="{'readonly': [('condition', '!=', 'bet')]}"/>
                                 <field name="value_apply"/>
                                 <field name="value_type"/>
                             </tree>
