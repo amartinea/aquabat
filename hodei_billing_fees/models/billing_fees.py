@@ -36,13 +36,13 @@ class BillingFeeLines(models.Model):
 
 
     def _calcul_condition_bigger(self, vals):
-        if self.value_condition1 > vals
+        if self.value_condition1 > vals:
             return False
         return True
 
 
     def _calcul_condition_smaller(self, vals):
-        if self.value_condition1 < vals
+        if self.value_condition1 < vals:
             return False
         return True
 
