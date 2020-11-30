@@ -10,7 +10,7 @@ class BillingFee(models.Model):
     name = fields.Char('Name')
     sequence = fields.Integer(help='Used to order billing fee', default=10)
     fee_lines = fields.One2many('billing.fee.lines', 'fee_id', string='Billing Fee lines', readonly=False)
-    tax_id = fields.Many2one('account.tax', string='Billing Fee')
+    tax_id = fields.Many2one('account.tax', string='Tax apply to fee')
 
     def _check_condition_to_apply(self, vals):
         for line in self.fee_lines:
@@ -29,7 +29,7 @@ class BillingFeeLines(models.Model):
     value_condition1 = fields.Float('Value 1')
     value_condition2 = fields.Float('Value 2')
     value_apply = fields.Float('Fee Value')
-    value_type = fields.Selection([('perc', '%'), ('fix', ' ')], required=True, default=' ')
+    value_type = fields.Selection([('perc', '%'), ('fix', 'fix')], required=True, default='fix')
     condition = fields.Selection([('big', 'Bigger or egal'), ('smal', 'Smaller or egal'), ('bet', 'Between')], required=True, default='big')
     sequence = fields.Integer(help='Used to order billing fee lines', default=10)
     fee_id = fields.Many2one('billing.fee', string='Billing Fee')
