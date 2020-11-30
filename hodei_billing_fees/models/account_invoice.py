@@ -16,7 +16,7 @@ class AccountInvoice(models.Model):
         _logger.warning("----- Invoice -----")
         _logger.warning(self)
         if self.apply_fee:
-            fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_total)
+            fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_untaxed)
             if fee_line:
                 if fee_line.value_type == 'perc':
                     fee_price = self.amount_untaxed * fee_line.value_apply / 100
