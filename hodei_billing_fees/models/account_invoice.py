@@ -15,7 +15,7 @@ class AccountInvoice(models.Model):
             fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_total)
             if fee_line:
                 if fee_line.value_type == 'perc':
-                    fee_price = self.amount_total * fee_line.value_apply / 100
+                    fee_price = self.amount_untaxed * fee_line.value_apply / 100
                 elif fee_line.value_type == 'fix':
                     fee_price = fee_line.value_apply
             else:
