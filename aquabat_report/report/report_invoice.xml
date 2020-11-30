@@ -189,11 +189,13 @@
                         <div class="row mt16" style="margin-left:3cm;border:1px solid black; margin-right:0px;">
                             <div class="col-6">
                                 <strong>
+                                Billing Fee<br/>
                                 Total HT<br/>
                                 TVA<br/>
                                 Total TTC</strong>
                             </div>
                             <div class="col-6 text-right pull-right">
+                                <span t-field="o.fee_price" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/><br/>
                                 <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/><br/>
                                 <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/><br/>
                                 <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
