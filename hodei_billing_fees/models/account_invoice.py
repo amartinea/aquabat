@@ -14,8 +14,8 @@ class AccountInvoice(models.Model):
     @api.onchange('apply_fee', 'partner_id', 'invoice_line_ids.price_subtotal', 'invoice_line_ids.price_unit')
     def _compute_fee(self):
         for invoice in self:
-            _logger("----- Invoice -----")
-            _logger(invoice)
+            _logger.warning("----- Invoice -----")
+            _logger.warning(invoice)
             if invoice.apply_fee:
                 fee_line = invoice.partner_id.fee_id._check_condition_to_apply(invoice.amount_total)
                 if fee_line:
@@ -27,8 +27,8 @@ class AccountInvoice(models.Model):
                     fee_price = 0
             else:
                 fee_price = 0
-            _logger("----- Fee -----")
-            _logger(fee_price)
+            _logger.warning("----- Fee -----")
+            _logger.warning(fee_price)
             invoice.fee_price = fee_price
 
 
