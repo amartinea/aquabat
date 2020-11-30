@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
@@ -26,6 +28,9 @@ class SaleAdvancePaymentInv(models.TransientModel):
     @api.multi
     def _create_invoice(self, order, so_line, amount):
         invoice = super(SaleAdvancePaymentInv, self)._create_invoice(order, so_line, amount)
+        _logger.warning("----- saleadvance -----")
+        _logger.warning(invoice)
+        _logger.warning(order)
         if order:
             if order.partner_id.sending_preference != 'none':
                 sending_preference = order.partner_id.sending_preference
@@ -33,6 +38,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
                 sending_preference = order.partner_id.parent_id.sending_preference
             else:
                 sending_preference = 'none'
+            _logger.warning(sending_preference)
             invoice.write({'sending_preference': sending_preference})
             invoice.write({'customer_name': order['customer_name']})
         return invoice
