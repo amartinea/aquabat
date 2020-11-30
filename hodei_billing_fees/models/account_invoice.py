@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
@@ -9,21 +11,25 @@ class AccountInvoice(models.Model):
     fee_price = fields.Float('Billing Fee', compute="_compute_fee", store=True)
     apply_fee = fields.Boolean(string='Apply Fee', default=True)
 
-    @api.onchange('apply_fee', 'partner_id', 'invoice_line_ids.price_subtotal')
+    @api.onchange('apply_fee', 'partner_id', 'invoice_line_ids.price_subtotal', 'invoice_line_ids.price_unit')
     def _compute_fee(self):
-    	for invoice in self:
-	        if invoice.apply_fee:
-	            fee_line = invoice.partner_id.fee_id._check_condition_to_apply(invoice.amount_total)
-	            if fee_line:
-	                if fee_line.value_type == 'perc':
-	                    fee_price = invoice.amount_untaxed * fee_line.value_apply / 100
-	                elif fee_line.value_type == 'fix':
-	                    fee_price = fee_line.value_apply
-	            else:
-	                fee_price = 0
-	        else:
-	            fee_price = 0
-	        invoice.fee_price = fee_price
+        for invoice in self:
+            _logger("----- Invoice -----")
+            _logger(invoice)
+            if invoice.apply_fee:
+                fee_line = invoice.partner_id.fee_id._check_condition_to_apply(invoice.amount_total)
+                if fee_line:
+                    if fee_line.value_type == 'perc':
+                        fee_price = invoice.amount_untaxed * fee_line.value_apply / 100
+                    elif fee_line.value_type == 'fix':
+                        fee_price = fee_line.value_apply
+                else:
+                    fee_price = 0
+            else:
+                fee_price = 0
+            _logger("----- Fee -----")
+            _logger(fee_price)
+            invoice.fee_price = fee_price
 
 
     @api.one
