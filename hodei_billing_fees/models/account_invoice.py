@@ -11,7 +11,7 @@ class AccountInvoice(models.Model):
     fee_price = fields.Float('Billing Fee', compute="_compute_fee", store=True)
     apply_fee = fields.Boolean(string='Apply Fee', default=True)
 
-    @api.depends('apply_fee', 'partner_id', 'amount_untaxed')
+    @api.depends('apply_fee', 'partner_id', 'invoice_line_ids')
     def _compute_fee(self):
         _logger.warning("----- Invoice -----")
         _logger.warning(self)
