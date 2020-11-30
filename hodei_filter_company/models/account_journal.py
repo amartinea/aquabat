@@ -12,7 +12,7 @@ class AccountJournal(models.Model):
     def open_action(self):
 
         action = super(AccountJournal, self).open_action()
-        action.update({'context': (action.get('context') or '').update({'search_default_company': 1})})
-        _logger.warning("--------------------------------------")
-        _logger.warning(action)
+        context = action.get('context') or {}
+        context['search_default_company'] = 1
+        action.update({'context': context})
         return action
