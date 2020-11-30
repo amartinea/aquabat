@@ -9,7 +9,7 @@ class AccountInvoice(models.Model):
     fee_price = fields.Float('Billing Fee', compute="_compute_fee",)
     apply_fee = fields.Boolean(string='Apply Fee', default=True)
 
-    @api.onchange('apply_fee', 'partner_id')
+    @api.onchange('apply_fee', 'partner_id', 'invoice_line_ids.price_subtotal')
     def _compute_fee(self):
         if self.apply_fee:
             fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_total)
@@ -23,6 +23,7 @@ class AccountInvoice(models.Model):
         else:
             fee_price = 0
         self.fee_price = fee_price
+
 
     @api.one
     @api.depends('invoice_line_ids.price_subtotal', 'tax_line_ids.amount', 'tax_line_ids.amount_rounding',
