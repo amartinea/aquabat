@@ -9,5 +9,5 @@ class AccountJournal(models.Model):
     def open_action(self):
 
         action = super(AccountJournal, self).open_action()
-        action.update({'context': (action.get('context') or '') + "'search_default_company': 1"})
+        action.update({'context': (action.get('context') or '').update({'search_default_company': 1})})
         return action
