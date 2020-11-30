@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-import logging
 
-_logger = logging.getLogger(__name__)
 
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
@@ -13,8 +11,6 @@ class AccountInvoice(models.Model):
 
     @api.depends('apply_fee', 'partner_id', 'invoice_line_ids')
     def _compute_fee(self):
-        _logger.warning("----- Invoice -----")
-        _logger.warning(self)
         if self.apply_fee:
             fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_untaxed)
             if fee_line:
@@ -26,8 +22,6 @@ class AccountInvoice(models.Model):
                 fee_price = 0
         else:
             fee_price = 0
-        _logger.warning("----- Fee -----")
-        _logger.warning(fee_price)
         self.fee_price = fee_price
 
 
