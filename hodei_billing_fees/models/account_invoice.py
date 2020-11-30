@@ -13,23 +13,22 @@ class AccountInvoice(models.Model):
 
     @api.onchange('apply_fee', 'partner_id', 'amount_untaxed')
     def _compute_fee(self):
-        for invoice in self:
-            _logger.warning("----- Invoice -----")
-            _logger.warning(invoice)
-            if invoice.apply_fee:
-                fee_line = invoice.partner_id.fee_id._check_condition_to_apply(invoice.amount_total)
-                if fee_line:
-                    if fee_line.value_type == 'perc':
-                        fee_price = invoice.amount_untaxed * fee_line.value_apply / 100
-                    elif fee_line.value_type == 'fix':
-                        fee_price = fee_line.value_apply
-                else:
-                    fee_price = 0
+        _logger.warning("----- Invoice -----")
+        _logger.warning(self)
+        if self.apply_fee:
+            fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_total)
+            if fee_line:
+                if fee_line.value_type == 'perc':
+                    fee_price = self.amount_untaxed * fee_line.value_apply / 100
+                elif fee_line.value_type == 'fix':
+                    fee_price = fee_line.value_apply
             else:
                 fee_price = 0
-            _logger.warning("----- Fee -----")
-            _logger.warning(fee_price)
-            invoice.fee_price = fee_price
+        else:
+            fee_price = 0
+        _logger.warning("----- Fee -----")
+        _logger.warning(fee_price)
+        self.fee_price = fee_price
 
 
     @api.one
