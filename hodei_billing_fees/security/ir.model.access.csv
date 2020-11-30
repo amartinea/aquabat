@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_billing_fee_user,billing.fee.user,model_billing_fee,account.group_account_user,1,1,1,1
 access_billing_fee_line_user,billing.fee.line.user,model_billing_fee_lines,account.group_account_user,1,1,1,1
+access_billing_fee_line_user,billing.fee.line.user,model_billing_fee_lines,account.group_account_user,1,1,1,1
+access_billing_account_invoice_user,billing.account.invoice.user,account.model_account_invoice,account.group_account_user,1,1,1,1
