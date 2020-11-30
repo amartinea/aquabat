@@ -43,6 +43,8 @@
               </p>
             </field>
         </record>
-
+        <record id="account.action_vendor_bill_template" model="ir.actions.act_window">
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase', 'search_default_company': 1}</field>
+        </record>
     </data>
 </odoo>
