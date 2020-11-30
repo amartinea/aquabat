@@ -6,7 +6,7 @@ from odoo import api, fields, models, _
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
-    fee_price = fields.Float('Billing Fee', compute="_compute_fee",)
+    fee_price = fields.Float('Billing Fee', compute="_compute_fee", store=True)
     apply_fee = fields.Boolean(string='Apply Fee', default=True)
 
     @api.onchange('apply_fee', 'partner_id', 'invoice_line_ids.price_subtotal')
