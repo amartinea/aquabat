@@ -11,7 +11,7 @@ class AccountInvoice(models.Model):
     fee_price = fields.Float('Billing Fee', compute="_compute_fee", store=True)
     apply_fee = fields.Boolean(string='Apply Fee', default=True)
 
-    @api.onchange('apply_fee', 'partner_id', 'invoice_line_ids.price_subtotal', 'invoice_line_ids.price_unit')
+    @api.onchange('apply_fee', 'partner_id', 'invoice_line_ids')
     def _compute_fee(self):
         for invoice in self:
             _logger.warning("----- Invoice -----")
