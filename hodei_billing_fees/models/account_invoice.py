@@ -29,7 +29,7 @@ class AccountInvoice(models.Model):
                 fee_price = 0
             _logger.warning("----- Fee -----")
             _logger.warning(fee_price)
-            invoice.fee_price = fee_price
+            invoice.write({'fee_price': fee_price})
 
 
     @api.one
