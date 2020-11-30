@@ -231,4 +231,19 @@
             </t>
         </t>
     </template>
+    <template id="report_invoice_document_inherited_aquabat_hpr" inherit_id="__export__.report_invoice_document_inherited_hpr">
+        <xpath expr="//div[@class='row mt16']/div/" position="replace">
+            <div class="col-6">
+                <strong>
+                    BILLING FEE<br/>
+                    TOTAL HT<br/>
+                    TVA<br/>
+                    TOTAL TTC</strong>
+                </strong>
+            </div>
+        </xpath>
+        <xpath expr="//span[@t-field='o.amount_untaxed']" position="before">
+            <span t-field="o.fee_price" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/><br/>
+        </xpath>
+  </template>
 </odoo>
