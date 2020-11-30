@@ -238,12 +238,12 @@
                     BILLING FEE<br/>
                     TOTAL HT<br/>
                     TVA<br/>
-                    TOTAL TTC</strong>
+                    TOTAL TTC
                 </strong>
             </div>
         </xpath>
         <xpath expr="//span[@t-field='o.amount_untaxed']" position="before">
             <span t-field="o.fee_price" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/><br/>
         </xpath>
-  </template>
+    </template>
 </odoo>
