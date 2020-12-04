@@ -30,3 +30,4 @@ class SaleAdvancePaymentInv(models.TransientModel):
         invoice = super(SaleAdvancePaymentInv, self)._create_invoice(order, so_line, amount)
         if order:
             invoice.write({'customer_name': order['customer_name']})
+        return invoice

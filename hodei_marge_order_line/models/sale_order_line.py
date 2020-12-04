@@ -8,6 +8,7 @@ class SaleOrderLine(models.Model):
 
     marge = fields.Float('Marge', compute='_compute_marge', store=True)
     marge_percent = fields.Float('Marge %', compute='_compute_marge', store=True)
+    product_type = fields.Char('Product type', compute='_compute_type', store=True)
 
     @api.depends('product_uom_qty', 'purchase_price', 'price_subtotal')
     def _compute_marge(self):
@@ -18,12 +19,9 @@ class SaleOrderLine(models.Model):
                     line.marge_percent = (line.price_subtotal - line.product_uom_qty * line.purchase_price) * 100 / line.price_subtotal
                 else:
                     line.marge_percent = 0
-                if line.marge < 0:
-                    # ne fonctionne pas
-                    return {
-                        'warning': {
-                            'title': 'Warning!',
-                            'message': 'An Order line have a negative marge.'
-                        }
-                    }
-                    #ajouter msg non bloquant
+
+    @api.depends('product_id')
+    def _compute_type(self):
+        for line in self:
+            if line.product_id.type:
+                line.product_type = line.product_id.type

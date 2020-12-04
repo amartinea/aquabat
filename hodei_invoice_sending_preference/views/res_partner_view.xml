@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_res_partner_property_sending_preference_form" model="ir.ui.view">
+            <field name="name">res.partner.property.sending.preference.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='vat']" position="after">
+                    	<field name="sending_preference"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>
