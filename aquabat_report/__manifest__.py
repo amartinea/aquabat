@@ -7,7 +7,7 @@
     'description': """ """,
     'depends': [
         'account',
-        'hodei_billing_fees',
+        #'hodei_billing_fees',
         'sale',
         'web',
     ],

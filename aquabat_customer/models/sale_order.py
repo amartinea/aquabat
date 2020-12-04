@@ -6,7 +6,7 @@ from odoo import api, fields, models, _
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    customer_name = fields.Text('Customer name')
+    customer_name = fields.Text('Customer name', default="")
  
     @api.multi
     def _prepare_invoice(self):
@@ -30,3 +30,4 @@ class SaleAdvancePaymentInv(models.TransientModel):
         invoice = super(SaleAdvancePaymentInv, self)._create_invoice(order, so_line, amount)
         if order:
             invoice.write({'customer_name': order['customer_name']})
+        return invoice
