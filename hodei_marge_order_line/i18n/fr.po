@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0+e-20190816\n"
+"Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-11 12:20+0000\n"
-"PO-Revision-Date: 2019-12-11 12:20+0000\n"
+"POT-Creation-Date: 2020-12-07 06:46+0000\n"
+"PO-Revision-Date: 2020-12-07 06:46+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,8 +17,23 @@ msgstr ""
 
 #. module: hodei_marge_order_line
 #: model_terms:ir.ui.view,arch_db:hodei_marge_order_line.view_order_line_marge_form
+msgid "Are you sure you want to valid with some order line with consumable product ?"
+msgstr "Ëtes vous certain de vouloir valider le devis alors qu'il y a des produits consommables sur certaines lignes ?"
+
+#. module: hodei_marge_order_line
+#: model_terms:ir.ui.view,arch_db:hodei_marge_order_line.view_order_line_marge_form
 msgid "Are you sure you want to valid with some order line with negative marge ?"
 msgstr "Ëtes vous certain de vouloir valider le devis alors qu'il y a des marges négatives sur certaines lignes ?"
+
+#. module: hodei_marge_order_line
+#: model_terms:ir.ui.view,arch_db:hodei_marge_order_line.view_order_line_marge_form
+msgid "Are you sure you want to valid with some order line with negative marge and some order line with consumable product ?"
+msgstr "Ëtes vous certain de vouloir valider le devis alors qu'il y a des marges négatives et des produits consommables sur certaines lignes ?"
+
+#. module: hodei_marge_order_line
+#: model:ir.model.fields,field_description:hodei_marge_order_line.field_sale_order__one_line_consu
+msgid "Check consu line"
+msgstr ""
 
 #. module: hodei_marge_order_line
 #: model:ir.model.fields,field_description:hodei_marge_order_line.field_sale_order__marge_negative
@@ -31,9 +46,24 @@ msgid "Confirm"
 msgstr "Confirmer"
 
 #. module: hodei_marge_order_line
+#: model_terms:ir.ui.view,arch_db:hodei_marge_order_line.view_order_line_marge_form
+msgid "MAJ des coûts"
+msgstr ""
+
+#. module: hodei_marge_order_line
 #: model:ir.model.fields,field_description:hodei_marge_order_line.field_sale_order_line__marge
 msgid "Marge"
-msgstr "Marge"
+msgstr ""
+
+#. module: hodei_marge_order_line
+#: model:ir.model.fields,field_description:hodei_marge_order_line.field_sale_order_line__marge_percent
+msgid "Marge %"
+msgstr ""
+
+#. module: hodei_marge_order_line
+#: model:ir.model.fields,field_description:hodei_marge_order_line.field_sale_order_line__product_type
+msgid "Product type"
+msgstr "Type de produit"
 
 #. module: hodei_marge_order_line
 #: model:ir.model,name:hodei_marge_order_line.model_sale_order
