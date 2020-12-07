@@ -1,0 +1,39 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* hodei_payment_term_default
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-07 06:48+0000\n"
+"PO-Revision-Date: 2020-12-07 06:48+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hodei_payment_term_default
+#: code:addons/hodei_payment_term_default/models/payment_term.py:18
+#: code:addons/hodei_payment_term_default/models/payment_term.py:28
+#, python-format
+msgid "An other payment term is set to be the default one : %s"
+msgstr "Un autre terms de paiement est défini pour être celui par défaut : %s"
+
+#. module: hodei_payment_term_default
+#: model:ir.model,name:hodei_payment_term_default.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: hodei_payment_term_default
+#: model:ir.model.fields,field_description:hodei_payment_term_default.field_account_payment_term__default_term
+msgid "Default term"
+msgstr "Terms par défaut"
+
+#. module: hodei_payment_term_default
+#: model:ir.model,name:hodei_payment_term_default.model_account_payment_term
+msgid "Payment Terms"
+msgstr "Conditions de paiement"
+

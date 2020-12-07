@@ -1,0 +1,27 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* hodei_force_marge
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-07 06:44+0000\n"
+"PO-Revision-Date: 2020-12-07 06:44+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hodei_force_marge
+#: model:ir.model.fields,field_description:hodei_force_marge.field_sale_order__force_marge
+msgid "Force marge"
+msgstr "Forcer la mage"
+
+#. module: hodei_force_marge
+#: model:ir.model,name:hodei_force_marge.model_sale_order
+msgid "Sale Order"
+msgstr "Bon de commande"
+
