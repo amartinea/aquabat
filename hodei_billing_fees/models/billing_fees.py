@@ -47,6 +47,6 @@ class BillingFeeLines(models.Model):
         return True
 
     def _calcul_condition_between(self, vals):
-        if self.value_condition1 > vals and self.value_condition2 < vals:
+        if self.value_condition1 > vals or self.value_condition2 < vals:
             return False
         return True
