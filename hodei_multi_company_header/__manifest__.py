@@ -11,7 +11,7 @@
     'external_dependencies': {
     },
     'data': [
-        'views/header_view.xml'
+        'views/hodei_multi_company_header.xml'
     ],
     'demo': [],
     'test': [],
