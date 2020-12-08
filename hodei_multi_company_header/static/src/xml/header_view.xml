@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<template id="template" xml:space="preserve">
+<templates id="template" xml:space="preserve">
     <t t-name="Menu" t-extend="Menu">
         <t tquery=".o_main_navbar" position="replace">
             <nav class="o_main_navbar o_main_navbar_bis">
@@ -10,4 +10,4 @@
             </nav>
         </t>
     </t>
-</template>
+</templates>
