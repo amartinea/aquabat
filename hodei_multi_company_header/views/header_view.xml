@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="header_inherit" inherit_id="web.Menu">
+            <xpath expr="//nav[@class='o_main_navbar']" position="replace">
+                <nav class="o_main_navbar o_main_navbar_bis">
+                    <ul class="o_menu_apps"/>
+                    <a class="o_menu_brand" role="button"/>
+                    <ul class="o_menu_sections" role="menu"/>
+                    <ul class="o_menu_systray" role="menu"/>
+                </nav>
+            </xpath>
+        </template>
+    </data>
+</odoo>
