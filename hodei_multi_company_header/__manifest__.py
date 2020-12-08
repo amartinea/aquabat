@@ -11,7 +11,7 @@
     'external_dependencies': {
     },
     'data': [
-        'views/header_view.xml',
+        'views/header_view.xml'
     ],
     'demo': [],
     'test': [],
