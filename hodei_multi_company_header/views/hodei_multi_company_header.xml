@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<template id="extended_libs" name="extended libs" inherit_id="web.assets_backed">
+	<template id="extended_libs" name="extended libs" inherit_id="web.assets_backend">
 		<xpath expr="." position="inside">
 			<script type="text/javascript" src="hodei_multi_company_header/static/src/js/qweb_template.js"></script>
 		</xpath>
