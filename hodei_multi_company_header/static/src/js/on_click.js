@@ -16,6 +16,36 @@ var SwitchCompanyMenu = require('web.SwitchCompanyMenu');
 var _t = core._t;
 
 SwitchCompanyMenu.include({
+    start: function () {
+        var companiesList = '';
+        if (this.isMobile) {
+            companiesList = '<li class="bg-info">' +
+                _t('Tap on the list to change company') + '</li>';
+        }
+        else {
+            this.$('.oe_topbar_name').text(session.user_companies.current_company[1]);
+        }
+        _.each(session.user_companies.allowed_companies, function(company) {
+            var a = '';
+            if (company[0] === session.user_companies.current_company[0]) {
+                a = '<i class="fa fa-check mr8"></i>';
+            } else {
+                a = '<span style="margin-right: 24px;"/>';
+            }
+            companiesList += '<a role="menuitem" href="#" class="dropdown-item" data-menu="company" data-company-id="' +
+                            company[0] + '">' + a + company[1] + '</a>';
+        });
+        if (session.user_companies.current_company[0] == 1)
+        {
+            this.$('.dropdown-menu').parent().parent().parent().parent().find('.o_main_navbar').removeClass('header-company-marsan').addClass('header-company-negoce');
+        }
+        else if (session.user_companies.current_company[0] == 3)
+        {
+            this.$('.dropdown-menu').parent().parent().parent().parent().find('.o_main_navbar').removeClass('header-company-negoce').addClass('header-company-marsan');
+        }
+        this.$('.dropdown-menu').html(companiesList);
+        return this._super();
+    },
     _onClick: function (ev) {
         ev.preventDefault();
         var companyID = $(ev.currentTarget).data('company-id');
