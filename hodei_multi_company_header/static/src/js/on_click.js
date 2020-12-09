@@ -21,11 +21,11 @@ SwitchCompanyMenu.include({
         var companyID = $(ev.currentTarget).data('company-id');
         if (companyID == 1)
         {
-            ev.currentTarget.parentElement.parentElement.parentElement.parentElement.removeClass('header-company-marsan').addClass('header-company-negoce');
+            $(ev.currentTarget).parent().parent().parent().parent().removeClass('header-company-marsan').addClass('header-company-negoce');
         }
         else if (companyID == 3)
         {
-            ev.currentTarget.parentElement.parentElement.parentElement.parentElement.removeClass('header-company-negoce').addClass('header-company-marsan');
+            $(ev.currentTarget).parent().parent().parent().parent().removeClass('header-company-negoce').addClass('header-company-marsan');
         }
         this._rpc({
             model: 'res.users',
