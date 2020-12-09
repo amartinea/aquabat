@@ -1,4 +1,4 @@
-odoo.define('hodei_multi_company_header.OnClickSwitchCompanyMenu', function(require) {
+odoo.define('hodei_multi_company_header.SwitchCompanyMenu', function(require) {
 "use strict";
 
 /**
@@ -15,59 +15,7 @@ var SwitchCompanyMenu = require('web.SwitchCompanyMenu');
 
 var _t = core._t;
 
-var OnClickSwitchCompanyMenu SwitchCompanyMenu.extend({
-    template: 'OnClickSwitchCompanyMenu',
-    events: {
-        'click .dropdown-item[data-menu]': '_onClick',
-    },
-    /**
-     * @override
-     */
-    init: function () {
-        this._super.apply(this, arguments);
-        this.isMobile = config.device.isMobile;
-        this._onClick = _.debounce(this._onClick, 1500, true);
-    },
-    /**
-     * @override
-     */
-    willStart: function () {
-        return session.user_companies ? this._super() : $.Deferred().reject();
-    },
-    /**
-     * @override
-     */
-    start: function () {
-        var companiesList = '';
-        if (this.isMobile) {
-            companiesList = '<li class="bg-info">' +
-                _t('Tap on the list to change company') + '</li>';
-        }
-        else {
-            this.$('.oe_topbar_name').text(session.user_companies.current_company[1]);
-        }
-        _.each(session.user_companies.allowed_companies, function(company) {
-            var a = '';
-            if (company[0] === session.user_companies.current_company[0]) {
-                a = '<i class="fa fa-check mr8"></i>';
-            } else {
-                a = '<span style="margin-right: 24px;"/>';
-            }
-            companiesList += '<a role="menuitem" href="#" class="dropdown-item" data-menu="company" data-company-id="' +
-                            company[0] + '">' + a + company[1] + '</a>';
-        });
-        this.$('.dropdown-menu').html(companiesList);
-        return this._super();
-    },
-
-    //--------------------------------------------------------------------------
-    // Handlers
-    //--------------------------------------------------------------------------
-
-    /**
-     * @private
-     * @param {MouseEvent} ev
-     */
+SwitchCompanyMenu.include({
     _onClick: function (ev) {
         ev.preventDefault();
         var companyID = $(ev.currentTarget).data('company-id');
@@ -90,5 +38,7 @@ var OnClickSwitchCompanyMenu SwitchCompanyMenu.extend({
     },
 });
 
-SystrayMenu.Items.push(OnClickSwitchCompanyMenu);
-return OnClickSwitchCompanyMenu
+SystrayMenu.Items.push(SwitchCompanyMenu);
+return SwitchCompanyMenu;
+
+});
