@@ -10,3 +10,9 @@ class SaleOrderLine(models.Model):
         discount = self.discount
         super(SaleOrderLine, self)._onchange_discount()
         self.discount = discount
+
+    @api.onchange('product_uom', 'product_uom_qty')
+    def product_uom_change(self):
+        price_unit = self.price_unit
+        super(SaleOrderLine, self).product_uom_change()
+        self.price_unit = price_unit
