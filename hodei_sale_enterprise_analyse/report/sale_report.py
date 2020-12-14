@@ -10,9 +10,11 @@ class SaleReport(models.Model):
 
     billable_total = fields.Float('Billable Total', readonly=True)
     billable_marge = fields.Float('Billable Marge', readonly=True)
+    percent_billable_marge = fields.Float('Billable % Marge', readonly=True)
 
     def _query(self, with_clause='', fields={}, groupby='', from_clause=''):
         fields['billable_total'] = ", sum(l.price_reduce_taxexcl * l.qty_delivered / CASE COALESCE(s.currency_rate, 0) WHEN 0 THEN 1.0 ELSE s.currency_rate END) as billable_total"
         fields['billable_marge'] = ', sum((l.price_reduce_taxexcl - l.purchase_price) * l.qty_delivered / CASE COALESCE(s.currency_rate, 0) WHEN 0 THEN 1.0 ELSE s.currency_rate END) as billable_marge'
+        fields['percent_billable_marge'] = ', (sum((l.price_reduce_taxexcl - l.purchase_price) * l.qty_delivered)) / sum(l.purchase_price) * 100 as percent_billable_marge'
 
         return super(SaleReport, self)._query(with_clause, fields, groupby, from_clause)
