@@ -7,7 +7,7 @@ from odoo import api, fields, models
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    available_stock = fields.Selection([('Green', 'Green'), ('Red', 'Red')] string='Available Stock', compute="_compute_available_stock", store=True)
+    available_stock = fields.Selection([('Green', 'Green'), ('Red', 'Red')], string='Available Stock', compute="_compute_available_stock", store=True)
 
     def _compute_available_stock(self):
         for line in self:
