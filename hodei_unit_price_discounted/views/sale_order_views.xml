@@ -23,7 +23,7 @@
             <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line"/>
             <field name="arch" type="xml">
                 <data>
-                    <xpath expr="//field[@name='order_line']/form/group/group/field[@name='purchase_price']" position="attributes">
+                    <xpath expr="//field[@name='purchase_price']" position="attributes">
                         <attribute name="readonly">1</attribute>
                     </xpath>
                 </data>
