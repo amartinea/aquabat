@@ -8,10 +8,12 @@
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="//field[@name='order_line']/form/group/group" position="inside">
-                        <field name="available_stock" readonly="True" widget="color"/>
+                        <button  type="object" help="Done" icon="STOCK_NO" attrs="{'invisible':[('available_stock','=', True)]}">
+                        </button>
+                        <field name="available_stock" readonly="True" widget="state_selection"/>
                     </xpath>
                     <xpath expr="//field[@name='order_line']/tree" position="inside">
-                        <field name="available_stock" readonly="True" widget="color"/>
+                        <field name="available_stock" readonly="True" widget="state_selection"/>
                     </xpath>
                 </data>
             </field>

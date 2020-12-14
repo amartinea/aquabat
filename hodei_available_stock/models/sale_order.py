@@ -7,14 +7,14 @@ from odoo import api, fields, models
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    available_stock = fields.Char('Available Stock', compute="_compute_available_stock", store=True)
+    available_stock = fields.Selection([('Green', 'Green'), ('Red', 'Red')] string='Available Stock', compute="_compute_available_stock", store=True)
 
     def _compute_available_stock(self):
         for line in self:
             try:
                 if line.product_id.qty_real_available > line.product_qty:
-                    line.available_stock = 'green'
+                    line.available_stock = 'Green'
                 else:
-                    line.available_stock = 'red'
+                    line.available_stock = 'Red'
             except:
-                line.available_stock = 'red'
+                line.available_stock = 'Red'
