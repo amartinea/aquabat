@@ -8,7 +8,7 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     available_stock = fields.Boolean('Available Stock', compute="_compute_available_stock")
-    available_stock_company = fields.Float('Available Stock Global', compute="_compute_available_stock")
+    available_stock_company = fields.Float('Available Stock Company', compute="_compute_available_stock")
     available_stock_global = fields.Float('Available Stock Global', compute="_compute_available_stock")
 
     def _compute_available_stock(self):
@@ -28,3 +28,13 @@ class SaleOrderLine(models.Model):
                         #     line.available_stock = False
             except:
                 line.available_stock = False
+
+    @api.onchange('product_id')
+    def available_stock_change(self):
+        if not self.product_id:
+            self.available_stock_company = 0.0
+            self.available_stock_global = 0.0
+            return
+        if self.product_id:
+            self.available_stock_company = self.product_id.qty_real_available
+            self.available_stock_global = self.product_id._compute_quantities_dict_by_company(self.order_id.company_id.id)
