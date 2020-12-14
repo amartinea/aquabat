@@ -8,9 +8,13 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     available_stock = fields.Boolean('Available Stock', compute="_compute_available_stock")
+    available_stock_company = fields.Float('Available Stock Global', compute="_compute_available_stock")
+    available_stock_global = fields.Float('Available Stock Global', compute="_compute_available_stock")
 
     def _compute_available_stock(self):
         for line in self:
+        	available_stock_global = line.product_id.qty_real_available
+        	available_stock_company = line.product_id._compute_quantities_dict_by_company(line.order_id.company_id)
             try:
                 if line.order_id.company_id:
                     if line.product_id._compute_quantities_dict_by_company(line.order_id.company_id) > line.product_qty:
