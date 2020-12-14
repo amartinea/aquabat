@@ -9,7 +9,7 @@ class SaleOrderLine(models.Model):
 
     unit_price_net = fields.Float('Unit price net', compute="_compute_unit_price_net", store=True)
 
-    @api.depends('coef_item_ids', 'standard_price')
+    @api.depends('price_unit', 'price_reduce_taxexcl')
     def _compute_unit_price_net(self):
         for line in self:
             line.unit_price_net = line.price_unit - line.price_reduce_taxexcl
