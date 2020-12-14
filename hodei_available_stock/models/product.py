@@ -39,6 +39,7 @@ class ProductProduct(models.Model):
             domain_move_out_todo += [('company_id', '=', company_id)]
         for product in self.with_context(prefetch_fields=False):
             product_id = product.id
+            rounding = product.uom_id.rounding
             #calcul quant
             quants_res = dict((item['product_id'][0], item['quantity']) for item in Quant.read_group(domain_quant, ['product_id', 'quantity'], ['product_id'], orderby='id'))
             qty_available = float_round(quants_res.get(product_id, 0.0), precision_rounding=rounding)
