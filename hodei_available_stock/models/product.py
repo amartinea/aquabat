@@ -19,3 +19,32 @@ class ProductProduct(models.Model):
             product.outgoing_qty = res[product.id]['outgoing_qty']
             product.virtual_available = res[product.id]['virtual_available']
             product.qty_real_available = res[product.id]['virtual_available'] - res[product.id]['incoming_qty']
+
+
+    def _compute_quantities_dict_by_company(self, company_id):
+        
+        #define domain quant
+        Quant = self.env['stock.quant']
+        domain_quant_loc, domain_move_in_loc, domain_move_out_loc = self._get_domain_locations()
+        domain_quant = [('product_id', 'in', self.ids)] + domain_quant_loc
+
+        #define domain move out
+        Move = self.env['stock.move']
+        domain_move_out = [('product_id', 'in', self.ids)] + domain_move_out_loc
+        domain_move_out_todo = [('state', 'in', ('waiting', 'confirmed', 'assigned', 'partially_available'))] + domain_move_out
+
+        if company_id is not None:
+            domain_quant += [('company_id', '=', company_id)]
+            domain_move_out_todo += [('company_id', '=', company_id)]
+
+        #calcul quant
+        quants_res = dict((item['product_id'][0], item['quantity']) for item in Quant.read_group(domain_quant, ['product_id', 'quantity'], ['product_id'], orderby='id'))
+        qty_available = float_round(quants_res.get(product_id, 0.0), precision_rounding=rounding)
+
+        #calcul move out
+        moves_out_res = dict((item['product_id'][0], item['product_qty']) for item in Move.read_group(domain_move_out_todo, ['product_id', 'product_qty'], ['product_id'], orderby='id'))
+        outgoing_qty = float_round(moves_out_res.get(product_id, 0.0), precision_rounding=rounding)
+
+        qty_real_available = qty_available - outgoing_qty
+
+        return float_round(qty_real_available, precision_rounding=rounding)
