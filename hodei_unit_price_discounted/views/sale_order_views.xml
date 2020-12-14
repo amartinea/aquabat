@@ -14,7 +14,7 @@
                         <field name="price_reduce_taxexcl" readonly="True"/>
                     </xpath>
                     <xpath expr="//field[@name='order_line']/form/group/group/field[@name='purchase_price']" position="attributes">
-                        <attribute name="readonly">1<attribute>
+                        <attribute name="readonly">1</attribute>
                     </xpath>
                 </data>
             </field>
