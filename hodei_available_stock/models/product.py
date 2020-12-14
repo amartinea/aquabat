@@ -8,7 +8,7 @@ from odoo.addons import decimal_precision as dp
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
-    qty_real_available = fields.Float('Real Forecast Quantity', compute='_compute_quantities', digits=dp.get_precision('Product Unit of Measure'),)
+    qty_real_available = fields.Float('Real Forecast Quantity', compute='_compute_quantities')
 
     @api.depends('stock_move_ids.product_qty', 'stock_move_ids.state')
     def _compute_quantities(self):
