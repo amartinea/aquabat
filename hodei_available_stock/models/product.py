@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models
 from odoo.addons import decimal_precision as dp
+from odoo.tools.float_utils import float_round
 
 
 class ProductProduct(models.Model):
