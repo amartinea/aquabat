@@ -11,10 +11,10 @@ class SaleOrderLine(models.Model):
 
     def _compute_available_stock(self):
         for line in self:
-        	try:
+            try:
                 if line.product_id.qty_real_available > line.product_qty:
                     line.available_stock = True
                 else:
                     line.available_stock = False
             except:
-            	line.available_stock = False
+                line.available_stock = False
