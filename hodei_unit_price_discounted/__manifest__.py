@@ -7,6 +7,7 @@
     'description': """ """,
     'depends': [
         'sale',
+        'sale_margin'
     ],
     'external_dependencies': {
     },
