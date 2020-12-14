@@ -13,8 +13,8 @@ class SaleOrderLine(models.Model):
 
     def _compute_available_stock(self):
         for line in self:
-        	line.available_stock_global = line.product_id.qty_real_available
-        	line.available_stock_company = line.product_id._compute_quantities_dict_by_company(line.order_id.company_id)
+            line.available_stock_global = line.product_id.qty_real_available
+            line.available_stock_company = line.product_id._compute_quantities_dict_by_company(line.order_id.company_id)
             try:
                 if line.order_id.company_id:
                     if line.product_id._compute_quantities_dict_by_company(line.order_id.company_id) > line.product_qty:
