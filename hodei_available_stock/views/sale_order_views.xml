@@ -10,10 +10,10 @@
                     <xpath expr="//field[@name='order_line']/form/group/group" position="inside">
                         <button  type="object" help="Done" icon="STOCK_NO" attrs="{'invisible':[('available_stock','=', True)]}">
                         </button>
-                        <field name="available_stock" readonly="True" widget="state_selection"/>
+                        <field name="available_stock" readonly="True"/>
                     </xpath>
                     <xpath expr="//field[@name='order_line']/tree" position="inside">
-                        <field name="available_stock" readonly="True" widget="state_selection"/>
+                        <field name="available_stock" readonly="True"/>
                     </xpath>
                 </data>
             </field>
