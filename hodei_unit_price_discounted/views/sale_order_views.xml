@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_line_price_discount_form" model="ir.ui.view">
+            <field name="name">sale.order.line.price.discount.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_unit']" position="after">
+                        <field name="unit_price_net" readonly="True" widget="boolean_button"/>
+                    </xpath>
+                    <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                        <field name="unit_price_net" readonly="True" widget="boolean_button"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>
