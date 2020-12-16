@@ -7,7 +7,11 @@ from odoo import api, fields, models
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    available_stock = fields.Boolean('Available Stock', compute="_compute_available_stock")
+    available_stock = fields.Selection([
+        ('red', 'Red'),
+        ('orange', 'Orange'),
+        ('green', 'Green')], 
+        'Available Stock', compute="_compute_available_stock")
     available_stock_company = fields.Float('Available Stock Company', compute="_compute_available_stock")
     available_stock_global = fields.Float('Available Stock Global', compute="_compute_available_stock")
 
@@ -17,15 +21,13 @@ class SaleOrderLine(models.Model):
             line.available_stock_company = line.product_id._compute_quantities_dict_by_company(line.order_id.company_id.id)
             try:
                 if line.order_id.company_id:
-                    if line.product_id._compute_quantities_dict_by_company(line.order_id.company_id.id) > line.product_qty:
-                        line.available_stock = True
+                    if line.product_id._compute_quantities_dict_by_company(line.order_id.company_id.id) >= line.product_qty:
+                        line.available_stock = 'green'
                     else:
-                        line.available_stock = False
+                        line.available_stock = 'orange'
                 
-                        #if line.product_id.qty_real_available > line.product_qty:
-                        #     line.available_stock = True
-                        # else:
-                        #     line.available_stock = False
+                    if line.product_id.qty_real_available < line.product_qty:
+                        line.available_stock = 'red'
             except:
                 line.available_stock = False
 

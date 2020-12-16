@@ -12,7 +12,7 @@
                         <field name="available_stock_global" readonly="True"/>
                     </xpath>
                     <xpath expr="//field[@name='order_line']/tree" position="inside">
-                        <field name="available_stock" readonly="True"/>
+                        <field name="available_stock" widget="color" readonly="True"/>
                     </xpath>
                 </data>
             </field>
