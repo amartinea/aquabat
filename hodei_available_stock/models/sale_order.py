@@ -18,19 +18,20 @@ class SaleOrderLine(models.Model):
     @api.onchange('product_uom_qty')
     def _compute_available_stock(self):
         for line in self:
-            line.available_stock_global = line.product_id.qty_real_available
-            line.available_stock_company = line.product_id._compute_quantities_dict_by_company(line.order_id.company_id.id)
-            try:
-                if line.order_id.company_id:
-                    if line.product_id._compute_quantities_dict_by_company(line.order_id.company_id.id) >= line.product_qty:
-                        line.available_stock = 'green'
-                    else:
-                        line.available_stock = 'orange'
+        	if line.product_id:
+                line.available_stock_global = line.product_id.qty_real_available
+                line.available_stock_company = line.product_id._compute_quantities_dict_by_company(line.order_id.company_id.id)
+                try:
+                    if line.order_id.company_id:
+                        if line.product_id._compute_quantities_dict_by_company(line.order_id.company_id.id) >= line.product_qty:
+                            line.available_stock = 'green'
+                        else:
+                            line.available_stock = 'orange'
                 
-                    if line.product_id.qty_real_available < line.product_qty:
-                        line.available_stock = 'red'
-            except:
-                line.available_stock = False
+                        if line.product_id.qty_real_available < line.product_qty:
+                            line.available_stock = 'red'
+                except:
+                    line.available_stock = False
 
     @api.onchange('product_id')
     def available_stock_change(self):
