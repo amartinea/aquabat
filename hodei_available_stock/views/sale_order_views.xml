@@ -13,11 +13,11 @@
                     </xpath>
                     <xpath expr="//field[@name='order_line']/tree" position="inside">
                         <field name="available_stock" invisible="True"/>
-                        <button style="position:absolute; padding-left: 2%" help="Available in the current company"
+                        <button style="position:absolute;" help="Available in the current company"
                             icon="hodei_available_stock/static/src/img/icons/STOCK_GREEN.png" attrs="{'invisible':[('available_stock','!=', 'green')]}"/>
-                        <button style="position:relative; left:88%" help="Available with stock of both company"
+                        <button style="position:relative; right:46%" help="Available with stock of both company"
                             icon="hodei_available_stock/static/src/img/icons/STOCK_ORANGE.png" attrs="{'invisible':[('available_stock','!=', 'orange')]}"/>
-                        <button style="position:relative; right:56%" help="Not available"
+                        <button style="position:relative; right:190%" help="Not available"
                             icon="hodei_available_stock/static/src/img/icons/STOCK_RED.png" attrs="{'invisible':[('available_stock','!=', 'red')]}"/>
                     </xpath>
                 </data>
