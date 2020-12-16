@@ -15,6 +15,7 @@ class SaleOrderLine(models.Model):
     available_stock_company = fields.Float('Available Stock Company', compute="_compute_available_stock")
     available_stock_global = fields.Float('Available Stock Global', compute="_compute_available_stock")
 
+    @api.onchange('product_uom_qty')
     def _compute_available_stock(self):
         for line in self:
             line.available_stock_global = line.product_id.qty_real_available
