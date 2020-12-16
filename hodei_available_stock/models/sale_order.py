@@ -18,7 +18,7 @@ class SaleOrderLine(models.Model):
     @api.onchange('product_uom_qty')
     def _compute_available_stock(self):
         for line in self:
-        	if line.product_id:
+            if line.product_id:
                 line.available_stock_global = line.product_id.qty_real_available
                 line.available_stock_company = line.product_id._compute_quantities_dict_by_company(line.order_id.company_id.id)
                 try:
