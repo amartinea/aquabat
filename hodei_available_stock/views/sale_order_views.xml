@@ -13,6 +13,12 @@
                     </xpath>
                     <xpath expr="//field[@name='order_line']/tree" position="inside">
                         <field name="available_stock" widget="color" readonly="True"/>
+                        <button name="action_stock" type="object" help="Not available"
+                            icon="STOCK_GREEN" attrs="{'invisible':[('available_stock','!=', 'green')]}">
+                        <button name="action_stock" type="object" help="Not available"
+                            icon="STOCK_ORANGE" attrs="{'invisible':[('available_stock','!=', 'orange')]}">
+                        <button name="action_stock" type="object" help="Not available"
+                            icon="STOCK_RED" attrs="{'invisible':[('available_stock','!=', 'red')]}">
                     </xpath>
                 </data>
             </field>
