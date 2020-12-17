@@ -31,13 +31,13 @@ class StockRoute(models.Model):
 
     def write(self, vals):
         if vals['default_route']:
-            if vals['default_route'] == True:
+            if 'default_route' in vals vals['default_route'] == True:
                 # Check if an other default_route is set
                 already_set_default = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self['company_id'].id)])
                 if already_set_default:
                     raise UserError(_('An other default route is set to be the default one : %s') % already_set_default.name)
                     vals['default_route'] = False
-        if vals['default_update_route']:
+        if 'default_update_route' in vals and vals['default_update_route']:
             if vals['default_update_route'] == True:
                 # Check if an other default_update_route is set
                 already_set_update_default = self.env['stock.location.route'].search([('default_update_route', '=', True), ('company_id', '=', self['company_id'].id)])
