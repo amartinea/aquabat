@@ -30,8 +30,8 @@ class StockRoute(models.Model):
                 self.default_update_route = True
 
     def write(self, vals):
-        if vals['default_route']:
-            if 'default_route' in vals vals['default_route'] == True:
+        if 'default_route' in vals and vals['default_route']:
+            if vals['default_route'] == True:
                 # Check if an other default_route is set
                 already_set_default = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self['company_id'].id)])
                 if already_set_default:
