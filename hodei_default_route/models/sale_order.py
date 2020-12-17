@@ -10,4 +10,4 @@ class SaleOrderLine(models.Model):
     def _default_route(self):
         return self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.order_id.company_id)], limit=1)
 
-    route_id = fields.many2one(default=_default_route)
+    route_id = fields.Many2one(default=_default_route)
