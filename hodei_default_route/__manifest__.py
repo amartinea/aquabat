@@ -12,9 +12,7 @@
     'external_dependencies': {
     },
     'data': [
-        'views/account_invoice_view.xml',
-        'views/purchase_order_view.xml',
-        'views/sale_order_view.xml',
+        'views/stock_location_route_views.xml',
     ],
     'demo': [],
     'test': [],
