@@ -46,26 +46,26 @@ SwitchCompanyMenu.include({
         //this.$('.dropdown-menu').html(companiesList);
         return this._super();
     },
-    _onClick: function (ev) {
-        ev.preventDefault();
-        var companyID = $(ev.currentTarget).data('company-id');
-        if (companyID == 1)
-        {
-            $(ev.currentTarget).parent().parent().parent().parent().find('.o_main_navbar').removeClass('header-company-marsan').addClass('header-company-negoce');
-        }
-        else if (companyID == 3)
-        {
-            $(ev.currentTarget).parent().parent().parent().parent().find('.o_main_navbar').removeClass('header-company-negoce').addClass('header-company-marsan');
-        }
-        this._rpc({
-            model: 'res.users',
-            method: 'write',
-            args: [[session.uid], {'company_id': companyID}],
-        })
-        .then(function() {
-            location.reload();
-        });
-    },
+    // _onClick: function (ev) {
+    //     ev.preventDefault();
+    //     var companyID = $(ev.currentTarget).data('company-id');
+    //     if (companyID == 1)
+    //     {
+    //         $(ev.currentTarget).parent().parent().parent().parent().find('.o_main_navbar').removeClass('header-company-marsan').addClass('header-company-negoce');
+    //     }
+    //     else if (companyID == 3)
+    //     {
+    //         $(ev.currentTarget).parent().parent().parent().parent().find('.o_main_navbar').removeClass('header-company-negoce').addClass('header-company-marsan');
+    //     }
+    //     this._rpc({
+    //         model: 'res.users',
+    //         method: 'write',
+    //         args: [[session.uid], {'company_id': companyID}],
+    //     })
+    //     .then(function() {
+    //         location.reload();
+    //     });
+    // },
 });
 
 SystrayMenu.Items.push(SwitchCompanyMenu);
