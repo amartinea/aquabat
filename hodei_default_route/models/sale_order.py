@@ -12,5 +12,6 @@ class SaleOrderLine(models.Model):
     @api.multi
     @api.depends('order_id.company_id')
     def _compute_company_id(self):
-        if self.order_id.company_id:
-            self.route_id = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.order_id.company_id.id)])
+        for line in self:
+            if line.order_id.company_id:
+                line.route_id = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
