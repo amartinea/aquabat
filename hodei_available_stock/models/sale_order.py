@@ -14,14 +14,14 @@ class SaleOrderLine(models.Model):
         'Available Stock', compute="_compute_available_stock")
     available_stock_company = fields.Float('Available Stock Company', compute="_compute_available_stock")
     available_stock_global = fields.Float('Available Stock Global', compute="_compute_available_stock")
-    virtual_stock_global = fields.Float('Virtual Stock Global', compute="_compute_available_stock")
+    #virtual_stock_global = fields.Float('Virtual Stock Global', compute="_compute_available_stock")
 
     @api.onchange('product_uom_qty')
     def _compute_available_stock(self):
         for line in self:
             if line.product_id:
                 line.available_stock_global = line.product_id.qty_real_available
-                line.virtual_stock_global = line.product_id.virtual_available
+                #line.virtual_stock_global = line.product_id.virtual_available
                 line.available_stock_company = line.product_id._compute_quantities_dict_by_company(line.order_id.company_id.id)
                 try:
                     if line.order_id.company_id:
