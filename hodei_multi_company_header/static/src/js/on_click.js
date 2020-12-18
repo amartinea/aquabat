@@ -68,7 +68,7 @@ SwitchCompanyMenu.include({
     // },
 });
 
-SystrayMenu.Items.push(SwitchCompanyMenu);
+//SystrayMenu.Items.push(SwitchCompanyMenu);
 return SwitchCompanyMenu;
 
 });
