@@ -10,7 +10,7 @@
                     <xpath expr="//field[@name='order_line']/form/group/group" position="inside">
                         <field name="available_stock_company" readonly="True"/>
                         <field name="available_stock_global" readonly="True"/>
-                        <field name="virtual_stock_global" readonly="True"/>
+                        <!--<field name="virtual_stock_global" readonly="True"/>-->
                     </xpath>
                     <xpath expr="//field[@name='order_line']/tree" position="inside">
                         <field name="available_stock" invisible="True"/>
