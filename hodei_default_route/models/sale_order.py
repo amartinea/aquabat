@@ -6,7 +6,7 @@ from odoo import api, fields, models, _
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    route_id = fields.Many2one(compute='_compute_company_id')
+    route_id = fields.Many2one(compute='_compute_company_id', readonly=False)
 
     @api.multi
     @api.depends('order_id.company_id')
