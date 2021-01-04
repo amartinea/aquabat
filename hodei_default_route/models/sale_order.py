@@ -12,7 +12,7 @@ class SaleOrderLine(models.Model):
     @api.depends('order_id.company_id')
     def _compute_company_id(self):
         for line in self:
-            if line.order_id.company_id:
+            if line.order_id.company_id and not line.route_id:
                 line.route_id = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
 
 # class SaleOrder(models.Model):
@@ -23,4 +23,3 @@ class SaleOrderLine(models.Model):
 #             if order.company_id:
 #                 for line in order.order_line: 
 #                     line.route_id = self.env['stock.location.route'].search([('default_update_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
-
