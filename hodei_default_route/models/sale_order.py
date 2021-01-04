@@ -6,13 +6,13 @@ from odoo import api, fields, models, _
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    route_id = fields.Many2one(compute='_compute_company_id', readonly=False)
+    route_id = fields.Many2one(readonly=False)
 
     @api.multi
     @api.depends('order_id.company_id')
-    def _compute_company_id(self):
+    def _on_change_company_id(self):
         for line in self:
-            if line.order_id.company_id and not line.route_id:
+            if line.order_id.company_id:
                 line.route_id = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
 
 # class SaleOrder(models.Model):
