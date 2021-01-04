@@ -6,7 +6,11 @@ from odoo import api, fields, models, _
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    route_id = fields.Many2one(readonly=False)
+    def _default_route(self):
+        if self.order_id.company_id:
+            return self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.order_id.company_id.id)])
+
+    route_id = fields.Many2one(default=lambda self: self._default_route(), readonly=False)
 
     # @api.multi
     # @api.depends('order_id.company_id')
@@ -15,15 +19,15 @@ class SaleOrderLine(models.Model):
     #         if line.order_id.company_id:
     #             line.route_id = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
 
-    def write(self, vals):
-        if self.order_id.company_id:
-            vals['route_id'] = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.order_id.company_id.id)])
-        return super(StockRoute, self).write(vals)
-# class SaleOrder(models.Model):
-#     _inherit = "sale.order"
+    # def write(self, vals):
+    #     if self.order_id.company_id:
+    #         vals['route_id'] = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.order_id.company_id.id)])
+    #     return super(SaleOrderLine, self).write(vals)
+    # class SaleOrder(models.Model):
+    #     _inherit = "sale.order"
 
-#     def _use_alternative_route(self):
-#         for order in self:
-#             if order.company_id:
-#                 for line in order.order_line: 
-#                     line.route_id = self.env['stock.location.route'].search([('default_update_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
+    #     def _use_alternative_route(self):
+    #         for order in self:
+    #             if order.company_id:
+    #                 for line in order.order_line: 
+    #                     line.route_id = self.env['stock.location.route'].search([('default_update_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
