@@ -10,9 +10,9 @@ class SaleOrderLine(models.Model):
     def _default_route(self):
         _logger.info("default_route")
         _logger.info(self)
-        if self.order_id.company_id:
+        if self.company_id:
             _logger.info("company_id")
-            return self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.order_id.company_id.id)])
+            return self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.company_id.id)])
 
     route_id = fields.Many2one(default=lambda self: self._default_route(), readonly=False)
 
