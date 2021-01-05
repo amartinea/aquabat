@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-
+import logging
+_logger = logging.getLogger(__name__)
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     def _default_route(self):
+        _logger.info("default_route")
         if self.order_id.company_id:
+            _logger.info("company_id")
             return self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.order_id.company_id.id)])
 
     route_id = fields.Many2one(default=lambda self: self._default_route(), readonly=False)
