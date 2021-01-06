@@ -41,6 +41,6 @@ class SaleOrder(models.Model):
     def use_alternative_route(self):
         for order in self:
             if order.company_id:
-            	order.use_second_route = True
+                order.use_second_route = True
                 for line in order.order_line:
                     line.route_id = self.env['stock.location.route'].search([('default_update_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
