@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_line_route_form" model="ir.ui.view">
+            <field name="name">sale.order.line.route.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//button[@id='action_confirm']" position="after">
+                        <button name="_use_alternative_route" string="Echanger route" type="object"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

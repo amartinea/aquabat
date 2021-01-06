@@ -16,17 +16,6 @@ class SaleOrderLine(models.Model):
         route = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.company_id.id)])
         self.update({'route_id': route})
         return result
-        
-
-
-
-
-
-
-
-
-
-
 
     # @api.multi
     # @api.depends('order_id.company_id')
@@ -42,8 +31,11 @@ class SaleOrderLine(models.Model):
     # class SaleOrder(models.Model):
     #     _inherit = "sale.order"
 
-    #     def _use_alternative_route(self):
-    #         for order in self:
-    #             if order.company_id:
-    #                 for line in order.order_line: 
-    #                     line.route_id = self.env['stock.location.route'].search([('default_update_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
+    
+    def _use_alternative_route(self):
+        for order in self:
+            if order.company_id:
+                for line in order.order_line: 
+                    line.route_id = self.env['stock.location.route'].search([('default_update_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])

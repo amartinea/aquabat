@@ -9,7 +9,7 @@
                 <data>
                     <xpath expr="//field[@name='company_id']" position="after">
                         <field name="default_route"/>
-                        <!--<field name="default_update_route"/>-->
+                        <field name="default_update_route"/>
                     </xpath>
                 </data>
             </field>
