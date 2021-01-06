@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="//button[@id='action_confirm']" position="after">
-                        <button name="_use_alternative_route" string="Echanger route" type="object"/>
+                        <button name="use_alternative_route" string="Echanger route" type="object"/>
                     </xpath>
                 </data>
             </field>
