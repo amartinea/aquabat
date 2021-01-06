@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-import logging
-_logger = logging.getLogger(__name__)
 
 
 class SaleOrderLine(models.Model):
@@ -14,11 +12,7 @@ class SaleOrderLine(models.Model):
     @api.onchange('product_id')
     def product_id_change(self):
         result = super(SaleOrderLine, self).product_id_change()
-        _logger.info(self.order_id)
-        if not self.order_id.use_second_route:
-            route = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.company_id.id)])
-        else:
-            route = self.env['stock.location.route'].search([('default_update_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
+        route = self.env['stock.location.route'].search([('default_route', '=', True), ('company_id', '=', self.company_id.id)])
         self.update({'route_id': route})
         return result
 
@@ -38,12 +32,9 @@ class SaleOrderLine(models.Model):
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
-    
-    use_second_route = fields.Boolean(default=False)
 
     def use_alternative_route(self):
         for order in self:
             if order.company_id:
-                order.use_second_route = True
                 for line in order.order_line:
                     line.route_id = self.env['stock.location.route'].search([('default_update_route', '=', True), ('company_id', '=', line.order_id.company_id.id)])
