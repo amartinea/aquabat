@@ -24,7 +24,7 @@
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="//field[@name='purchase_price']" position="attributes">
-                        <attribute name="readonly">[["product_tŷpe",==,'product']]</attribute>
+                        <attribute name="attrs">{'readonly': [('product_tŷpe','=','product')]</attribute>
                     </xpath>
                 </data>
             </field>
