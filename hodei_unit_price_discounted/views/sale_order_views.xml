@@ -23,8 +23,11 @@
             <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line"/>
             <field name="arch" type="xml">
                 <data>
+                    <xpath expr="//field[@name='purchase_price']" position="after">
+                        <field name="product_type" invisible="1"/>
+                    </xpath>
                     <xpath expr="//field[@name='purchase_price']" position="attributes">
-                        <attribute name="attrs">{'readonly': [('product_tŷpe','=','product')]}</attribute>
+                        <attribute name="attrs">{'readonly': [('product_type','=','product')]}</attribute>
                     </xpath>
                 </data>
             </field>
