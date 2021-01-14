@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<odoo>
+<template id="__export__.external_layout_hf_custom_hpr">
+    <div class="header">
+        <div class="row" style="border-bottom: solid #dddddd 1px">
+            <div class="col-3">
+                <img src="/x_web/static/img/aquabatlogo.png"/>
+            </div>
+            <div class="col-4">
+                <div style="font-size:15px;">
+                    <span style="font-weight: bold;" t-field="company.partner_id.name"/><br/>
+                    <span t-field="company.partner_id.street"/><br/>
+                    <span t-field="company.partner_id.zip"/> <sapn t-field="company.partner_id.city"/><br/>
+                    <span t-field="company.partner_id.country_id"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="article o_report_layout_background" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+        <t t-call="web.address_layout"/>
+        <t t-raw="0"/>
+    </div>
+
+    <div class="footer">
+        <div class="text-center" style="margin-left:0px; border-top: solid #7d2d5d 1.5px; border-bottom: solid #7d2d5d 1.5px">
+            <div style="font-size:12px;color:#7d2d5d;"><strong>Siège social : 290, rue des Alouettes – 40990 Mées &#8226; Tél : 05 58 56 25 21 – aquabat.negoce@gmail.com</strong><br/>
+            SAS au capital de 10 000€ - Siret : 82834326900019 – Code APE : 4673 A</div>
+        </div>
+        <div class="text-center" t-if="report_type == 'pdf'" style="color:#666666; font-size:8px">
+            Page: <span class="page"/> sur <span class="topage"/>
+        </div>
+    </div>
+</template>
+</odoo>
