@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_line_price_discount_form" model="ir.ui.view">
+            <field name="name">sale.order.line.price.discount.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_unit']" position="after">
+                        <field name="price_reduce_taxexcl" readonly="True"/>
+                    </xpath>
+                    <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                        <field name="price_reduce_taxexcl" readonly="True"/>
+                    </xpath>
+                    
+                </data>
+            </field>
+        </record>
+        <record id="sale_margin_sale_order_line_readonly" model="ir.ui.view">
+            <field name="name">sale.order.line.margin.readonly.view.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='purchase_price']" position="after">
+                        <field name="product_type" invisible="1"/>
+                    </xpath>
+                    <xpath expr="//field[@name='purchase_price']" position="attributes">
+                        <attribute name="attrs">{'readonly': [('product_type','=','product')]}</attribute>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

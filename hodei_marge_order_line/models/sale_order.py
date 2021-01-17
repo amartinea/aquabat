@@ -28,6 +28,6 @@ class SaleOrder(models.Model):
 
     def update_purchase_price_lines(self):
         for lines in self.order_line:
-            if lines.product_id.standard_price != 0:
-                lines.purchase_price = lines.product_id.standard_price
+            if lines.product_id.cost_price != 0:
+                lines.purchase_price = lines.product_id.cost_price
         self.on_change_order_line()

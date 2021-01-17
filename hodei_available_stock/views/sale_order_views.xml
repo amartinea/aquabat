@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_line_availale_form" model="ir.ui.view">
+            <field name="name">sale.order.line.available.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='order_line']/form/group/group" position="inside">
+                        <field name="available_stock_company" readonly="True"/>
+                        <field name="available_stock_global" readonly="True"/>
+                        <!--<field name="virtual_stock_global" readonly="True"/>-->
+                    </xpath>
+                    <xpath expr="//field[@name='order_line']/tree" position="inside">
+                        <field name="available_stock" invisible="True"/>
+                        <button help="Available in the current company"
+                            icon="hodei_available_stock/static/src/img/icons/STOCK_GREEN.png" attrs="{'invisible':[('available_stock','!=', 'green')]}"/>
+                        <button help="Available with stock of both company"
+                            icon="hodei_available_stock/static/src/img/icons/STOCK_ORANGE.png" attrs="{'invisible':[('available_stock','!=', 'orange')]}"/>
+                        <button help="Not available"
+                            icon="hodei_available_stock/static/src/img/icons/STOCK_RED.png" attrs="{'invisible':[('available_stock','!=', 'red')]}"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>
