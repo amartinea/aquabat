@@ -5,7 +5,12 @@ from odoo import api, fields, models, _
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    @api.onchange('product_id', 'price_unit', 'product_uom', 'product_uom_qty', 'tax_id')
+    @api.onchange('product_id')
+    def _onchange_discount_product(self):
+        super(SaleOrderLine, self).product_uom_change()
+        self.discount = 0
+
+    @api.onchange('price_unit', 'product_uom', 'product_uom_qty', 'tax_id')
     def _onchange_discount(self):
         if not (self.product_id and self.product_uom and
                 self.order_id.partner_id and self.order_id.pricelist_id and
@@ -38,8 +43,6 @@ class SaleOrderLine(models.Model):
             discount = (new_list_price - price) / new_list_price * 100
             if (discount > 0 and new_list_price > 0) or (discount < 0 and new_list_price < 0):
                 self.discount = discount
-        else:
-            self.discount = 0.0 
 
     @api.onchange('product_uom', 'product_uom_qty')
     def product_uom_change(self):
