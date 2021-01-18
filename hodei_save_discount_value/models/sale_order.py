@@ -6,25 +6,17 @@ _logger = logging.getLogger(__name__)
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    @api.onchange('product_id')
-    def _onchange_discount_product(self):
-        _logger.info(self.product_id)
-        _logger.info("product")
-        _logger.info(self.product_uom_qty)
-        _logger.info("qty")
-        _logger.info(self.price_unit)
-        _logger.info("price_unit")
-        super(SaleOrderLine, self)._onchange_discount()
+    product_id_check = fields.Many2one('product.product', string='Product Check')
 
-    @api.onchange('price_unit', 'product_uom', 'product_uom_qty', 'tax_id')
+    @api.onchange('product_id', 'price_unit', 'product_uom', 'product_uom_qty', 'tax_id')
     def _onchange_discount(self):
-        _logger.info(self.product_id)
-        _logger.info("product")
-        _logger.info(self.product_uom_qty)
-        _logger.info("qty")
-        _logger.info(self.price_unit)
-        _logger.info("price_unit")
-        super(SaleOrderLine, self)._onchange_discount()
+        if self.product_id_check and self.product_id_check == self.product_id:
+            discount = self.discount
+            super(SaleOrderLine, self)._onchange_discount()
+            self.discount = discount
+        else:
+            super(SaleOrderLine, self)._onchange_discount()
+            self.product_id_check = self.product_id
 
 
     @api.onchange('product_uom', 'product_uom_qty')
