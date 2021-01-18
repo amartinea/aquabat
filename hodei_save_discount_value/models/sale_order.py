@@ -18,7 +18,7 @@ class SaleOrderLine(models.Model):
                 self.env.user.has_group('product.group_discount_per_so_line')):
             return
 
-        #self.discount = 0.0
+        self.discount = 0.0
         product = self.product_id.with_context(
             lang=self.order_id.partner_id.lang,
             partner=self.order_id.partner_id,
