@@ -12,7 +12,7 @@ class SaleOrderLine(models.Model):
     #     super(SaleOrderLine, self)._onchange_discount()
 
     @api.onchange('product_id')
-    def _onchange_discount(self):
+    def _onchange_discount_product(self):
         _logger.info("oui")
         if not (self.product_id and self.product_uom and
                 self.order_id.partner_id and self.order_id.pricelist_id and
