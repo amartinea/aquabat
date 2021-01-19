@@ -6,7 +6,7 @@ _logger = logging.getLogger(__name__)
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    product_id_check = fields.Many2one('product.product', string='Product Check')
+    product_id_check = fields.Char(string='Product Check')
 
     @api.onchange('product_id', 'price_unit', 'product_uom', 'product_uom_qty', 'tax_id')
     def _onchange_discount(self):
