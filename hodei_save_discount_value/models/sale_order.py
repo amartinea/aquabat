@@ -18,6 +18,9 @@ class SaleOrderLine(models.Model):
             self.discount = discount
         else:
             _logger.info("non")
+            _logger.info(self.discount)
+            _logger.info(self.product_id_check)
+            _logger.info(self.product_id)
             super(SaleOrderLine, self)._onchange_discount()
             self.product_id_check = self.product_id
             _logger.info(self.discount)
