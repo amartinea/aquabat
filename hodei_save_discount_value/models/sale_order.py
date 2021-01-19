@@ -22,7 +22,7 @@ class SaleOrderLine(models.Model):
             _logger.info(self.product_id_check)
             _logger.info(self.product_id)
             super(SaleOrderLine, self)._onchange_discount()
-            self.product_id_check = self.product_id.name
+            self.product_id_check = 'test'
             _logger.info(self.discount)
 
 
