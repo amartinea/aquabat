@@ -11,10 +11,12 @@ class SaleOrderLine(models.Model):
     @api.onchange('product_id', 'price_unit', 'product_uom', 'product_uom_qty', 'tax_id')
     def _onchange_discount(self):
         if self.product_id_check and self.product_id_check == self.product_id:
+            _logger.info("oui")
             discount = self.discount
             super(SaleOrderLine, self)._onchange_discount()
             self.discount = discount
         else:
+            _logger.info("non")
             super(SaleOrderLine, self)._onchange_discount()
             self.product_id_check = self.product_id
 
