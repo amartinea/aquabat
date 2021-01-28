@@ -2,6 +2,8 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import api, fields, models, _
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class AccountInvoice(models.Model):
@@ -78,7 +80,12 @@ class AccountInvoice(models.Model):
                     references[invoices[group_key]] |= order
 
             pickings = self.env['stock.picking'].search([('sale_id', '=', order.id), ('picking_type_code', '=', 'outgoing'), ('invoice_id', '=', False)])
-            pickings.invoice_id = invoice
+            _logger.info('picking')
+            _logger.info(pickings)
+            _logger.info('invoice')
+            _logger.info(invoice)
+            for picking in pickings:
+                picking.invoice_id = invoice
 
             self.env['account.invoice.line'].create(line_vals_list)
 
