@@ -25,11 +25,12 @@ class AccountInvoice(models.Model):
         references = {}
         invoices_origin = {}
         invoices_name = {}
-
+        _logger.info('action_invoice_create')
         # Keep track of the sequences of the lines
         # To keep lines under their section
         inv_line_sequence = 0
         for order in self:
+        	_logger.info('order')
             group_key = order.id if grouped else (order.partner_invoice_id.id, order.currency_id.id)
 
             # We only want to create sections that have at least one invoiceable line
