@@ -6,8 +6,8 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
 
 
     @api.multi
