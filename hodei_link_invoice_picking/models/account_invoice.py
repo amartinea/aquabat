@@ -81,7 +81,7 @@ class SaleOrder(models.Model):
                     references[invoices[group_key]] |= order
 
             pickings = self.env['stock.picking'].search([('sale_id', '=', order.id), ('picking_type_code', '=', 'outgoing'), ('invoice_id', '=', False)])
-            _logger.info('picking') 
+            _logger.info('picking')
             _logger.info(pickings)
             _logger.info('invoice')
             _logger.info(invoice)
