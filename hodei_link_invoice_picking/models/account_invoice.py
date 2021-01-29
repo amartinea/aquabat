@@ -103,6 +103,13 @@ class SaleOrder(models.Model):
 
             self.env['account.invoice.line'].create(line_vals_list)
 
+            for picking in order.picking_ids:
+                _logger.info('picking')
+                _logger.info(picking)
+                _logger.info('invoice')
+                _logger.info(invoice.id)
+                picking.invoice_id = invoice.id
+
         for group_key in invoices:
             invoices[group_key].write({'name': ', '.join(invoices_name[group_key]),
                                        'origin': ', '.join(invoices_origin[group_key])})
