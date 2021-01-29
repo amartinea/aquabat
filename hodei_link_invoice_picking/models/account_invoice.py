@@ -6,9 +6,17 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
+class SaleAdvancePaymentInv(models.TransientModel):
+    _inherit = "sale.advance.payment.inv"
+
+
+    @api.multi
+    def creates_invoices(self):
+        _logger.info('creates_invoices')
+        super(SaleAdvancePaymentInv, self).creates_invoices()
+
 class SaleOrder(models.Model):
     _inherit = "sale.order"
-
 
     @api.multi
     def action_invoice_create(self, grouped=False, final=False):
