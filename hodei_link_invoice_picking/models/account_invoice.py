@@ -11,6 +11,6 @@ class SaleAdvancePaymentInv(models.TransientModel):
 
 
     @api.multi
-    def creates_invoices(self):
+    def create_invoices(self):
         _logger.info('creates_invoices')
-        super(SaleAdvancePaymentInv, self).creates_invoices()
+        super(SaleAdvancePaymentInv, self).create_invoices()
