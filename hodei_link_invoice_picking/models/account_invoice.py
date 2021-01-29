@@ -10,6 +10,8 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.tools.misc import formatLang
 from odoo.osv import expression
 from odoo.tools import float_is_zero, float_compare
+import logging
+_logger = logging.getLogger(__name__)
 
 
 from odoo.addons import decimal_precision as dp
@@ -57,6 +59,8 @@ class SaleOrder(models.Model):
                 if group_key not in invoices:
                     inv_data = order._prepare_invoice()
                     invoice = inv_obj.create(inv_data)
+                    _logger.info('inv')
+                    _logger.info(invoice)
                     references[invoice] = order
                     invoices[group_key] = invoice
                     invoices_origin[group_key] = [invoice.origin]
@@ -90,7 +94,8 @@ class SaleOrder(models.Model):
                     references[invoices[group_key]] |= order
 
             self.env['account.invoice.line'].create(line_vals_list)
-
+            _logger.info('invoice')
+            _logger.info(invoice)
             for picking in order.picking_ids:
                 if picking.invoice_id is False:
                     picking.invoice_id = invoice.id
