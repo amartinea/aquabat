@@ -15,18 +15,7 @@ from odoo.tools import float_is_zero, float_compare
 from odoo.addons import decimal_precision as dp
 
 from werkzeug.urls import url_encode
-import logging
-_logger = logging.getLogger(__name__)
 
-
-class SaleAdvancePaymentInv(models.TransientModel):
-    _inherit = "sale.advance.payment.inv"
-
-
-    @api.multi
-    def create_invoices(self):
-        _logger.info('creates_invoices')
-        super(SaleAdvancePaymentInv, self).create_invoices()
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -40,7 +29,6 @@ class SaleOrder(models.Model):
         :param final: if True, refunds will be generated if necessary
         :returns: list of created invoices
         """
-        _logger.info('action_invoice_create')
         inv_obj = self.env['account.invoice']
         precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         invoices = {}
@@ -104,11 +92,8 @@ class SaleOrder(models.Model):
             self.env['account.invoice.line'].create(line_vals_list)
 
             for picking in order.picking_ids:
-                _logger.info('picking')
-                _logger.info(picking)
-                _logger.info('invoice')
-                _logger.info(invoice.id)
-                picking.invoice_id = invoice.id
+                if 'invoice_id' in picking and picking.invoice_id is None:
+                	picking.invoice_id = invoice.id
 
         for group_key in invoices:
             invoices[group_key].write({'name': ', '.join(invoices_name[group_key]),
