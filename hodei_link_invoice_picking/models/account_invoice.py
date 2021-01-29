@@ -101,7 +101,8 @@ class SaleOrder(models.Model):
                 _logger.info('picking row')
                 _logger.info(picking.state)
                 _logger.info(picking.id)
-                if picking.invoice_id is False and picking.state == 'done':
+                _logger.info(picking.invoice_id)
+                if picking.invoice_id and picking.state == 'done':
                     picking.invoice_id = invoice.id
 
         for group_key in invoices:
