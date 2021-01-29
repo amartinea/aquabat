@@ -96,6 +96,7 @@ class SaleOrder(models.Model):
             self.env['account.invoice.line'].create(line_vals_list)
             _logger.info('invoice')
             _logger.info(invoice)
+            _logger.info(invoice.id)
             for picking in order.picking_ids:
                 if picking.invoice_id is False:
                     picking.invoice_id = invoice.id
