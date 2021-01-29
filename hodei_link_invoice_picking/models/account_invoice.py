@@ -98,6 +98,9 @@ class SaleOrder(models.Model):
             _logger.info(invoice)
             _logger.info(invoice.id)
             for picking in order.picking_ids:
+                _logger.info('picking row')
+                _logger.info(picking.state)
+                _logger.info(picking.id)
                 if picking.invoice_id is False and picking.state == 'done':
                     picking.invoice_id = invoice.id
 
