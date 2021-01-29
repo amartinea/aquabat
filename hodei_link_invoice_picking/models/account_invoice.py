@@ -92,7 +92,7 @@ class SaleOrder(models.Model):
             self.env['account.invoice.line'].create(line_vals_list)
 
             for picking in order.picking_ids:
-                if 'invoice_id' in picking and picking.invoice_id is None:
+                if 'invoice_id' in picking or picking.invoice_id is None:
                 	picking.invoice_id = invoice.id
 
         for group_key in invoices:
