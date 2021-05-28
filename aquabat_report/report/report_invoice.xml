@@ -234,7 +234,7 @@
             </t>
         </t>
     </template>
-    <template id="report_invoice_document_inherited_aquabat_hpr" inherit_id="__export__.report_invoice_document_inherited_hpr">
+    <!--<template id="report_invoice_document_inherited_aquabat_hpr" inherit_id="__export__.report_invoice_document_inherited_hpr">
         <xpath expr="//div[@class='row mt16']/div" position="replace">
             <div class="col-6">
                 <strong>
@@ -244,5 +244,5 @@
                 </strong>
             </div>
         </xpath>
-    </template>
+    </template>-->
 </odoo>
