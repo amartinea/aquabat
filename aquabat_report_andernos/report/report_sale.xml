@@ -162,8 +162,6 @@
             </xpath>
             <xpath expr="//p[@id='fiscal_position_remark']" position="replace">
             </xpath>
-            <xpath expr="//div[class='oe_structure']" position="replace">
-            </xpath>
             <xpath expr="//div[@name='signature']" position="replace">
                 <div class="row" style="margin-left:5px;">
                     <div class="mt16 col-4" style="border:1px solid black;">
