@@ -5,7 +5,7 @@
             <xpath expr="//div[@class='row'][1]" position="replace">
                 <div class="row" style="border-bottom: solid #dddddd 1px">
                     <div class="col-3">
-                        <img src="/x_web/static/img/aquabatlogo.png"/>
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 45px;" alt="Logo"/>
                     </div>
                     <div class="col-4">
                         <div style="font-size:15px;">
