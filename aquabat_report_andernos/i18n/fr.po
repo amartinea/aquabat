@@ -16,17 +16,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "% discount"
 msgstr "% de remise"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "%TVA"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "<br/>\n"
 "                            Paiement: A définir à la commande<br/>\n"
 "                            Validité de l'Offre: 1 Mois<br/>\n"
@@ -34,25 +34,25 @@ msgid "<br/>\n"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "<br/>\n"
 "                          Conditions de règlement:"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "<br/>\n"
 "                          Date d'échéance:"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "<span>Optional Products</span>"
 msgstr "<span>Produits optionnels</span>"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "<strong>\n"
 "                                Total HT<br/>\n"
 "                                TVA<br/>\n"
@@ -115,7 +115,7 @@ msgid "<strong>Total TTC </strong>"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "<strong>Total:</strong>"
 msgstr "<strong>Total :</strong>"
 
@@ -125,7 +125,7 @@ msgid "<strong>Unit price</strong>"
 msgstr "<strong>Prix unitaire</strong>"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Adr. de facturation"
 msgstr ""
 
@@ -136,7 +136,7 @@ msgid "Adr. de livraison"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "BIC:"
 msgstr ""
 
@@ -147,12 +147,12 @@ msgid "Bon de livraison"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "Code Article"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Date de facturation :"
 msgstr ""
 
@@ -175,8 +175,8 @@ msgstr "Bon de livraison non chiffré"
 #. module: aquabat_report_andernos
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery_without
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "Description"
 msgstr ""
 
@@ -187,12 +187,12 @@ msgid "Document d'origine :"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Facture"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "IBAN:"
 msgstr ""
 
@@ -202,7 +202,7 @@ msgid "Invoices custom Report"
 msgstr "Factures"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "Le Client, Bon pour commande:<br/>\n"
 "                            (date, cachet et signature)"
 msgstr ""
@@ -221,17 +221,17 @@ msgid "Marchandises, ci-dessus désignées, reçues en bon état<br/>\n"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Montant HA"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Montant TVA"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "Nos prix sont établis en fonction des conditions économiques en vigueur à ce jour et sont révisables. Les délais sont indicatifs et ne peuvent en aucun cas engager notre responsabilité.<br/>\n"
 "                        En cas de paiement anticipé ou comptant, aucun escompte ne sera accordé."
 msgstr ""
@@ -239,34 +239,34 @@ msgstr ""
 #. module: aquabat_report_andernos
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery_without
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Numéro :"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Price"
 msgstr "Prix"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "Prix"
 msgstr ""
 
 #. module: aquabat_report_andernos
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery_without
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Product Code"
 msgstr "Code produit"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Quantity"
 msgstr "Quantité"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "Quantité"
 msgstr ""
 
@@ -278,12 +278,12 @@ msgstr "Devis / Commande"
 #. module: aquabat_report_andernos
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery_without
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "REF:"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Refund"
 msgstr "Avoir"
 
@@ -294,46 +294,46 @@ msgid "Référence chantier :"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "Sous-total"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "Subtotal"
 msgstr "Sous-total"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "TVA"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "Unit Price"
 msgstr "Prix unitaire"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "Unité"
 msgstr ""
 
 #. module: aquabat_report_andernos
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery_without
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "VAT:"
 msgstr "TVA :"
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_saleorder_document_aquabat
 msgid "ref:"
 msgstr ""
 
 #. module: aquabat_report_andernos
-#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
 msgid "the"
 msgstr "le"
 
