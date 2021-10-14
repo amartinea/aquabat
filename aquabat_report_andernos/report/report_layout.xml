@@ -21,7 +21,7 @@
             </xpath>
             <xpath expr="//div[@class='row'][2]" position="replace">
             </xpath>
-            <xpath expr="//div[@class='footer']" position="replace">
+            <xpath expr="//div[@class='footer o_standard_footer']" position="replace">
                 <div class="footer o_standard_footer">
                     <div class="text-center" style="border-top: 1px solid black;">
                         <ul class="list-inline mb4">
