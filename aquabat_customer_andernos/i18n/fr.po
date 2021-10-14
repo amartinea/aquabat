@@ -1,0 +1,53 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * sale
+# * aquabat_customer
+# 
+# Translators:
+# Arthur Martineau <a.martineau@hodei.net> 2019
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-28 07:13+0000\n"
+"PO-Revision-Date: 2019-11-28 18:00+0000\n"
+"Last-Translator: Arthur Martineau <a.martineau@hodei.net>, 2019\n"
+"Language-Team: French (https://www.transifex.com/odoo/teams/41243/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: sale
+#: model:ir.model.fields,field_description:sale.field_sale_order__client_order_ref
+msgid "Customer Reference"
+msgstr "Référence chantier"
+
+#. module: aquabat_customer
+#: model:ir.model.fields,field_description:aquabat_customer.field_account_invoice__customer_name
+#: model:ir.model.fields,field_description:aquabat_customer.field_sale_order__customer_name
+msgid "Customer name"
+msgstr "Référence client"
+
+#. module: aquabat_customer
+#: model:ir.model,name:aquabat_customer.model_account_invoice
+msgid "Invoice"
+msgstr "Facture"
+
+#. module: aquabat_customer
+#: model_terms:ir.ui.view,arch_db:aquabat_customer.report_saleorder_document_customer_ref
+#: model_terms:ir.ui.view,arch_db:aquabat_customer.report_invoice_customer_ref
+msgid "Customer Name :"
+msgstr "Nom du client :"
+
+#. module: aquabat_customer
+#: model:ir.model,name:aquabat_customer.model_sale_order
+msgid "Sale Order"
+msgstr "Bon de commande"
+
+#. module: aquabat_customer
+#: model:ir.model,name:aquabat_customer.model_sale_advance_payment_inv
+msgid "Sales Advance Payment Invoice"
+msgstr "Facture de paiement d'avance"

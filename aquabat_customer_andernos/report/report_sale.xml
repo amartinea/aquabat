@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--     <template id="aquabat_customer_andernos.report_saleorder_document_customer_ref" inherit_id="aquabat_report_andernos.report_saleorder_document_aquabat">
+        <xpath expr="//div[@class='row main-row']/div[@class='col-4 border-date']" position="inside">
+            <div class="row" style="margin-right:0px;">
+                <div t-if="doc.customer_name">
+                    <div style="font-size: 14px;">Customer Name : <div t-field="doc.customer_name"/></div>
+                </div>
+            </div>
+        </xpath>
+    </template> -->
+</odoo>
+    

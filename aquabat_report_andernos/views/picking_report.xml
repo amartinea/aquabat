@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- QWeb Reports -->
+        <report
+            id="stock_picking_custom_report"
+            model="stock.picking"
+            string="Delivery Note Report"
+            report_type="qweb-pdf"
+            name="aquabat_report_andernos.stock_picking_custom_delivery_report"
+            file="aquabat_report_andernos.stock_picking_custom_delivery_report"
+            print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
+        />
+        <!-- QWeb Reports -->
+        <report
+            id="stock_picking_without_custom_report"
+            model="stock.picking"
+            string="Delivery Note Report Without Price"
+            report_type="qweb-pdf"
+            name="aquabat_report_andernos.stock_picking_custom_delivery_without_report"
+            file="aquabat_report_andernos.stock_picking_custom_delivery_without_report"
+            print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
+        />
+    </data>
+</odoo>

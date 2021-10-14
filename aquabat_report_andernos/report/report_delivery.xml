@@ -1,0 +1,290 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="aquabat_report_andernos.report_delivery">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="row" style="margin-right:0px;">
+                      <div class="col-4">
+                        <div style="font-size: 18px;">Bon de livraison</div>
+                      </div>
+                      <div class="col-3 offset-5">
+                        <div style="font-size: 18px; margin-left:-17px;">Adr. de livraison</div>
+                      </div>
+                    </div>
+                    <div class="row main-row" style="margin-right:0px; font-size: 14px; margin-left:5px;">
+                        <div class="col-5" style="border-left:solid;">
+                          <div class="row" style="margin-right:0px;">
+                            <div class="col-6">
+                                Numéro : <div t-field="o.name" style="font-size: 12px;"/>
+                            </div>
+                            <div class="col-6">
+                                Date de livraison : <div t-field="o.scheduled_date"/>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-2">
+                            <div t-if="o.sale_id.client_order_ref" style="font-size: 14px; margin-left:-10px;">Référence chantier : <div t-field="o.sale_id.client_order_ref"/></div>
+                        </div>
+
+                        <div class="col-3 offset-1" style="border-left:solid;">
+                            <!-- <div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/> -->
+                            <div>
+                                <div t-field="o.partner_id.name"/>
+                                <div t-field="o.partner_id.street"/>
+                                <div t-field="o.partner_id.street2"/>
+                                <div t-field="o.partner_id.state_id.name"/>
+                                <div><span t-field="o.partner_id.zip"/> <span t-field="o.partner_id.city"/></div>
+                            </div>
+                            <p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat"/></p>
+                            <p t-if="o.partner_id.ref" class="mt16">REF: <span t-field="o.partner_id.ref"/></p>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-right:0px; font-size: 14px; margin-left:5px;">
+                        <div class="col-4" style="border-left:solid;">
+                            <div style="font-size: 14px;">Document d'origine : <div t-field="o.origin"/></div>
+                        </div>
+                    </div>
+                    <div style="margin-top:64px; margin-bottom:5px; font-size: 14px">
+                        <table width="100%">
+                            <thead t-if="not o.sale_id and o.state!='done'">
+                                <tr style="font-size: 15px">
+                                    <th>Product Code</th>
+                                    <th style="padding-left:3px;">Description</th>
+                                    <th><strong>Ordered Quantity</strong></th>
+                                </tr>
+                            </thead>
+                            <t t-if="o.sale_id">
+                                <thead t-if="(o.move_line_ids or o.move_ids_without_package) and o.state=='done'">
+                                    <t t-set="amount_total" t-value="0.00"/>
+                                    <t t-set="amount_tva" t-value="0.00"/>
+                                    <tr>
+                                        <th><strong>Product Code</strong></th>
+                                        <th style="padding-left:3px;"><strong>Description</strong></th>
+                                        <th><strong>Quantity</strong></th>
+                                        <th><strong>Unit price</strong></th>
+                                        <th><strong>Sub Total</strong></th>
+                                        <th class="text-right"><strong>TVA</strong></th>
+                                    </tr>
+                                </thead>
+                                <thead t-if="(o.move_line_ids or o.move_ids_without_package) and o.state!='done'">
+                                    <t t-set="amount_total" t-value="0.00"/>
+                                    <t t-set="amount_tva" t-value="0.00"/>
+                                    <tr>
+                                        <th><strong>Product Code</strong></th>
+                                        <th style="padding-left:3px;"><strong>Description</strong></th>
+                                        <th><strong>Quantity</strong></th>
+                                        <th><strong>Unit price</strong></th>
+                                        <th><strong>Sub Total</strong></th>
+                                        <th class="text-right"><strong>TVA</strong></th>
+                                    </tr>
+                                </thead>
+                            </t>
+                            <t t-else="">
+                                <thead t-if="(o.move_line_ids or o.move_ids_without_package) and o.state=='done'">
+                                    <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')"/>
+                                    <tr>
+                                        <th><strong>Product</strong></th>
+                                        <th name="lot_serial" t-if="has_serial_number" groups="stock.group_lot_on_delivery_slip">
+                                            Lot/Serial Number
+                                        </th>
+                                        <th class="text-center"><strong>Quantity</strong></th>
+                                    </tr>
+                                </thead>
+                            </t>
+                            <tbody t-if="not o.sale_id and o.state!='done'">
+                                <tr t-foreach="o.move_lines" t-as="move">
+                                    <td><span t-field="move.product_id.default_code"/></td>
+                                    <td><span t-field="move.product_id.name"/></td>
+                                    <td>
+                                        <!--<span t-field="move.ordered_qty"/>-->
+                                        <span t-field="move.product_uom_qty"/>
+                                        <span t-field="move.product_uom"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <t t-if="o.sale_id">
+                                <tbody t-if="o.state=='done'">
+                                    <tr t-foreach="o.move_line_ids" t-as="pack">
+                                        <td><span t-field="pack.product_id.default_code"/></td>
+                                        <td><span t-field="pack.product_id.name"/></td>
+                                        <td><span t-field="pack.qty_done"/></td>
+                                        <t t-set="related_order_line" t-value="o.sale_id.order_line.filtered(lambda x,pack=pack: x.product_id == pack.product_id)"/>
+                                        <td><span t-esc="'%.2f'%(related_order_line.price_unit - (related_order_line.price_unit * (related_order_line.discount / 100)))"/></td>
+                                        <td class="text-right"><span t-esc="'%.2f'%((related_order_line.price_subtotal / related_order_line.product_uom_qty) * pack.qty_done)"/></td>
+                                        <t t-set="amount_total" t-value="amount_total + (round((related_order_line.price_subtotal / related_order_line.product_uom_qty) * pack.qty_done, 2))"/>
+                                        <t t-set="amount_tva" t-value="amount_tva + round(((related_order_line.price_tax / related_order_line.product_uom_qty) * pack.qty_done), 2)"/>
+                                        <td class="text-right"><span t-field="pack.product_id.taxes_id.description"/></td>
+                                    </tr>
+                                    <!--<tr t-foreach="o.move_ids_without_package" t-as="w_pack">
+                                        <td><span t-field="w_pack.product_id"/></td>
+                                        <td><span t-field="w_pack.product_uom_qty"/></td>
+                                        <t t-set="related_order_line" t-value="o.sale_id.order_line.filtered(lambda x,w_pack=w_pack: x.product_id == w_pack.product_id)"/>
+                                        <td><span t-esc="'%.2f'%(related_order_line.price_unit - (related_order_line.price_unit * (related_order_line.discount / 100)))"/></td>
+                                        <td class="text-right"><span t-esc="'%.2f'%((related_order_line.price_subtotal / related_order_line.product_uom_qty) * w_pack.product_uom_qty)"/></td>
+                                        <t t-set="amount_total" t-value="amount_total + (round((related_order_line.price_subtotal / related_order_line.product_uom_qty) * w_pack.product_uom_qty))"/>
+                                        <t t-set="amount_tva" t-value="amount_tva + round(((related_order_line.price_tax / related_order_line.product_uom_qty) * w_pack.product_uom_qty))"/>
+                                    </tr>-->
+                                </tbody>
+                                <tbody t-else="">
+                                    <tr t-foreach="o.move_line_ids" t-as="pack">
+                                        <td><span t-field="pack.product_id.default_code"/></td>
+                                        <td><span t-field="pack.product_id.name"/></td>
+                                        <td><span t-field="pack.qty_done"/></td>
+                                        <t t-set="related_order_line" t-value="o.sale_id.order_line.filtered(lambda x,pack=pack: x.product_id == pack.product_id)"/>
+                                        <td><span t-esc="'%.2f'%(related_order_line.price_unit - (related_order_line.price_unit * (related_order_line.discount / 100)))"/></td>
+                                        <td class="text-right"><span t-esc="'%.2f'%((related_order_line.price_subtotal / related_order_line.product_uom_qty) * pack.qty_done)"/></td>
+                                        <t t-set="amount_total" t-value="amount_total + (round((related_order_line.price_subtotal / related_order_line.product_uom_qty) * pack.qty_done, 2))"/>
+                                        <t t-set="amount_tva" t-value="amount_tva + round(((related_order_line.price_tax / related_order_line.product_uom_qty) * pack.qty_done), 2)"/>
+                                        <td class="text-right"><span t-field="pack.product_id.taxes_id.description"/></td>
+                                    </tr>
+                                    <!--<tr t-foreach="o.move_ids_without_package" t-as="w_pack">
+                                        <td><span t-field="w_pack.product_id"/></td>
+                                        <td><span t-field="w_pack.product_uom_qty"/></td>
+                                        <t t-set="related_order_line" t-value="o.sale_id.order_line.filtered(lambda x,w_pack=w_pack: x.product_id == w_pack.product_id)"/>
+                                        <td><span t-esc="'%.2f'%(related_order_line.price_unit - (related_order_line.price_unit * (related_order_line.discount / 100)))"/></td>
+                                        <td class="text-right"><span t-esc="'%.2f'%((related_order_line.price_subtotal / related_order_line.product_uom_qty) * w_pack.product_uom_qty)"/></td>
+                                        <t t-set="amount_total" t-value="amount_total + (round((related_order_line.price_subtotal / related_order_line.product_uom_qty) * w_pack.product_uom_qty))"/>
+                                        <t t-set="amount_tva" t-value="amount_tva + round(((related_order_line.price_tax / related_order_line.product_uom_qty) * w_pack.product_uom_qty))"/>
+                                    </tr>-->
+                                </tbody>
+                            </t>
+                            <t t-else="">
+                                <tbody>
+                                    <tr t-foreach="o.move_line_ids" t-as="move_line">
+                                        <td><span t-field="move_line.product_id.default_code"/></td>
+                                        <td>
+                                            <span t-field="move_line.product_id.name"/>
+                                            <p t-if="o.picking_type_code == 'outgoing'">
+                                                <span t-field="move_line.product_id.sudo().description_pickingout"/>
+                                            </p>
+                                            <p t-if="o.picking_type_code == 'incoming'">
+                                                <span t-field="move_line.product_id.sudo().description_pickingin"/>
+                                            </p>
+                                        </td>
+                                        <td t-if="has_serial_number and move_line.lot_name" groups="stock.group_lot_on_delivery_slip">
+                                            <span t-field="move_line.lot_name"/>
+                                        </td>
+                                        <td t-else="" groups="stock.group_lot_on_delivery_slip">
+                                            <span t-field="move_line.lot_id.name"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="move_line.qty_done"/>
+                                            <span t-field="move_line.product_uom_id"/>
+                                        </td>
+                                    </tr>
+                                    <!--<tr t-foreach="o.move_ids_without_package" t-as="w_move_line">
+                                        <td>
+                                            <span t-field="w_move_line.product_id"/>
+                                            <p t-if="o.picking_type_code == 'outgoing'">
+                                                <span t-field="w_move_line.product_id.sudo().description_pickingout"/>
+                                            </p>
+                                            <p t-if="o.picking_type_code == 'incoming'">
+                                                <span t-field="w_move_line.product_id.sudo().description_pickingin"/>
+                                            </p>
+                                        </td>
+                                        <td t-if="has_serial_number and move_line.lot_name" groups="stock.group_lot_on_delivery_slip">
+                                            <span t-field="w_move_line.lot_name"/>
+                                        </td>
+                                        <td t-else="" groups="stock.group_lot_on_delivery_slip">
+                                            <span t-field="w_move_line.lot_id.name"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="w_move_line.product_uom_qty"/>
+                                            <span t-field="w_move_line.product_uom_id"/>
+                                        </td>
+                                    </tr>-->
+                                </tbody>
+                            </t>
+                        </table>
+                    </div>
+    <!--                 <div class="row" style="margin-left:5px; page-break-inside: avoid">
+                        <div class="mt32 col-6">
+                            <table style="border: 1px solid black" width="100%">
+                                <thead>
+                                    <th class="text-center" style="border-right:1px solid black; border-bottom:1px solid black;">TVA</th>
+                                    <th class="text-center" style="border-right:1px solid black; border-bottom:1px solid black;">Montant HA</th>
+                                    <th class="text-center" style="border-right:1px solid black; border-bottom:1px solid black;">%TVA</th>
+                                    <th class="text-center" style="border-bottom:1px solid black;">Montant TVA</th>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.move_line_ids" t-as="t">
+                                        <td style="border-right:1px solid black;padding-left:3px;"><span t-esc="t_index + 1"/></td>
+                                        <td class="text-right" style="border-right:1px solid black;padding-right:3px;">
+                                            <span t-field="t.base"/>
+                                        </td>
+                                        <td style="border-right:1px solid black;padding-left:3px;" class="text-right"><span t-field="t.tax_id.description"/></td>
+                                        <td class="text-right" style="padding-right:3px;">
+                                            <span t-field="t.amount"/>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div><div class="mt32 col-6">
+                            <div class="row mt16" style="margin-left:3cm;border:1px solid black; margin-right:0px;">
+                                <div class="col-6">
+                                    <strong>
+                                    Total HT<br/>
+                                    TVA<br/>
+                                    Total TTC</strong>
+                                </div>
+                                <div class="col-6 text-right pull-right">
+                                    <span t-esc="amount_total"/>
+                                    <span t-esc="amount_tva"/>
+                                    <span t-esc="amount_total + amount_tva"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row" name="total" t-if="o.sale_id">
+                        <div class="col-4 offset-8">
+                            <table class="table table-sm">
+                                <tr class="border-black">
+                                    <td><strong>Total HT</strong></td>
+                                    <td class="text-right">
+                                        <span t-esc="amount_total"/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black">
+                                    <td><strong>TVA </strong></td>
+                                    <td class="text-right">
+                                        <span t-esc="amount_tva"/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black">
+                                    <td><strong>Total TTC </strong></td>
+                                    <td class="text-right">
+                                        <span t-esc="round(amount_total + amount_tva, 2)"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-left:5px; margin-top:15px;">
+                        <div class="col-12" style="font-size: 12px;">
+                          <div class="row">
+                            <div class="col-7">
+                                <!--<t t-if="o.backorder_ids and o.backorder_ids.filtered(lambda x: x.state not in ('done', 'cancel'))" position="after">-->
+                                    <p class="mt32">Marchandises, ci-dessus désignées, reçues en bon état<br/>
+                                        Signature : </p>
+                                <!--</t>-->
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <p style="page-break-before:always;"> </p>
+                </div>
+            </t>
+        </t>  
+    </template>
+    <template id="stock_picking_custom_delivery_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="aquabat_report.report_delivery" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>
