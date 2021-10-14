@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <template id="aquabat_report_andernos.report_invoice_docuement" inherit_id="account.report_invoice_document">
-            <xpath expr="t[@t-set='address']" position="replace">
-            </xpath>
+        <template id="aquabat_report_andernos.report_invoice_document" inherit_id="account.report_invoice_document">
             <xpath expr="h2" position="replace">
                 <span t-if="o.type == 'out_refund'">Refund</span>
                 <div class="oe_structure"/>
