@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <template id="external_layout_standard_aquabat" inherit_id="web.external_layout_standard">
-            <xpath expr="div[@class='row'][1]" position="replace">
+            <xpath expr="//div[@class='row'][1]" position="replace">
                 <div class="row" style="border-bottom: solid #dddddd 1px">
                     <div class="col-3">
                         <img src="/x_web/static/img/aquabatlogo.png"/>
@@ -17,11 +17,11 @@
                     </div>
                 </div>
             </xpath>
-            <xpath expr="div[@class='zero_min_height']" position="replace">
+            <xpath expr="//div[@class='zero_min_height']" position="replace">
             </xpath>
-            <xpath expr="div[@class='row'][3]" position="replace">
+            <xpath expr="//div[@class='row'][3]" position="replace">
             </xpath>
-            <xpath expr="div[@class='footer']" position="replace">
+            <xpath expr="//div[@class='footer']" position="replace">
                 <div class="footer o_standard_footer">
                     <div class="text-center" style="border-top: 1px solid black;">
                         <ul class="list-inline mb4">

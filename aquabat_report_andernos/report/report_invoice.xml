@@ -2,7 +2,8 @@
 <odoo>
     <data>
         <template id="aquabat_report_andernos.report_invoice_document" inherit_id="account.report_invoice_document">
-            <xpath expr="h2" position="replace">
+            <xpath expr="//t[@t-set='address']" position="replace"></xpath>
+            <xpath expr="//h2" position="replace">
                 <span t-if="o.type == 'out_refund'">Refund</span>
                 <div class="oe_structure"/>
                 <div class="row" style="margin-right:0px;">
@@ -14,7 +15,7 @@
                     </div>
                 </div>
             </xpath>
-            <xpath expr="div[@id='informations']" position="replace">
+            <xpath expr="//div[@id='informations']" position="replace">
                 <div class="row main-row" style="margin-right:0px; font-size: 14px; margin-left:5px;">
                     <div class="col-7" style="border-left:solid;">
                         <div class="row" style="margin-right:0px;">
@@ -48,7 +49,7 @@
                     </div>
                 </div>
             </xpath>
-            <xpath expr="table[@name='invoice_line_table']" position="replace">
+            <xpath expr="//table[@name='invoice_line_table']" position="replace">
                 <div>
                     <table class="table table-sm o_main_table" style="margin-top:10px">
                         <thead style="display: table-row-group">
@@ -187,7 +188,7 @@
                     </table>
                 </div>
             </xpath>
-            <xpath expr="div[@class='clearfix']" position="replace">
+            <xpath expr="//div[@class='clearfix']" position="replace">
                  <div class="row" style="margin-left:5px; page-break-inside: avoid">
                     <div class="mt32 col-6">
                         <table style="border: 1px solid black" width="100%">
@@ -242,11 +243,11 @@
                     </div>
                 </div>
             </xpath>
-            <xpath expr="p[@t-if='o.reference']" position="replace"></xpath>
-            <xpath expr="p[@t-if='o.comment']" position="replace"></xpath>
-            <xpath expr="p[@t-if='o.payment_term_id']" position="replace"></xpath>
-            <xpath expr="p[@t-if='o.fiscal_position_id.note']" position="replace"></xpath>
-            <xpath expr="[@id='qrcode']" position="replace">
+            <xpath expr="//p[@t-if='o.reference']" position="replace"></xpath>
+            <xpath expr="//p[@t-if='o.comment']" position="replace"></xpath>
+            <xpath expr="//p[@t-if='o.payment_term_id']" position="replace"></xpath>
+            <xpath expr="//p[@t-if='o.fiscal_position_id.note']" position="replace"></xpath>
+            <xpath expr="//div[@id='qrcode']" position="replace">
                 <div class="row" style="margin-left:5px;">
                     <div class="col-12" style="font-size: 12px;">
                       <div class="row" style="margin-left:2px;">

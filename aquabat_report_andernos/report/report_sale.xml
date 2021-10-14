@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <template id="report_saleorder_document_aquabat" inherit_id="sale.report_saleorder_document">
-            <xpath expr="div[@class='page']" position="before">
+            <xpath expr="//div[@class='page']" position="before">
                 <t t-set="address">
                     <div t-field="doc.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
                     <p t-if="doc.partner_id.vat"><t t-esc="doc.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="doc.partner_id.vat"/></p>
@@ -19,7 +19,7 @@
                     </t>
                 </t>
             </xpath>
-            <xpath expr="h2" position="replace">
+            <xpath expr="//h2" position="replace">
                 <div class="row" style="margin-right:0px;">
                   <div class="col-5" style="margin-bottom:8px">
                     <h3 class="mt16">
@@ -38,7 +38,7 @@
                   </div>
                 </div>
             </xpath>
-            <xpath expr="div[@class='row mt32 mb32']" position="replace">
+            <xpath expr="//div[@class='row mt32 mb32']" position="replace">
                 <div class="row main-row" style="margin-right:0px; margin-top:-5px; border-left:solid; margin-left:10px;">
                     <div class="col-6">
                         <div class="row mt32 mb32" id="informations" style="margin-bottom:0px; font-size: 14px;">
@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </xpath>
-            <xpath expr="table[@class='table table-sm o_main_table']" position="replace">
+            <xpath expr="//table[@class='table table-sm o_main_table']" position="replace">
                 <table class="table table-sm o_main_table" style="margin-top:10px">
                     <thead style="display: table-row-group">
                         <tr>
@@ -154,17 +154,17 @@
                     </tbody>
                 </table>
             </xpath>
-            <xpath expr="div[@class='clearfix']" position="replace">
+            <xpath expr="//div[@class='clearfix']" position="replace">
             </xpath>
-            <xpath expr="p[@t-field='doc.note']" position="replace">
+            <xpath expr="//p[@t-field='doc.note']" position="replace">
             </xpath>
-            <xpath expr="p[@t-field='doc.payment_term_id.note']" position="replace">
+            <xpath expr="//p[@t-field='doc.payment_term_id.note']" position="replace">
             </xpath>
-            <xpath expr="p[@id='fiscal_position_remark']" position="replace">
+            <xpath expr="//p[@id='fiscal_position_remark']" position="replace">
             </xpath>
-            <xpath expr="div[class='oe_structure']" position="replace">
+            <xpath expr="//div[class='oe_structure']" position="replace">
             </xpath>
-            <xpath expr="div[@name='signature']" position="replace">
+            <xpath expr="//div[@name='signature']" position="replace">
                 <div class="row" style="margin-left:5px;">
                     <div class="mt16 col-4" style="border:1px solid black;">
                         <div style="border-bottom:1px solid black; margin-left:-15px;margin-right:-15px;"/>
