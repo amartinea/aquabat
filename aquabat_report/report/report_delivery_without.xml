@@ -29,7 +29,7 @@
                             <div t-if="o.sale_id.client_order_ref" style="font-size: 14px; margin-left:-10px;">Référence chantier : <div t-field="o.sale_id.client_order_ref"/></div>
                         </div>
 
-                        <div class="col-3 offset-2" style="border-left:solid;">
+                        <div class="col-3 offset-1" style="border-left:solid;">
                             <!-- <div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/> -->
                             <div>
                                 <div t-field="o.partner_id.name"/>

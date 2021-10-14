@@ -84,20 +84,11 @@
                             </t>
                             <t t-foreach="pick.move_lines.filtered(lambda x:x.product_id.id == line.product_id.id and x.sale_line_id.id in line.sale_line_ids.ids)" t-as="move">
                                 <tr>
-                                    <t t-if="line.quantity == move.quantity_done">
-                                        <td><span t-field="line.product_id.default_code"/></td>
-                                        <td><span t-field="move.product_id.name"/></td>
-                                        <td class="text-right"><span t-field="line.quantity"/></td>
-                                        <td class="text-right"><span t-esc="(line.price_unit - (line.price_unit *  line.discount)/100)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
-                                        <td class="text-right">
-                                            <t t-set="subtotal" t-value="(line.price_unit * line.quantity) - ((line.price_unit * line.quantity * line.discount)/100)"/>
-                                            <t t-set="total_amount_per_do" t-value="total_amount_per_do + subtotal"/>
-                                            <span t-esc="subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
-                                        </td>
-                                        <td class="text-right"><span t-field="line.product_id.taxes_id.description"/></td>
+                                    <t t-if="line.display_type == 'line_section' or line.display_type == 'line_note'">
+                                        <td><span t-field="line.name" style="margin-left: 10px"/></td>
                                     </t>
-                                    <t t-if="line.quantity != move.quantity_done">
-                                        <t t-if="line.quantity &lt; move.quantity_done">
+                                    <t t-if="line.display_type != 'line_section' and line.display_type != 'line_note'">
+                                        <t t-if="line.quantity == move.quantity_done">
                                             <td><span t-field="line.product_id.default_code"/></td>
                                             <td><span t-field="move.product_id.name"/></td>
                                             <td class="text-right"><span t-field="line.quantity"/></td>
@@ -109,17 +100,31 @@
                                             </td>
                                             <td class="text-right"><span t-field="line.product_id.taxes_id.description"/></td>
                                         </t>
-                                        <t t-if="line.quantity &gt; move.quantity_done">
-                                            <td><span t-field="line.product_id.default_code"/></td>
-                                            <td><span t-field="move.product_id.name"/></td>
-                                            <td class="text-right"><span t-field="move.quantity_done"/></td>
-                                            <td class="text-right"><span t-esc="(line.price_unit - (line.price_unit * line.discount)/100)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
-                                            <td class="text-right">
-                                                <t t-set="subtotal" t-value="(line.price_unit * move.quantity_done) - ((line.price_unit * move.quantity_done * line.discount)/100)"/>
-                                                <t t-set="total_amount_per_do" t-value="total_amount_per_do + subtotal"/>
-                                                <span t-esc="subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
-                                            </td>
-                                            <td class="text-right"><span t-field="line.product_id.taxes_id.description"/></td>
+                                        <t t-if="line.quantity != move.quantity_done">
+                                            <t t-if="line.quantity &lt; move.quantity_done">
+                                                <td><span t-field="line.product_id.default_code"/></td>
+                                                <td><span t-field="move.product_id.name"/></td>
+                                                <td class="text-right"><span t-field="line.quantity"/></td>
+                                                <td class="text-right"><span t-esc="(line.price_unit - (line.price_unit *  line.discount)/100)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                                                <td class="text-right">
+                                                    <t t-set="subtotal" t-value="(line.price_unit * line.quantity) - ((line.price_unit * line.quantity * line.discount)/100)"/>
+                                                    <t t-set="total_amount_per_do" t-value="total_amount_per_do + subtotal"/>
+                                                    <span t-esc="subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                                </td>
+                                                <td class="text-right"><span t-field="line.product_id.taxes_id.description"/></td>
+                                            </t>
+                                            <t t-if="line.quantity &gt; move.quantity_done">
+                                                <td><span t-field="line.product_id.default_code"/></td>
+                                                <td><span t-field="move.product_id.name"/></td>
+                                                <td class="text-right"><span t-field="move.quantity_done"/></td>
+                                                <td class="text-right"><span t-esc="(line.price_unit - (line.price_unit * line.discount)/100)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                                                <td class="text-right">
+                                                    <t t-set="subtotal" t-value="(line.price_unit * move.quantity_done) - ((line.price_unit * move.quantity_done * line.discount)/100)"/>
+                                                    <t t-set="total_amount_per_do" t-value="total_amount_per_do + subtotal"/>
+                                                    <span t-esc="subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                                </td>
+                                                <td class="text-right"><span t-field="line.product_id.taxes_id.description"/></td>
+                                            </t>
                                         </t>
                                     </t>
                                 </tr>
@@ -229,7 +234,7 @@
             </t>
         </t>
     </template>
-    <template id="report_invoice_document_inherited_aquabat_hpr" inherit_id="__export__.report_invoice_document_inherited_hpr">
+    <!--<template id="report_invoice_document_inherited_aquabat_hpr" inherit_id="__export__.report_invoice_document_inherited_hpr">
         <xpath expr="//div[@class='row mt16']/div" position="replace">
             <div class="col-6">
                 <strong>
@@ -239,5 +244,5 @@
                 </strong>
             </div>
         </xpath>
-    </template>
+    </template>-->
 </odoo>

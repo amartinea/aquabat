@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <odoo>
-    <template id="aquabat_report.report_delivery">
+    <template id="aquabat_report_andernos.report_delivery_without">
         <t t-call="web.html_container">
             <t t-call="web.external_layout">
                 <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
@@ -42,7 +42,7 @@
                             <p t-if="o.partner_id.ref" class="mt16">REF: <span t-field="o.partner_id.ref"/></p>
                         </div>
                     </div>
-                    <div class="row" style="margin-right:0px; font-size: 14px; margin-left:5px;">
+                    <div class="row origin" style="margin-right:0px; font-size: 14px; margin-left:5px;">
                         <div class="col-4" style="border-left:solid;">
                             <div style="font-size: 14px;">Document d'origine : <div t-field="o.origin"/></div>
                         </div>
@@ -64,9 +64,6 @@
                                         <th><strong>Product Code</strong></th>
                                         <th style="padding-left:3px;"><strong>Description</strong></th>
                                         <th><strong>Quantity</strong></th>
-                                        <th><strong>Unit price</strong></th>
-                                        <th><strong>Sub Total</strong></th>
-                                        <th class="text-right"><strong>TVA</strong></th>
                                     </tr>
                                 </thead>
                                 <thead t-if="(o.move_line_ids or o.move_ids_without_package) and o.state!='done'">
@@ -76,9 +73,6 @@
                                         <th><strong>Product Code</strong></th>
                                         <th style="padding-left:3px;"><strong>Description</strong></th>
                                         <th><strong>Quantity</strong></th>
-                                        <th><strong>Unit price</strong></th>
-                                        <th><strong>Sub Total</strong></th>
-                                        <th class="text-right"><strong>TVA</strong></th>
                                     </tr>
                                 </thead>
                             </t>
@@ -111,12 +105,6 @@
                                         <td><span t-field="pack.product_id.default_code"/></td>
                                         <td><span t-field="pack.product_id.name"/></td>
                                         <td><span t-field="pack.qty_done"/></td>
-                                        <t t-set="related_order_line" t-value="o.sale_id.order_line.filtered(lambda x,pack=pack: x.product_id == pack.product_id)"/>
-                                        <td><span t-esc="'%.2f'%(related_order_line.price_unit - (related_order_line.price_unit * (related_order_line.discount / 100)))"/></td>
-                                        <td class="text-right"><span t-esc="'%.2f'%((related_order_line.price_subtotal / related_order_line.product_uom_qty) * pack.qty_done)"/></td>
-                                        <t t-set="amount_total" t-value="amount_total + (round((related_order_line.price_subtotal / related_order_line.product_uom_qty) * pack.qty_done, 2))"/>
-                                        <t t-set="amount_tva" t-value="amount_tva + round(((related_order_line.price_tax / related_order_line.product_uom_qty) * pack.qty_done), 2)"/>
-                                        <td class="text-right"><span t-field="pack.product_id.taxes_id.description"/></td>
                                     </tr>
                                     <!--<tr t-foreach="o.move_ids_without_package" t-as="w_pack">
                                         <td><span t-field="w_pack.product_id"/></td>
@@ -133,12 +121,6 @@
                                         <td><span t-field="pack.product_id.default_code"/></td>
                                         <td><span t-field="pack.product_id.name"/></td>
                                         <td><span t-field="pack.qty_done"/></td>
-                                        <t t-set="related_order_line" t-value="o.sale_id.order_line.filtered(lambda x,pack=pack: x.product_id == pack.product_id)"/>
-                                        <td><span t-esc="'%.2f'%(related_order_line.price_unit - (related_order_line.price_unit * (related_order_line.discount / 100)))"/></td>
-                                        <td class="text-right"><span t-esc="'%.2f'%((related_order_line.price_subtotal / related_order_line.product_uom_qty) * pack.qty_done)"/></td>
-                                        <t t-set="amount_total" t-value="amount_total + (round((related_order_line.price_subtotal / related_order_line.product_uom_qty) * pack.qty_done, 2))"/>
-                                        <t t-set="amount_tva" t-value="amount_tva + round(((related_order_line.price_tax / related_order_line.product_uom_qty) * pack.qty_done), 2)"/>
-                                        <td class="text-right"><span t-field="pack.product_id.taxes_id.description"/></td>
                                     </tr>
                                     <!--<tr t-foreach="o.move_ids_without_package" t-as="w_pack">
                                         <td><span t-field="w_pack.product_id"/></td>
@@ -239,30 +221,6 @@
                             </div>
                         </div>
                     </div> -->
-                    <div class="row" name="total" t-if="o.sale_id">
-                        <div class="col-4 offset-8">
-                            <table class="table table-sm">
-                                <tr class="border-black">
-                                    <td><strong>Total HT</strong></td>
-                                    <td class="text-right">
-                                        <span t-esc="amount_total"/>
-                                    </td>
-                                </tr>
-                                <tr class="border-black">
-                                    <td><strong>TVA </strong></td>
-                                    <td class="text-right">
-                                        <span t-esc="amount_tva"/>
-                                    </td>
-                                </tr>
-                                <tr class="border-black">
-                                    <td><strong>Total TTC </strong></td>
-                                    <td class="text-right">
-                                        <span t-esc="round(amount_total + amount_tva, 2)"/>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
                     <div class="row" style="margin-left:5px; margin-top:15px;">
                         <div class="col-12" style="font-size: 12px;">
                           <div class="row">
@@ -278,12 +236,12 @@
                     <p style="page-break-before:always;"> </p>
                 </div>
             </t>
-        </t>  
+        </t>
     </template>
-    <template id="stock_picking_custom_delivery_report">
+    <template id="stock_picking_custom_delivery_without_report">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="aquabat_report.report_delivery" t-lang="o.partner_id.lang"/>
+                <t t-call="aquabat_report.report_delivery_without" t-lang="o.partner_id.lang"/>
             </t>
         </t>
     </template>

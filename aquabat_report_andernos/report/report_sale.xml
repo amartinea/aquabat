@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_saleorder_document_aquabat" inherit_id="sale.report_saleorder_document">
+            <xpath expr="div[@class='page']" position="before">
+                <t t-set="address">
+                    <div t-field="doc.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                    <p t-if="doc.partner_id.vat"><t t-esc="doc.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="doc.partner_id.vat"/></p>
+                </t>
+                <t t-if="doc.partner_shipping_id == doc.partner_invoice_id and doc.partner_invoice_id != doc.partner_id or doc.partner_shipping_id != doc.partner_invoice_id">
+                    <t t-set="information_block">
+                        <strong t-if="doc.partner_shipping_id == doc.partner_invoice_id">Invoicing and shipping address:</strong>
+                        <strong t-if="doc.partner_shipping_id != doc.partner_invoice_id">Invoicing address:</strong>
+                        <div t-field="doc.partner_invoice_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                        <t t-if="doc.partner_shipping_id != doc.partner_invoice_id">
+                            <strong>Shipping address:</strong>
+                            <div t-field="doc.partner_shipping_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                        </t>
+                    </t>
+                </t>
+            </xpath>
+            <xpath expr="h2" position="replace">
+                <div class="row" style="margin-right:0px;">
+                  <div class="col-5" style="margin-bottom:8px">
+                    <h3 class="mt16">
+                      <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+                          <span t-if="doc.state not in ['draft','sent']">Commande </span>
+                          <span t-if="doc.state in ['draft','sent']">Devis </span>
+                      </t>
+                      <t t-if="env.context.get('proforma', False) or is_pro_forma">
+                          <span>Pro-Forma Invoice # </span>
+                      </t>
+                      <span t-field="doc.name"/>
+                    </h3>
+                  </div>
+                  <div class="col-4 offset-3">
+                    <div style="font-size: 18px; margin-left:-5px;">Adresse client</div>
+                  </div>
+                </div>
+            </xpath>
+            <xpath expr="div[@class='row mt32 mb32']" position="replace">
+                <div class="row main-row" style="margin-right:0px; margin-top:-5px; border-left:solid; margin-left:10px;">
+                    <div class="col-6">
+                        <div class="row mt32 mb32" id="informations" style="margin-bottom:0px; font-size: 14px;">
+                            <div t-if="doc.user_id.name" class="col-auto col-3 mw-100 mb-2">
+                                <span>Vendeur:</span>
+                                <p class="m-0" t-field="doc.user_id"/>
+                            </div>
+                          
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <span>Paiement:</span>
+                                <p class="m-0">A définir à la commande</p>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <span>Validité de l'Offre:</span>
+                                <p class="m-0">1 Mois</p>
+                            </div>
+                        </div>
+                        <div class="row mt32 mb32" style="font-size: 14px;">
+                            <div t-if="doc.date_order and doc.state in ['draft', 'sent']" class="col-auto col-3 mw-100 mb-2">
+                                <span>Date de commande:</span>
+                                <p class="m-0" t-field="doc.date_order" t-options="{'format':'dd/MM/YYYY'}"/>
+                            </div>
+                            <div t-if="doc.confirmation_date and not doc.state in ['draft', 'sent']" class="col-auto col-3 mw-100 mb-2">
+                                <span>Date de confirmation:</span>
+                                <p class="m-0" t-field="doc.confirmation_date" t-options="{'format':'dd/MM/YYYY'}"/>
+                            </div>
+                            <div t-if="doc.partner_id.ref" class="col-auto col-3 mw-100 mb-2">
+                                <span>Référence client:</span>
+                                <p class="m-0" t-field="doc.partner_id.ref"/>
+                            </div>
+                            <div t-if="doc.client_order_ref" class="col-auto col-3 mw-100 mb-2">
+                                <span>Votre référence:</span>
+                                <p class="m-0" t-field="doc.client_order_ref"/>
+                            </div>
+                        
+                        
+                        </div>
+                    </div>
+                    <div class="col-4 offset-2">
+                        <div style="border-left:solid; padding-left:5px;">
+                            <div style="padding-left:10px;" t-field="doc.partner_id"
+                                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+                            <p t-if="doc.partner_id.vat"><t t-esc="doc.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="doc.partner_id.vat"/></p>
+                            <div style="padding-left:10px" t-if="doc.customer_name">Client : <span t-field="doc.customer_name"/></div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+            <xpath expr="table[@class='table table-sm o_main_table']" position="replace">
+                <table class="table table-sm o_main_table" style="margin-top:10px">
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th>Code Article</th>
+                            <th width="45%" style="padding-left:3px;">Description</th>
+                            <th class="text-right">Quantité</th>
+                            <th class="text-center">Unité</th>
+                            <th class="text-right">Prix</th>
+                            <th class="text-right" style="padding-right:3px;">Sous-total</th>
+                            <th class="text-right blueth" style="padding-right:3px;">TVA</th>
+                        </tr>
+                   </thead>
+                   <tbody>
+                        <t t-set="current_subtotal" t-value="0"/>
+                        <t t-foreach="doc.order_line" t-as="l">
+                            <t t-set="current_subtotal" t-value="current_subtotal + l.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                            <t t-set="current_subtotal" t-value="current_subtotal + l.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                            <tr t-att-class="'bg-200 font-weight-bold o_line_section' if l.display_type == 'line_section' else 'font-italic o_line_note' if l.display_type == 'line_note' else ''">
+                                <t t-if="not l.display_type">
+                                    <td><span t-field="l.product_id.default_code"/></td>
+                                    <td style="padding-left:3px;"><span t-esc="l.name.replace(('[%s]'%l.product_id.default_code),'')"/></td>
+                                    <td class="text-right">
+                                        <span t-esc="'%.2f'%l.product_uom_qty"/>
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-field="l.product_uom"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-if="l.discount">
+                                            <span t-esc="l.price_unit - (l.price_unit*(l.discount/100))" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </t>
+                                        <t t-else="">
+                                          <span t-field="l.price_unit" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-right" style="padding-right:3px;">
+                                        <span t-field="l.price_subtotal"/>
+                                    </td>
+    
+                                    <td class="text-right"><span t-field="l.product_id.taxes_id.description"/></td>
+                                </t>
+                                <t t-if="l.display_type == 'line_section'">
+                                    <td name="td_section_line" colspan="99">
+                                        <span t-field="l.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="l"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                </t>
+                                <t t-if="l.display_type == 'line_note'">
+                                    <td name="td_note_line" colspan="99">
+                                        <span t-field="l.name"/>
+                                    </td>
+                                </t>
+                            </tr>
+                            <t t-if="current_section and (l_last or doc.order_line[l_index+1].display_type == 'line_section')">
+                                <tr class="is-subtotal text-right">
+                                    <td name="td_section_subtotal" colspan="99">
+                                        <strong class="mr16">Subtotal</strong>
+                                        <span t-esc="current_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+            </xpath>
+            <xpath expr="div[@class='clearfix']" position="replace">
+            </xpath>
+            <xpath expr="p[@t-field='doc.note']" position="replace">
+            </xpath>
+            <xpath expr="p[@t-field='doc.payment_term_id.note']" position="replace">
+            </xpath>
+            <xpath expr="p[@id='fiscal_position_remark']" position="replace">
+            </xpath>
+            <xpath expr="div[class='oe_structure']" position="replace">
+            </xpath>
+            <xpath expr="div[@name='signature']" position="replace">
+                <div class="row" style="margin-left:5px;">
+                    <div class="mt16 col-4" style="border:1px solid black;">
+                        <div style="border-bottom:1px solid black; margin-left:-15px;margin-right:-15px;"/>
+                        <div style="height:85px;">
+                            Le Client, Bon pour commande:<br/>
+                            (date, cachet et signature)
+                        </div>
+                    </div>
+                    <div class="col-4"></div>
+                    <div class="col-4">
+                        <table class="table table-sm">
+                            <tr class="border-black o_subtotal">
+                                <td name="td_amount_untaxed_label"><strong>Total HT</strong></td>
+                                <td name="td_amount_untaxed" class="text-right">
+                                    <span t-field="doc.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black o_subtotal">
+                                <td name="td_amount_untaxed_label"><strong>TVA</strong></td>
+                                <td name="td_amount_untaxed" class="text-right">
+                                    <span t-field="doc.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black o_subtotal">
+                                <td name="td_amount_untaxed_label"><strong>Total TTC</strong></td>
+                                <td name="td_amount_untaxed" class="text-right">
+                                    <strong>
+                                        <span t-field="doc.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt16" style="margin-left:0px;">
+                    <div style="font-size:8px;">
+                        Nos prix sont établis en fonction des conditions économiques en vigueur à ce jour et sont révisables. Les délais sont indicatifs et ne peuvent en aucun cas engager notre responsabilité.<br/>
+                        En cas de paiement anticipé ou comptant, aucun escompte ne sera accordé.
+                    </div>
+                </div>
+                <p style="page-break-before:always;"> </p>
+                <p style='font-size: 0.45em; text-align: justify; text-justify: inter-word;' type='char' t-field="doc.note"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

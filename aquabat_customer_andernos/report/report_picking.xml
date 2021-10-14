@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="aquabat_customer_andernos.report_delivery_customer_ref" inherit_id="aquabat_report_andernos.report_delivery">
+        <xpath expr="//div[@class='row main-row']/div[@class='col-3 offset-1']/div" position="inside">
+            <div t-if="o.customer_name" style="font-size: 14px;">Customer Name : <div t-field="o.customer_name"/></div>
+        </xpath>
+    </template>
+    <template id="aquabat_customer_andernos.report_delivery_without_customer_ref" inherit_id="aquabat_report_andernos.report_delivery_without">
+        <xpath expr="//div[@class='row main-row']/div[@class='col-3 offset-1']/div" position="inside">
+            <div t-if="o.customer_name" style="font-size: 14px;">Customer Name : <div t-field="o.customer_name"/></div>
+        </xpath>
+    </template>
+</odoo>

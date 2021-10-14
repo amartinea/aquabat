@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <odoo>
-    <template id="aquabat_report.report_delivery">
+    <template id="aquabat_report_andernos.report_delivery">
         <t t-call="web.html_container">
             <t t-call="web.external_layout">
                 <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
