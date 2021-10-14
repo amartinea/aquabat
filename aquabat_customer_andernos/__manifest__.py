@@ -7,7 +7,7 @@
     'description': """ """,
     'depends': [
         'account',
-        'aquabat_report',
+        'aquabat_report_andernos',
         'delivery',
         'sale',
         'stock',
