@@ -64,9 +64,9 @@ class AccountInvoice(models.Model):
                     residual += line.currency_id._convert(line.amount_residual_currency, self.currency_id, line.company_id, line.date or fields.Date.today())
                 else:
                     residual += line.company_id.currency_id._convert(line.amount_residual, self.currency_id, line.company_id, line.date or fields.Date.today())
-        self.residual_company_signed = abs(residual_company_signed + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100)) * sign
-        self.residual_signed = abs(residual + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100)) * sign
-        self.residual = abs(residual + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100))
+        self.residual_company_signed = abs(residual_company_signed + (self.fee_price + self.fee_price * self.partner_id.fee_id.tax_id.amount / 100)) * sign
+        self.residual_signed = abs(residual + (self.fee_price + self.fee_price * self.partner_id.fee_id.tax_id.amount / 100)) * sign
+        self.residual = abs(residual + (self.fee_price + self.fee_price * self.partner_id.fee_id.tax_id.amount / 100))
         digits_rounding_precision = self.currency_id.rounding
         if float_is_zero(self.residual, precision_rounding=digits_rounding_precision):
             self.reconciled = True
