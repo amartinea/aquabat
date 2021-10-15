@@ -228,7 +228,7 @@
                         <div class="row mt16" style="margin-left:3cm;border:1px solid black; margin-right:0px;">
                             <div class="col-6">
                                 <strong>
-                                <t t-if="o.fee_price != 0">Billing Fee<br/></t>
+                                <t t-if="o.fee_price != 0" style="font-size:12px">Billing Fee<br/></t>
                                 Total HT<br/>
                                 TVA<br/>
                                 Total TTC</strong>
