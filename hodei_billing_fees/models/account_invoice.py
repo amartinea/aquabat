@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+from odoo.tools import float_is_zero
 
 
 class AccountInvoice(models.Model):
