@@ -60,6 +60,11 @@ msgid "<strong>\n"
 msgstr ""
 
 #. module: aquabat_report_andernos
+#: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_invoice_document
+msgid "Billing Fee<br/>"
+msgstr "Frais de facturation<br/>"
+
+#. module: aquabat_report_andernos
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery
 #: model_terms:ir.ui.view,arch_db:aquabat_report_andernos.report_delivery_without
 msgid "<strong>Description</strong>"
