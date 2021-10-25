@@ -4,7 +4,7 @@ from odoo import fields, models
 
 
 class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+	_inherit = "account.invoice"
 
 	payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms', oldname='payment_term',
 		readonly=True, states={'draft': [('readonly', False)]},
