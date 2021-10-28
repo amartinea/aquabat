@@ -13,7 +13,7 @@ class AccountInvoice(models.Model):
     @api.model
     def finalize_invoice_move_lines(self, lines):
         for line in lines:
-            line[2]['company_id'] = self.company_id
+            line[2]['company_id'] = self.company_id.id
         _logger.warning('--------------------ici-------------')
-        _logger.warning(line)
+        _logger.warning(lines)
         return line
