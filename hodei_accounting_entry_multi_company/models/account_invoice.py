@@ -16,7 +16,7 @@ class AccountInvoice(models.Model):
             line[2]['company_id'] = self.company_id.id
         _logger.warning('--------------------ici-------------')
         _logger.warning(lines)
-        return line
+        return lines
 
     @api.multi
     def action_move_create(self):
