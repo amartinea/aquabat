@@ -102,12 +102,15 @@ class AccountInvoice(models.Model):
             move = account_move.create(move_vals)
             # Pass invoice in method post: used if you want to get the same
             # account move reference when creating the same invoice after a cancelled one:
+            _logger.warning('---------------------create ok-----------')
             move.post(invoice = inv)
             # make the invoice point to that move
+            _logger.warning('---------------------post ok-----------')
             vals = {
                 'move_id': move.id,
                 'date': date,
                 'move_name': move.name,
             }
             inv.write(vals)
+            _logger.warning('-------------------test-------------')
         return True
