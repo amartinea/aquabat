@@ -18,7 +18,7 @@ msgstr ""
 #. module: hodei_force_marge
 #: model:ir.model.fields,field_description:hodei_force_marge.field_sale_order__force_marge
 msgid "Force marge"
-msgstr "Forcer la mage"
+msgstr "Forcer la marge"
 
 #. module: hodei_force_marge
 #: model:ir.model,name:hodei_force_marge.model_sale_order
