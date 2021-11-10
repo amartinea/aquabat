@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import fields, models, _
 from odoo.exceptions import UserError
 
 class SaleOrder(models.Model):
