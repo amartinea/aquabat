@@ -10,4 +10,4 @@ class AccountInvoice(models.Model):
 		readonly=True, states={'draft': [('readonly', False)]},
 		help="If you use payment terms, the due date will be computed automatically at the generation "
 			"of accounting entries. If you keep the payment terms and the due date empty, it means direct payment. "
-			"The payment terms may compute several due dates, for example 50% now, 50% in one month.", required=True)
+			"The payment terms may compute several due dates, for example 50% now, 50% in one month.")
