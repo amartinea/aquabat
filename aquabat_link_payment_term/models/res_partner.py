@@ -8,6 +8,7 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
+    @api.model_create_multi
     def create(self, vals):
         new_partner = super(ResPartner, self).create(vals)
         _logger.warning(new_partner)
