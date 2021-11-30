@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    @api.onchange('property_payment_term_id')
+    @api.depends('property_payment_term_id')
     def _onchange_property_payment_term_id(self):
         property_to_copy = self.property_payment_term_id.link_payment_term_id
         _logger.warning(property_to_copy)
