@@ -16,12 +16,12 @@ class ResPartner(models.Model):
             'fields_id': 2435,
             'type': 'many2one'
         }
-        partner_to_copy['res_id'] = 'res.partner,' + new_partner['id']
+        partner_to_copy['res_id'] = 'res.partner,' + str(new_partner['id'])
         if new_partner.company_id.id == 1:
             partner_to_copy['company_id'] = 3
         else:
             partner_to_copy['company_id'] = 1
-        partner_to_copy['value_reference'] = 'account.payment.term,' + new_partner.property_payment_term_id.link_payment_term_id['id']
+        partner_to_copy['value_reference'] = 'account.payment.term,' + str(new_partner.property_payment_term_id.link_payment_term_id['id'])
 
         new_partner['property_payment_term_id']
         self.env['ir.property'].create(partner_to_copy)
