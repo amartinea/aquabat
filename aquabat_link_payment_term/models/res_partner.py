@@ -13,7 +13,10 @@ class ResPartner(models.Model):
         new_partner = super(ResPartner, self).create(vals)
         _logger.info('_______________new_partner')
         _logger.warning(new_partner)
+        _logger.warning(new_partner['property_payment_term_id'])
+        _logger.warning('oui')
         if new_partner['property_payment_term_id']:
+            _logger.warning('if')
             property_to_copy = new_partner.property_payment_term_id.link_payment_term_id
             _logger.warning(property_to_copy)
             _logger.debug(new_partner['company_id'])
