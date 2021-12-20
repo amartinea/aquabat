@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-
+import logging
 from odoo import api, fields, models, _
 from odoo.tools import float_is_zero
 
+
+_logger = logging.getLogger(__name__)
 
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
@@ -67,13 +69,9 @@ class AccountInvoice(models.Model):
         self.residual_company_signed = abs(residual_company_signed + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100)) * sign
         self.residual_signed = abs(residual + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100)) * sign
         self.residual = abs(residual + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100))
+        _logger.warning(self.residual)
         digits_rounding_precision = self.currency_id.rounding
         if float_is_zero(self.residual, precision_rounding=digits_rounding_precision):
             self.reconciled = True
         else:
             self.reconciled = False
-
-    def _get_aml_for_amount_residual(self):
-        """ Get the aml to consider to compute the amount residual of invoices """
-        self.ensure_one()
-        return self.sudo().move_id.line_ids.filtered(lambda l: l.account_id == self.account_id) + self.fee_price
