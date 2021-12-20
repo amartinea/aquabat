@@ -24,7 +24,7 @@ class ResPartner(models.Model):
         partner_to_copy['value_reference'] = 'account.payment.term,' + str(new_partner.property_payment_term_id.link_payment_term_id['id'])
 
         new_partner['property_payment_term_id']
-        self.env['ir.property'].create(partner_to_copy)
+        self.sudo().env['ir.property'].create(partner_to_copy)
         # _logger.info('_______________new_partner')
         # _logger.warning(new_partner)
         # _logger.warning()
