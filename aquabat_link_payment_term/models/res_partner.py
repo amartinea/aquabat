@@ -11,17 +11,31 @@ class ResPartner(models.Model):
     @api.model_create_multi
     def create(self, vals):
         new_partner = super(ResPartner, self).create(vals)
-        _logger.info('_______________new_partner')
-        _logger.warning(new_partner)
-        _logger.warning(new_partner['property_payment_term_id'])
-        _logger.warning('oui')
-        if new_partner['property_payment_term_id']:
-            _logger.warning('if')
-            property_to_copy = new_partner.property_payment_term_id.link_payment_term_id['id']
-            _logger.warning(property_to_copy)
-            if new_partner.company_id.id == 1:
-                _logger.warning('__________________________1')
-                new_partner.with_context(force_company=3).write({'property_payment_term_id': property_to_copy})
-            elif new_partner.company_id.id == 3:
-                _logger.warning('__________________________3')
-                new_partner.with_context(force_company=1).write({'property_payment_term_id': property_to_copy})
+        partner_to_copy = {
+            'name': 'property_payment_term_id',
+            'fields_id': 2435,
+            'type': 'many2one'
+        }
+        partner_to_copy['res_id'] = 'res.partner,' + new_partner['id']
+        if new_partner.company_id.id == 1:
+            partner_to_copy['company_id'] = 3
+        else:
+            partner_to_copy['company_id'] = 1
+        partner_to_copy['value_reference'] = 'account.payment.term,' + new_partner.property_payment_term_id.link_payment_term_id['id']
+
+        new_partner['property_payment_term_id']
+        self.env['ir.property'].create(partner_to_copy)
+        # _logger.info('_______________new_partner')
+        # _logger.warning(new_partner)
+        # _logger.warning()
+        # _logger.warning('oui')
+        # if new_partner['property_payment_term_id']:
+        #     _logger.warning('if')
+        #     property_to_copy = new_partner.property_payment_term_id.link_payment_term_id['id']
+        #     _logger.warning(property_to_copy)
+        #     if new_partner.company_id.id == 1:
+        #         _logger.warning('__________________________1')
+        #         new_partner.with_context(force_company=3).write({'property_payment_term_id': property_to_copy})
+        #     elif new_partner.company_id.id == 3:
+        #         _logger.warning('__________________________3')
+        #         new_partner.with_context(force_company=1).write({'property_payment_term_id': property_to_copy})
