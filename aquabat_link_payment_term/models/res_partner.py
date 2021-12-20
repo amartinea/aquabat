@@ -11,6 +11,7 @@ class ResPartner(models.Model):
     @api.model_create_multi
     def create(self, vals):
         new_partner = super(ResPartner, self).create(vals)
+        _logger.info('_______________new_partner')
         _logger.warning(new_partner)
         if new_partner['property_payment_term_id']:
             property_to_copy = new_partner.property_payment_term_id.link_payment_term_id
