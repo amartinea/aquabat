@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-
+import logging
 from odoo import api, fields, models, _
 from odoo.tools import float_is_zero
-import logging
+
 
 _logger = logging.getLogger(__name__)
 
