@@ -1,0 +1,3 @@
+[submodule "aquabat"]
+	path = aquabat
+	url = https://github.com/amartinea/aquabat.git
