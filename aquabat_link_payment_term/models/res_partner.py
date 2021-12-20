@@ -16,6 +16,8 @@ class ResPartner(models.Model):
         if new_partner['property_payment_term_id']:
             property_to_copy = new_partner.property_payment_term_id.link_payment_term_id
             _logger.warning(property_to_copy)
+            _logger.debug(new_partner['company_id'])
+            _logger.debug(new_partner.company_id)
             if new_partner.company_id.id == 1:
                 _logger.warning('__________________________1')
                 new_partner.with_context(force_company=3).write({'property_payment_term_id': property_to_copy.id})
