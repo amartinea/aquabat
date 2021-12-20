@@ -72,3 +72,8 @@ class AccountInvoice(models.Model):
             self.reconciled = True
         else:
             self.reconciled = False
+
+    def _get_aml_for_amount_residual(self):
+        """ Get the aml to consider to compute the amount residual of invoices """
+        self.ensure_one()
+        return self.sudo().move_id.line_ids.filtered(lambda l: l.account_id == self.account_id) + self.fee_price
