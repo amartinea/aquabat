@@ -28,7 +28,6 @@
                             <group>
                                 <field name="name"/>
                                 <field name="tax_id"/>
-                                <field name="account_id"/>
                             </group>
                         </group>
                         <field name="fee_lines" widget="section_and_note_one2many" mode="tree">
