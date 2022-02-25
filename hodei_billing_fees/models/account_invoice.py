@@ -146,9 +146,10 @@ class AccountInvoice(models.Model):
                     'price_subtotal_signed': fee_price,
                     'quantity': 1,
                     'discount': 0,
-                    'company_id': self.company_id,
+                    'company_id': self.company_id.id,
                     'currency_id': 1
                 }
+                _logger.warning(self.company_id.id)
                 if self.company_id.id == self.partner_id.fee_id.company_id.id:
                     invoice_line_data['account_id'] = self.partner_id.fee_id.account_id.id
                     invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [self.partner_id.fee_id.tax_id.id])]
