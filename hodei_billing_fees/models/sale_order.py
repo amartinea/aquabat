@@ -135,7 +135,7 @@ class SaleOrder(models.Model):
                     'product_uom_qty': 1,
                     'qty_delivered': 1,
                     'discount': 0,
-                    'company_id': 1,
+                    'company_id': self.company_id.id,
                     'currency_id': 1
                 }
                 _logger.warning('_________________sale_line_data2')
