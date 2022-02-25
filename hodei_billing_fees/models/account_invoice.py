@@ -30,7 +30,10 @@ class AccountInvoice(models.Model):
         _logger.warning(vals['partner_id'])
         if vals.get('apply_fee'):
             partner = self.env['res.partner'].search([('id', '=', vals['partner_id'])])
-            fee_line = partner.fee_id._check_condition_to_apply(amount_change)
+            if self.company_id.id == partner.fee_id.company_id.id:
+                fee_line = partner.fee_id._check_condition_to_apply(amount_change)
+            else:
+                fee_line = partner.fee_id.fee_linked._check_condition_to_apply(amount_change)
             if fee_line:
                 if fee_line.value_type == 'perc':
                     fee_price = vals['amount_untaxed'] * fee_line.value_apply / 100
@@ -46,14 +49,18 @@ class AccountInvoice(models.Model):
                 'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
                 'uom_id': 1,
                 'partner_id': partner.id,
-                'account_id': partner.fee_id.account_id.id,
-                'invoice_line_tax_ids': [(6, False, [partner.fee_id.tax_id.id])],
                 'price_unit': fee_price,
                 'quantity': 1,
                 'discount': 0,
                 'company_id': 1,
                 'currency_id': 1
             }
+            if self.company_id.id == partner.fee_id.company_id.id:
+                invoice_line_data['account_id'] = partner.fee_id.account_id.id
+                invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.tax_id.id])]
+            else:
+                invoice_line_data['account_id'] = partner.fee_id.fee_linked.account_id.id
+                invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.fee_linked.tax_id.id])]
             if vals.get('invoice_line_ids'):
                 vals['invoice_line_ids'] += [(0, 0, invoice_line_data)]
             else:
@@ -61,7 +68,7 @@ class AccountInvoice(models.Model):
         #invoice.compute_taxes()
         vals['fee_price'] = fee_price
         _logger.warning(vals)
-        invoice =super(AccountInvoice, self).create(vals)
+        invoice = super(AccountInvoice, self).create(vals)
         invoice.compute_taxes()
         return invoice
 
@@ -83,7 +90,10 @@ class AccountInvoice(models.Model):
             _logger.warning('_________________amount_change')
             _logger.warning(amount_change)
         if self.apply_fee:
-            fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_untaxed + amount_change)
+            if self.company_id.id == self.partner_id.fee_id.company_id.id:
+                fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_untaxed + amount_change)
+            else:
+                fee_line = self.partner_id.fee_id.fee_linked._check_condition_to_apply(self.amount_untaxed + amount_change)
             if fee_line:
                 if fee_line.value_type == 'perc':
                     fee_price = self.amount_untaxed * fee_line.value_apply / 100
@@ -124,8 +134,6 @@ class AccountInvoice(models.Model):
                     'origin': self.origin,
                     'invoice_id': self.id,
                     'partner_id': self.partner_id.id,
-                    'account_id': self.partner_id.fee_id.account_id.id,
-                    'invoice_line_tax_ids': [(6, 0, [self.partner_id.fee_id.tax_id.id])],
                     'price_unit': fee_price,
                     'price_subtotal': fee_price,
                     'price_total': fee_price,
@@ -135,6 +143,12 @@ class AccountInvoice(models.Model):
                     'company_id': 1,
                     'currency_id': 1
                 }
+                if self.company_id.id == self.partner_id.fee_id.company_id.id:
+                    invoice_line_data['account_id'] = self.partner_id.fee_id.account_id.id
+                    invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [self.partner_id.fee_id.tax_id.id])]
+                else:
+                    invoice_line_data['account_id'] = self.partner_id.fee_id.fee_linked.account_id.id
+                    invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [self.partner_id.fee_id.fee_linked.tax_id.id])]
                 if invoice_line_data:
                     if values.get('invoice_line_ids'):
                         values['invoice_line_ids'] += [(0, 0, invoice_line_data)]

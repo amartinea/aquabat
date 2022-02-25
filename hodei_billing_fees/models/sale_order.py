@@ -30,7 +30,10 @@ class SaleOrder(models.Model):
         _logger.warning(vals['partner_id'])
         if vals['apply_fee']:
             partner = self.env['res.partner'].search([('id', '=', vals['partner_id'])])
-            fee_line = partner.fee_id._check_condition_to_apply(amount_change)
+            if self.company_id.id == partner.fee_id.company_id.id:
+                fee_line = partner.fee_id._check_condition_to_apply(amount_change)
+            else:
+                fee_line = partner.fee_id.fee_linked._check_condition_to_apply(amount_change)
             if fee_line:
                 if fee_line.value_type == 'perc':
                     fee_price = vals['amount_untaxed'] * fee_line.value_apply / 100
@@ -44,7 +47,6 @@ class SaleOrder(models.Model):
             sale_line_data = {
                 'name': 'Billing Fee',
                 'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
-                'tax_id': [(6, 0, [partner.fee_id.tax_id.id])],
                 'price_unit': fee_price,
                 'price_subtotal': fee_price,
                 'price_total': fee_price,
@@ -54,6 +56,10 @@ class SaleOrder(models.Model):
                 'company_id': 1,
                 'currency_id': 1
             }
+            if self.company_id.id == partner.fee_id.company_id.id:
+                sale_line_data['tax_id'] = [(6, 0, [partner.fee_id.tax_id.id])]
+            else:
+                sale_line_data['tax_id'] = [(6, 0, [partner.fee_id.fee_linked.tax_id.id])]
             if vals.get('order_line'):
                 vals['order_line'] += [(0, 0, sale_line_data)]
             else:
@@ -81,7 +87,10 @@ class SaleOrder(models.Model):
             _logger.warning('_________________amount_change')
             _logger.warning(amount_change)
         if self.apply_fee:
-            fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_untaxed + amount_change)
+            if self.company_id.id == self.partner_id.fee_id.company_id.id:
+                fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_untaxed + amount_change)
+            else:
+                fee_line = self.partner_id.fee_id.fee_linked._check_condition_to_apply(self.amount_untaxed + amount_change)
             if fee_line:
                 if fee_line.value_type == 'perc':
                     fee_price = self.amount_untaxed * fee_line.value_apply / 100
@@ -120,7 +129,6 @@ class SaleOrder(models.Model):
                 sale_line_data = {
                     'name': 'Billing Fee',
                     'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
-                    'tax_id': [(6, 0, [self.partner_id.fee_id.tax_id.id])],
                     'price_unit': fee_price,
                     'price_subtotal': fee_price,
                     'price_total': fee_price,
@@ -132,6 +140,10 @@ class SaleOrder(models.Model):
                 }
                 _logger.warning('_________________sale_line_data2')
                 _logger.warning(sale_line_data)
+                if self.company_id.id == self.partner_id.fee_id.company_id.id:
+                    sale_line_data['tax_id'] = [(6, 0, [self.partner_id.fee_id.tax_id.id])]
+                else:
+                    sale_line_data['tax_id'] = [(6, 0, [self.partner_id.fee_id.fee_linked.tax_id.id])]
                 if sale_line_data:
                     if values.get('order_line'):
                         values['order_line'] += [(0, 0, sale_line_data)]
