@@ -53,7 +53,7 @@ class SaleOrder(models.Model):
                 'product_uom_qty': 1,
                 'qty_delivered': 1,
                 'discount': 0,
-                'company_id': 1,
+                'company_id': vals['company_id'],
                 'currency_id': 1
             }
             if self.company_id.id == partner.fee_id.company_id.id:

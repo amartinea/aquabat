@@ -52,7 +52,7 @@ class AccountInvoice(models.Model):
                 'price_unit': fee_price,
                 'quantity': 1,
                 'discount': 0,
-                'company_id': 1,
+                'company_id': vals['company_id'],
                 'currency_id': 1
             }
             _logger.warning(vals)
@@ -146,7 +146,7 @@ class AccountInvoice(models.Model):
                     'price_subtotal_signed': fee_price,
                     'quantity': 1,
                     'discount': 0,
-                    'company_id': 1,
+                    'company_id': self.company_id,
                     'currency_id': 1
                 }
                 if self.company_id.id == self.partner_id.fee_id.company_id.id:
