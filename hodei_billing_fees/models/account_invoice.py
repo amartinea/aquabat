@@ -55,12 +55,17 @@ class AccountInvoice(models.Model):
                 'company_id': 1,
                 'currency_id': 1
             }
+            _logger.warning('_______________debut')
+            _logger.warning(self.company_id.id)
+            _logger.warning(partner.fee_id.company_id.id)
             if self.company_id.id == partner.fee_id.company_id.id:
                 invoice_line_data['account_id'] = partner.fee_id.account_id.id
                 invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.tax_id.id])]
             else:
                 invoice_line_data['account_id'] = partner.fee_id.fee_linked.account_id.id
                 invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.fee_linked.tax_id.id])]
+            _logger.warning(invoice_line_data['account_id'])
+            _logger.warning(invoice_line_data['invoice_line_tax_ids'])
             if vals.get('invoice_line_ids'):
                 vals['invoice_line_ids'] += [(0, 0, invoice_line_data)]
             else:
