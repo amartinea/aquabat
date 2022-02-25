@@ -56,9 +56,9 @@ class AccountInvoice(models.Model):
                 'currency_id': 1
             }
             _logger.warning('_______________debut')
-            _logger.warning(self.company_id.id)
+            _logger.warning(vals.company_id.id)
             _logger.warning(partner.fee_id.company_id.id)
-            if self.company_id.id == partner.fee_id.company_id.id:
+            if vals.company_id.id == partner.fee_id.company_id.id:
                 invoice_line_data['account_id'] = partner.fee_id.account_id.id
                 invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.tax_id.id])]
             else:
