@@ -56,7 +56,7 @@ class SaleOrder(models.Model):
                 'company_id': vals['company_id'],
                 'currency_id': 1
             }
-            if self.company_id.id == partner.fee_id.company_id.id:
+            if vals['company_id'] == partner.fee_id.company_id.id:
                 sale_line_data['tax_id'] = [(6, 0, [partner.fee_id.tax_id.id])]
             else:
                 sale_line_data['tax_id'] = [(6, 0, [partner.fee_id.fee_linked.tax_id.id])]
