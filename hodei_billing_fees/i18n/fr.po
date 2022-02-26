@@ -6,14 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-07 06:39+0000\n"
-"PO-Revision-Date: 2020-12-07 06:39+0000\n"
+"POT-Creation-Date: 2022-01-25 10:12+0000\n"
+"PO-Revision-Date: 2022-01-25 10:12+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: hodei_billing_fees
+#: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee__account_id
+msgid "Account"
+msgstr "Compte"
 
 #. module: hodei_billing_fees
 #: model_terms:ir.actions.act_window,help:hodei_billing_fees.action_billing_fee
@@ -26,7 +31,14 @@ msgid "Add a billing condition"
 msgstr "Ajouter une condition de frais"
 
 #. module: hodei_billing_fees
+#: code:addons/hodei_billing_fees/models/account_invoice.py:202
+#, python-format
+msgid "Advance: %s"
+msgstr ""
+
+#. module: hodei_billing_fees
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_account_invoice__apply_fee
+#: model:ir.model.fields,field_description:hodei_billing_fees.field_sale_order__apply_fee
 msgid "Apply Fee"
 msgstr "Appliquer les frais de facturation"
 
@@ -46,8 +58,11 @@ msgstr "Plus grand ou égal"
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee_lines__fee_id
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_res_partner__fee_id
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_res_users__fee_id
+#: model:ir.model.fields,field_description:hodei_billing_fees.field_sale_order__fee_price
 #: model_terms:ir.ui.view,arch_db:hodei_billing_fees.view_billing_fee_form
 #: model_terms:ir.ui.view,arch_db:hodei_billing_fees.view_billing_fee_tree
+#: model:product.product,name:hodei_billing_fees.product_fees
+#: model:product.template,name:hodei_billing_fees.product_fees_product_template
 msgid "Billing Fee"
 msgstr "Frais de Facturation"
 
@@ -66,7 +81,7 @@ msgstr "Lignes de frais de facturation"
 msgid "Billing Fees"
 msgstr "Frais de Facturation"
 
-#.0 module: hodei_billing_fees
+#. module: hodei_billing_fees
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee_lines__condition
 msgid "Condition"
 msgstr ""
@@ -100,6 +115,12 @@ msgid "Fee Value"
 msgstr "Valeur de frais"
 
 #. module: hodei_billing_fees
+#: model:ir.model.fields,field_description:hodei_billing_fees.field_product_product__fee_product
+#: model:ir.model.fields,field_description:hodei_billing_fees.field_product_template__fee_product
+msgid "Fee product"
+msgstr "Produit de frais de facturation"
+
+#. module: hodei_billing_fees
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee__id
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee_lines__id
 msgid "ID"
@@ -111,10 +132,15 @@ msgid "Invoice"
 msgstr "Facture"
 
 #. module: hodei_billing_fees
+#: model:ir.model,name:hodei_billing_fees.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Ligne de facture"
+
+#. module: hodei_billing_fees
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee____last_update
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee_lines____last_update
 msgid "Last Modified on"
-msgstr "Dernière Modification le"
+msgstr "Dernière modification le"
 
 #. module: hodei_billing_fees
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee__write_uid
@@ -134,6 +160,26 @@ msgid "Name"
 msgstr "Nom"
 
 #. module: hodei_billing_fees
+#: model:ir.model,name:hodei_billing_fees.model_product_product
+msgid "Product"
+msgstr "Article"
+
+#. module: hodei_billing_fees
+#: model:ir.model,name:hodei_billing_fees.model_product_template
+msgid "Product Template"
+msgstr "Modèle d'article"
+
+#. module: hodei_billing_fees
+#: model:ir.model,name:hodei_billing_fees.model_sale_order
+msgid "Sale Order"
+msgstr "Commandes"
+
+#. module: hodei_billing_fees
+#: model:ir.model,name:hodei_billing_fees.model_sale_advance_payment_inv
+msgid "Sales Advance Payment Invoice"
+msgstr "Facture de paiement d'avance"
+
+#. module: hodei_billing_fees
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee__sequence
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee_lines__sequence
 msgid "Sequence"
@@ -148,6 +194,25 @@ msgstr "Plus petit ou égal"
 #: model:ir.model.fields,field_description:hodei_billing_fees.field_billing_fee__tax_id
 msgid "Tax apply to fee"
 msgstr "Taxe appliqué sur les frais"
+
+#. module: hodei_billing_fees
+#: code:addons/hodei_billing_fees/models/account_invoice.py:191
+#, python-format
+msgid "The product used to invoice a down payment should be of type 'Service'. Please use another product or update this product."
+msgstr "Le produit utilisé pour facturer une avance doit être de type 'service'. Veuillez utiliser un autre produit pour modifier ce produit."
+
+#. module: hodei_billing_fees
+#: code:addons/hodei_billing_fees/models/account_invoice.py:189
+#, python-format
+msgid "The product used to invoice a down payment should have an invoice policy set to \"Ordered quantities\". Please update your deposit product to be able to create a deposit invoice."
+msgstr "Le produit utilisé pour facturer un acompte doit avoir une police de facture configurée sous \"Quantités commandées\". Veuillez mettre à jour votre produit de dépôt pour pouvoir créer une facture d'acompte."
+
+
+#. module: hodei_billing_fees
+#: model:product.product,uom_name:hodei_billing_fees.product_fees
+#: model:product.template,uom_name:hodei_billing_fees.product_fees_product_template
+msgid "Unit(s)"
+msgstr "Unité(s)"
 
 #. module: hodei_billing_fees
 #: model:ir.model.fields,help:hodei_billing_fees.field_billing_fee__sequence
@@ -189,3 +254,8 @@ msgstr ""
 msgid "fix"
 msgstr "fixe"
 
+#. module: hodei_billing_fees
+#: model:product.product,weight_uom_name:hodei_billing_fees.product_fees
+#: model:product.template,weight_uom_name:hodei_billing_fees.product_fees_product_template
+msgid "kg"
+msgstr ""

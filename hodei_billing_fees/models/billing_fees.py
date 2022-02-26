@@ -11,6 +11,9 @@ class BillingFee(models.Model):
     sequence = fields.Integer(help='Used to order billing fee', default=10)
     fee_lines = fields.One2many('billing.fee.lines', 'fee_id', string='Billing Fee lines', readonly=False)
     tax_id = fields.Many2one('account.tax', string='Tax apply to fee')
+    account_id = fields.Many2one('account.account', string="Account")
+    company_id = fields.Many2one('res.company', string="Company")
+    fee_linked = fields.Many2one('billing.fee', string="Fee linked", default=False)
 
     def _check_condition_to_apply(self, vals):
         for line in self.fee_lines:

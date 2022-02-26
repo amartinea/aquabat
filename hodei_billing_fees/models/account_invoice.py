@@ -1,77 +1,244 @@
 # -*- coding: utf-8 -*-
 import logging
 from odoo import api, fields, models, _
-from odoo.tools import float_is_zero
-
 
 _logger = logging.getLogger(__name__)
+
 
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
-    fee_price = fields.Float('Billing Fee', compute="_compute_fee", store=True, default="0")
+    fee_price = fields.Float('Billing Fee', store=True, default="0")
     apply_fee = fields.Boolean(string='Apply Fee', default=True)
 
-    @api.depends('apply_fee', 'partner_id', 'invoice_line_ids')
-    def _compute_fee(self):
-        for invoice in self:
-            if invoice.apply_fee:
-                fee_line = invoice.partner_id.fee_id._check_condition_to_apply(invoice.amount_untaxed)
-                if fee_line:
-                    if fee_line.value_type == 'perc':
-                        fee_price = invoice.amount_untaxed * fee_line.value_apply / 100
-                    elif fee_line.value_type == 'fix':
-                        fee_price = fee_line.value_apply
-                else:
-                    fee_price = 0
+    @api.model
+    def create(self, vals):
+        amount_change = 0
+        if vals.get('invoice_line_ids'):
+            for line in vals['invoice_line_ids']:
+                _logger.warning(line[0])
+                if line[0] == 0:
+                    if not 'discount' in line[2] or line[2]['discount'] == 0:
+                        amount_change += line[2]['quantity'] * line[2]['price_unit']
+                    else:
+                        amount_change += line[2]['quantity'] * line[2]['price_unit'] * line[2]['discount']/100
+                    _logger.warning(amount_change)
+                elif line[0] == 2:
+                    amount_change -= self.env['account.invoice.line'].search([('id', '=', line[1])])['price_subtotal']
+        _logger.warning('_________________amount_change')
+        _logger.warning(amount_change)
+        _logger.warning(vals['partner_id'])
+        if vals.get('apply_fee'):
+            partner = self.env['res.partner'].search([('id', '=', vals['partner_id'])])
+            if self.company_id.id == partner.fee_id.company_id.id:
+                fee_line = partner.fee_id._check_condition_to_apply(amount_change)
+            else:
+                fee_line = partner.fee_id.fee_linked._check_condition_to_apply(amount_change)
+            if fee_line:
+                if fee_line.value_type == 'perc':
+                    fee_price = vals['amount_untaxed'] * fee_line.value_apply / 100
+                elif fee_line.value_type == 'fix':
+                    fee_price = fee_line.value_apply
             else:
                 fee_price = 0
-            invoice.fee_price = fee_price
-
-
-    @api.one
-    @api.depends('invoice_line_ids.price_subtotal', 'tax_line_ids.amount', 'tax_line_ids.amount_rounding',
-                 'currency_id', 'company_id', 'date_invoice', 'type', 'fee_price')
-    def _compute_amount(self):
-        round_curr = self.currency_id.round
-        self.amount_untaxed = sum(line.price_subtotal for line in self.invoice_line_ids) + self.fee_price
-        self.amount_tax = sum(round_curr(line.amount_total) for line in self.tax_line_ids) + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100) 
-        self.amount_total = self.amount_untaxed + self.amount_tax
-        amount_total_company_signed = self.amount_total
-        amount_untaxed_signed = self.amount_untaxed
-        if self.currency_id and self.company_id and self.currency_id != self.company_id.currency_id:
-            currency_id = self.currency_id
-            amount_total_company_signed = currency_id._convert(self.amount_total, self.company_id.currency_id, self.company_id, self.date_invoice or fields.Date.today())
-            amount_untaxed_signed = currency_id._convert(self.amount_untaxed, self.company_id.currency_id, self.company_id, self.date_invoice or fields.Date.today())
-        sign = self.type in ['in_refund', 'out_refund'] and -1 or 1
-        self.amount_total_company_signed = amount_total_company_signed * sign
-        self.amount_total_signed = self.amount_total * sign
-        self.amount_untaxed_signed = amount_untaxed_signed * sign
-
-    @api.one
-    @api.depends(
-        'state', 'currency_id', 'invoice_line_ids.price_subtotal',
-        'move_id.line_ids.amount_residual',
-        'move_id.line_ids.currency_id')
-    def _compute_residual(self):
-        residual = 0.0
-        residual_company_signed = 0.0
-        sign = self.type in ['in_refund', 'out_refund'] and -1 or 1
-        for line in self._get_aml_for_amount_residual():
-            residual_company_signed += line.amount_residual
-            if line.currency_id == self.currency_id:
-                residual += line.amount_residual_currency if line.currency_id else line.amount_residual
-            else:
-                if line.currency_id:
-                    residual += line.currency_id._convert(line.amount_residual_currency, self.currency_id, line.company_id, line.date or fields.Date.today())
-                else:
-                    residual += line.company_id.currency_id._convert(line.amount_residual, self.currency_id, line.company_id, line.date or fields.Date.today())
-        self.residual_company_signed = abs(residual_company_signed + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100)) * sign
-        self.residual_signed = abs(residual + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100)) * sign
-        self.residual = abs(residual + (self.fee_price * self.partner_id.fee_id.tax_id.amount / 100))
-        _logger.warning(self.residual)
-        digits_rounding_precision = self.currency_id.rounding
-        if float_is_zero(self.residual, precision_rounding=digits_rounding_precision):
-            self.reconciled = True
         else:
-            self.reconciled = False
+            fee_price = 0
+        if fee_price != 0:
+            invoice_line_data = {
+                'name': 'Billing Fee',
+                'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
+                'uom_id': 1,
+                'partner_id': partner.id,
+                'price_unit': fee_price,
+                'quantity': 1,
+                'discount': 0,
+                'company_id': vals['company_id'],
+                'currency_id': 1
+            }
+            _logger.warning(vals)
+            _logger.warning('_______________debut')
+            _logger.warning(vals['company_id'])
+            _logger.warning(partner.fee_id.company_id.id)
+            if vals['company_id'] == partner.fee_id.company_id.id:
+                invoice_line_data['account_id'] = partner.fee_id.account_id.id
+                invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.tax_id.id])]
+            else:
+                invoice_line_data['account_id'] = partner.fee_id.fee_linked.account_id.id
+                invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.fee_linked.tax_id.id])]
+            _logger.warning(invoice_line_data['account_id'])
+            _logger.warning(invoice_line_data['invoice_line_tax_ids'])
+            if vals.get('invoice_line_ids'):
+                vals['invoice_line_ids'] += [(0, 0, invoice_line_data)]
+            else:
+                vals['invoice_line_ids'] = [(0, 0, invoice_line_data)]
+        #invoice.compute_taxes()
+        vals['fee_price'] = fee_price
+        _logger.warning(vals)
+        invoice = super(AccountInvoice, self).create(vals)
+        invoice.compute_taxes()
+        return invoice
+
+    @api.multi
+    def write(self, values):
+        amount_change = 0
+        if values.get('invoice_line_ids'):
+            for line in values['invoice_line_ids']:
+                _logger.warning(line[0])
+                if line[0] == 0:
+                    if not 'discount' in line[2] or line[2]['discount'] == 0:
+                        amount_change += line[2]['quantity'] * line[2]['price_unit']
+                    else:
+                        amount_change += line[2]['quantity'] * line[2]['price_unit'] * line[2]['discount'] / 100
+                    _logger.warning(amount_change)
+                elif line[0] == 2:
+                    amount_change -= self.env['account.invoice.line'].search([('id', '=', line[1])])['price_subtotal']
+                    _logger.warning(amount_change)
+            _logger.warning('_________________amount_change')
+            _logger.warning(amount_change)
+        if self.apply_fee:
+            if self.company_id.id == self.partner_id.fee_id.company_id.id:
+                fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_untaxed + amount_change)
+            else:
+                fee_line = self.partner_id.fee_id.fee_linked._check_condition_to_apply(self.amount_untaxed + amount_change)
+            if fee_line:
+                if fee_line.value_type == 'perc':
+                    fee_price = self.amount_untaxed * fee_line.value_apply / 100
+                elif fee_line.value_type == 'fix':
+                    fee_price = fee_line.value_apply
+            else:
+                fee_price = 0
+        else:
+            fee_price = 0
+        _logger.warning(self.fee_price)
+        _logger.warning('_________________fee_price')
+        _logger.warning(fee_price)
+        if self.fee_price != fee_price:
+            product_fee = self.env['product.product'].search([('fee_product', '=', True)])
+            billing_line = self.env['account.invoice.line'].search(
+                [('invoice_id', '=', self.id), ('product_id', '=', product_fee.id)])
+            _logger.warning('_________________billing_line')
+            _logger.warning(billing_line)
+            if billing_line:
+                invoice_line_data = {
+                    'price_unit': fee_price
+                }
+                if values.get('invoice_line_ids'):
+                    values['invoice_line_ids'] += [(1, billing_line.id, invoice_line_data)]
+                else:
+                    values['invoice_line_ids'] = [(1, billing_line.id, invoice_line_data)]
+                    _logger.warning('invoice_line_data')
+                    _logger.warning(invoice_line_data)
+                if fee_price == 0:
+                    if values.get('tax_line_ids'):
+                        values['tax_line_ids'][0][2]['amount'] -= self.fee_price * 20/100
+            else:
+                _logger.warning('add________________________')
+                invoice_line_data = {
+                    'name': 'Billing Fee',
+                    'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
+                    'uom_id': 1,
+                    'origin': self.origin,
+                    'invoice_id': self.id,
+                    'partner_id': self.partner_id.id,
+                    'price_unit': fee_price,
+                    'price_subtotal': fee_price,
+                    'price_total': fee_price,
+                    'price_subtotal_signed': fee_price,
+                    'quantity': 1,
+                    'discount': 0,
+                    'company_id': self.company_id.id,
+                    'currency_id': 1
+                }
+                _logger.warning(self.company_id.id)
+                if self.company_id.id == self.partner_id.fee_id.company_id.id:
+                    invoice_line_data['account_id'] = self.partner_id.fee_id.account_id.id
+                    invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [self.partner_id.fee_id.tax_id.id])]
+                else:
+                    invoice_line_data['account_id'] = self.partner_id.fee_id.fee_linked.account_id.id
+                    invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [self.partner_id.fee_id.fee_linked.tax_id.id])]
+                if invoice_line_data:
+                    if values.get('invoice_line_ids'):
+                        values['invoice_line_ids'] += [(0, 0, invoice_line_data)]
+                    else:
+                        values['invoice_line_ids'] = [(0, 0, invoice_line_data)]
+                    if values.get('tax_line_ids'):
+                        values['tax_line_ids'][0][2]['amount'] += fee_price * 20/100
+            values['fee_price'] = fee_price
+        _logger.warning(values)
+        return super(AccountInvoice, self).write(values)
+
+class AccountInvoiceLine(models.Model):
+    _inherit = "account.invoice.line"
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        _logger.warning('vals_list__________________')
+        for vals in vals_list:
+            if vals['product_id'] == self.env.ref('hodei_billing_fees.product_fees')['id']:
+                invoice = self.env['account.invoice'].search([('id', '=', vals['invoice_id'])])
+                for line in invoice.invoice_line_ids:
+                    if line['product_id'] == self.env.ref('hodei_billing_fees.product_fees'):
+                        vals_list.remove(vals)
+        _logger.warning(vals_list)
+
+        return super(AccountInvoiceLine, self).create(vals_list)
+
+class SaleAdvancePaymentInv(models.TransientModel):
+    _inherit = "sale.advance.payment.inv"
+
+    @api.multi
+    def create_invoices(self):
+        sale_orders = self.env['sale.order'].browse(self._context.get('active_ids', []))
+
+        if self.advance_payment_method == 'delivered':
+            _logger.warning('delivered__________________')
+            sale_orders.action_invoice_create()
+        elif self.advance_payment_method == 'all':
+            _logger.warning('all________________________')
+            sale_orders.action_invoice_create(final=True)
+        else:
+            _logger.warning('else________________________')
+            # Create deposit product if necessary
+            if not self.product_id:
+                vals = self._prepare_deposit_product()
+                self.product_id = self.env['product.product'].create(vals)
+                self.env['ir.config_parameter'].sudo().set_param('sale.default_deposit_product_id', self.product_id.id)
+
+            sale_line_obj = self.env['sale.order.line']
+            _logger.warning('sale_line_obj________________________')
+            _logger.warning(sale_line_obj)
+            for order in sale_orders:
+                if self.advance_payment_method == 'percentage':
+                    amount = order.amount_untaxed * self.amount / 100
+                else:
+                    amount = self.amount
+                if self.product_id.invoice_policy != 'order':
+                    raise UserError(_('The product used to invoice a down payment should have an invoice policy set to "Ordered quantities". Please update your deposit product to be able to create a deposit invoice.'))
+                if self.product_id.type != 'service':
+                    raise UserError(_("The product used to invoice a down payment should be of type 'Service'. Please use another product or update this product."))
+                taxes = self.product_id.taxes_id.filtered(lambda r: not order.company_id or r.company_id == order.company_id)
+                if order.fiscal_position_id and taxes:
+                    tax_ids = order.fiscal_position_id.map_tax(taxes, self.product_id, order.partner_shipping_id).ids
+                else:
+                    tax_ids = taxes.ids
+                context = {'lang': order.partner_id.lang}
+                analytic_tag_ids = []
+                for line in order.order_line:
+                    analytic_tag_ids = [(4, analytic_tag.id, None) for analytic_tag in line.analytic_tag_ids]
+                so_line = sale_line_obj.create({
+                    'name': _('Advance: %s') % (time.strftime('%m %Y'),),
+                    'price_unit': amount,
+                    'product_uom_qty': 0.0,
+                    'order_id': order.id,
+                    'discount': 0.0,
+                    'product_uom': self.product_id.uom_id.id,
+                    'product_id': self.product_id.id,
+                    'analytic_tag_ids': analytic_tag_ids,
+                    'tax_id': [(6, 0, tax_ids)],
+                    'is_downpayment': True,
+                })
+                del context
+                self._create_invoice(order, so_line, amount)
+        if self._context.get('open_invoices', False):
+            return sale_orders.action_view_invoice()
+        return {'type': 'ir.actions.act_window_close'}

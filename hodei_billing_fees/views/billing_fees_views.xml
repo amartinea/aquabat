@@ -28,6 +28,9 @@
                             <group>
                                 <field name="name"/>
                                 <field name="tax_id"/>
+                                <field name="account_id"/>
+                                <field name="company_id"/>
+                                <field name="fee_linked"/>
                             </group>
                         </group>
                         <field name="fee_lines" widget="section_and_note_one2many" mode="tree">
