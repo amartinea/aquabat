@@ -95,7 +95,9 @@ class AccountInvoice(models.Model):
                     _logger.warning(amount_change)
             _logger.warning('_________________amount_change')
             _logger.warning(amount_change)
-        if self.apply_fee:
+        if ('apply_fee' not in values and not self.apply_fee) or ('apply_fee' in values and not values['apply_fee']):
+            fee_price = 0
+        else:
             if self.company_id.id == self.partner_id.fee_id.company_id.id:
                 fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_untaxed + amount_change)
             else:
@@ -107,8 +109,6 @@ class AccountInvoice(models.Model):
                     fee_price = fee_line.value_apply
             else:
                 fee_price = 0
-        else:
-            fee_price = 0
         _logger.warning(self.fee_price)
         _logger.warning('_________________fee_price')
         _logger.warning(fee_price)
