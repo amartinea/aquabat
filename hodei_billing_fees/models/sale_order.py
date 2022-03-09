@@ -154,3 +154,10 @@ class SaleOrder(models.Model):
                     _logger.warning(values)
             values['fee_price'] = fee_price
         return super(SaleOrder, self).write(values)
+
+    @api.depends('invoice_lines.invoice_id.state', 'invoice_lines.quantity')
+    def _get_invoice_qty(self):
+        super(SaleOrder, self)._get_invoice_qty()
+        for line in self:
+            if line.product_id == self.env.ref('hodei_billing_fees.product_fees').id:
+                line.qty_invoiced = 1
