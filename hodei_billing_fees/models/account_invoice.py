@@ -130,7 +130,15 @@ class AccountInvoice(models.Model):
                     _logger.warning(invoice_line_data)
                 if fee_price == 0:
                     if values.get('tax_line_ids'):
-                        values['tax_line_ids'][0][2]['amount'] -= self.fee_price * 20/100
+                        values['tax_line_ids'][0][2]['amount'] -= self.fee_price * self.partner_id.fee_id.tax_id.amount
+                    else:
+                        tax_line = self.env['account.invoice.tax'].search(
+                            [('id', 'in', self.tax_line_ids.ids), ('tax_id', '=', self.partner_id.fee_id.tax_id.id)])
+                        tax_line.write({'amount': tax_line['amount'] - self.fee_price * self.partner_id.fee_id.tax_id.amount/100})
+                else:
+                    tax_line = self.env['account.invoice.tax'].search(
+                        [('id', 'in', self.tax_line_ids.ids), ('tax_id', '=', self.partner_id.fee_id.tax_id.id)])
+                    tax_line.write({'amount': tax_line['amount'] + fee_price * self.partner_id.fee_id.tax_id.amount/100 - self.fee_price * self.partner_id.fee_id.tax_id.amount / 100})
             else:
                 _logger.warning('add________________________')
                 invoice_line_data = {
