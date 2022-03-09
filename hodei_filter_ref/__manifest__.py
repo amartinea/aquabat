@@ -6,6 +6,7 @@
     'category': '',
     'description': """ """,
     'depends': [
+        'aquabat_customer',
         'sale',
     ],
     'external_dependencies': {
