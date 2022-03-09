@@ -159,5 +159,8 @@ class SaleOrder(models.Model):
     def _get_invoice_qty(self):
         super(SaleOrder, self)._get_invoice_qty()
         for line in self:
+            _logger.warning(line.product_id)
+            _logger.warning(self.env.ref('hodei_billing_fees.product_fees').id)
             if line.product_id == self.env.ref('hodei_billing_fees.product_fees').id:
+                _logger.warning("oui")
                 line.qty_invoiced = 1
