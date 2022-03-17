@@ -86,7 +86,10 @@ class SaleOrder(models.Model):
                     _logger.warning(amount_change)
             _logger.warning('_________________amount_change')
             _logger.warning(amount_change)
-        if self.apply_fee:
+
+        if ('apply_fee' not in values and not self.apply_fee) or ('apply_fee' in values and not values['apply_fee']):
+            fee_price = 0
+        else:
             if self.company_id.id == self.partner_id.fee_id.company_id.id:
                 fee_line = self.partner_id.fee_id._check_condition_to_apply(self.amount_untaxed + amount_change)
             else:
@@ -98,8 +101,6 @@ class SaleOrder(models.Model):
                     fee_price = fee_line.value_apply
             else:
                 fee_price = 0
-        else:
-            fee_price = 0
         _logger.warning(self.fee_price)
         _logger.warning('_________________fee_price')
         _logger.warning(fee_price)
@@ -153,3 +154,13 @@ class SaleOrder(models.Model):
                     _logger.warning(values)
             values['fee_price'] = fee_price
         return super(SaleOrder, self).write(values)
+
+    @api.depends('invoice_lines.invoice_id.state', 'invoice_lines.quantity')
+    def _get_invoice_qty(self):
+        super(SaleOrder, self)._get_invoice_qty()
+        for line in self:
+            _logger.warning(line.product_id)
+            _logger.warning(self.env.ref('hodei_billing_fees.product_fees').id)
+            if line.product_id == self.env.ref('hodei_billing_fees.product_fees').id:
+                _logger.warning("oui")
+                line.qty_invoiced = 1

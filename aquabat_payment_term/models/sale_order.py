@@ -11,6 +11,6 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
         if self.payment_term_id:
-            super(SaleOrder, self).action_confirm()
+            return super(SaleOrder, self).action_confirm()
         else:
             raise UserError(_('It is not allowed to confirm an order without any account payment term.'))
