@@ -5,4 +5,5 @@ from . import product_template
 from . import billing_fees
 from . import res_partner
 from . import sale_order
+from . import sale_order_line
 
