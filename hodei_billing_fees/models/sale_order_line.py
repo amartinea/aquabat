@@ -6,7 +6,7 @@ from odoo.tools import float_is_zero, float_compare
 _logger = logging.getLogger(__name__)
 
 
-class SaleOrder(models.Model):
+class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     @api.depends('state', 'product_uom_qty', 'qty_delivered', 'qty_to_invoice', 'qty_invoiced')
@@ -28,11 +28,11 @@ class SaleOrder(models.Model):
         for line in self:
             if line.state not in ('sale', 'done'):
                 line.invoice_status = 'no'
-            elif line.product_id == self.env.ref('hodei_billing_fees.product_fees').id:
+            elif line.product_id == self.env.ref('hodei_billing_fees.product_fees'):
                 line.invoice_status = 'to invoice'
                 for invoice in line.order_id.invoice_ids:
                     for invoice_line in invoice.invoice_line_ids:
-                        if invoice_line.product_id == self.env.ref('hodei_billing_fees.product_fees').id:
+                        if invoice_line.product_id == self.env.ref('hodei_billing_fees.product_fees'):
                             line.invoice_status = 'invoiced'
             else:
                 if not float_is_zero(line.qty_to_invoice, precision_digits=precision):
