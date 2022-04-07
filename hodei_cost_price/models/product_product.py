@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class ProductProduct(models.Model):
@@ -35,6 +37,8 @@ class ProductProduct(models.Model):
                 coef = coef_categ
             if coef_product != 0:
                 coef = coef_product
+            _logger.warning(self.env)
+            _logger.warning(self.env.company)
             product.with_context(force_company=self.env.company.id).cost_price = product.with_context(
                 force_company=self.env.company.id).standard_price * coef
             if product.product_tmpl_id:   #Not exist when create product
