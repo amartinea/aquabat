@@ -38,7 +38,7 @@ class ProductProduct(models.Model):
             if coef_product != 0:
                 coef = coef_product
             _logger.warning(self.env)
-            _logger.warning(self.env.company)
+            _logger.warning(self.env.user.company_id.id)
             product.with_context(force_company=self.env.company.id).cost_price = product.with_context(
                 force_company=self.env.company.id).standard_price * coef
             if product.product_tmpl_id:   #Not exist when create product
