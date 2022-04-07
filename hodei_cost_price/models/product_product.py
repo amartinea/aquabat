@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-import logging
-_logger = logging.getLogger(__name__)
 
 
 class ProductProduct(models.Model):
@@ -37,14 +35,12 @@ class ProductProduct(models.Model):
                 coef = coef_categ
             if coef_product != 0:
                 coef = coef_product
-            _logger.warning(self.env)
-            _logger.warning(self.env.user.company_id.id)
-            product.with_context(force_company=self.env.company.id).cost_price = product.with_context(
-                force_company=self.env.company.id).standard_price * coef
+            product.with_context(force_company=self.env.user.company_id.id).cost_price = product.with_context(
+                force_company=self.env.user.company_id.id).standard_price * coef
             if product.product_tmpl_id:   #Not exist when create product
                 product.product_tmpl_id.with_context(
-                    force_company=self.env.company.id).cost_price = product.with_context(
-                    force_company=self.env.company.id).standard_price * coef
+                    force_company=self.env.user.company_id.id).cost_price = product.with_context(
+                    force_company=self.env.user.company_id.id).standard_price * coef
 
     #
     #
@@ -82,10 +78,10 @@ class ProductTemplate(models.Model):
         unique_variants = self.filtered(lambda template: len(template.product_variant_ids) == 1)
         for template in unique_variants:
             template.with_context(
-                force_company=self.env.company.id).cost_price = template.product_variant_ids.with_context(
-                force_company=self.env.company.id).cost_price
+                force_company=self.env.user.company_id.id).cost_price = template.product_variant_ids.with_context(
+                force_company=self.env.user.company_id.id).cost_price
         for template in (self - unique_variants):
-            template.with_context(force_company=self.env.company.id).cost_price = 0.0
+            template.with_context(force_company=self.env.user.company_id.id).cost_price = 0.0
     #
     # @api.depends('product_variant_ids', 'product_variant_ids.standard_price')
     # def _compute_cost_price(self):
