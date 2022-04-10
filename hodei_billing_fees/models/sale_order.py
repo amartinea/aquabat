@@ -67,11 +67,14 @@ class SaleOrder(models.Model):
         vals['fee_price'] = fee_price
         return super(SaleOrder, self).create(vals)
 
-    @api.model
+    @api.multi
     def write(self, values):
         _logger.warning(self)
         _logger.warning(values)
         amount_change = 0
+        no_order_line = 0
+        if not values.get('order_line', False):
+            no_order_line = 1
         if values.get('order_line'):
             for line in values['order_line']:
                 _logger.warning(line[0])
@@ -153,6 +156,23 @@ class SaleOrder(models.Model):
                     _logger.warning('_________________values')
                     _logger.warning(values)
             values['fee_price'] = fee_price
+            if 'order_line' in values:
+                line_to_delete = False
+                for x in range(len(values['order_line'])):
+                    if values['order_line'][x][1] == billing_line.id:
+                        if values['order_line'][x][2]:
+                            values['order_line'][x][2]['price_unit'] = fee_price
+                        else:
+                            line_to_delete = x
+                if line_to_delete:
+                    del values['order_line'][line_to_delete]
+            else:
+                values['order_line'] = [1, billing_line.id, {'price_unit': fee_price}]
+            if no_order_line == 1:
+                lines = self.env['sale.order.line'].search(
+                    [('order_id', '=', self.id), ('product_id', '!=', product_fee.id)])
+                for line in lines:
+                    values['order_line'] += [[4, line.id, False]]
         return super(SaleOrder, self).write(values)
 
     @api.depends('invoice_lines.invoice_id.state', 'invoice_lines.quantity')
@@ -164,3 +184,8 @@ class SaleOrder(models.Model):
             if line.product_id == self.env.ref('hodei_billing_fees.product_fees').id:
                 _logger.warning("oui")
                 line.qty_invoiced = 1
+
+    def _prepare_invoice(self):
+        res = super(SaleOrder, self)._prepare_invoice()
+        res['apply_fee'] = self.apply_fee
+        return res
