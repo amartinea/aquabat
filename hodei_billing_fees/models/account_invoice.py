@@ -1,8 +1,19 @@
 # -*- coding: utf-8 -*-
 import logging
 from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
+
+# mapping invoice type to refund type
+TYPE2REFUND = {
+    'out_invoice': 'out_refund',        # Customer Invoice
+    'in_invoice': 'in_refund',          # Vendor Bill
+    'out_refund': 'out_invoice',        # Customer Credit Note
+    'in_refund': 'in_invoice',          # Vendor Credit Note
+}
+
+MAGIC_COLUMNS = ('id', 'create_uid', 'create_date', 'write_uid', 'write_date')
 
 
 class AccountInvoice(models.Model):
@@ -175,6 +186,43 @@ class AccountInvoice(models.Model):
                 values['fee_price'] = fee_price
             _logger.warning(values)
             return super(AccountInvoice, order).write(values)
+
+    @api.model
+    def _refund_cleanup_lines(self, lines):
+        """ Convert records to dict of values suitable for one2many line creation
+
+            :param recordset lines: records to convert
+            :return: list of command tuple for one2many line creation [(0, 0, dict of valueis), ...]
+        """
+        result = []
+        for line in lines:
+            values = {}
+            product_fee = self.env['product.product'].search([('fee_product', '=', True)])
+            _logger.warning('line______________________________')
+            _logger.warning(line)
+            if 'product_id' in line and line['product_id'].id == product_fee.id:
+                continue
+            for name, field in line._fields.items():
+                if name in MAGIC_COLUMNS:
+                    continue
+                elif field.type == 'many2one':
+                    values[name] = line[name].id
+                elif field.type not in ['many2many', 'one2many']:
+                    values[name] = line[name]
+                elif name == 'invoice_line_tax_ids':
+                    values[name] = [(6, 0, line[name].ids)]
+                elif name == 'analytic_tag_ids':
+                    values[name] = [(6, 0, line[name].ids)]
+            result.append((0, 0, values))
+
+        return result
+
+    @api.model
+    def _prepare_refund(self, invoice, date_invoice=None, date=None, description=None, journal_id=None):
+        values = super(AccountInvoice, self)._prepare_refund(invoice, date_invoice, date, description, journal_id)
+        values['apply_fee'] = False
+        return values
+
 
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
