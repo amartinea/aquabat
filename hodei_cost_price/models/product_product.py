@@ -57,3 +57,4 @@ class ProductTemplate(models.Model):
                 force_company=self.env.user.company_id.id).cost_price
         for template in (self - unique_variants):
             template.with_context(force_company=self.env.user.company_id.id).cost_price = 0.0
+
