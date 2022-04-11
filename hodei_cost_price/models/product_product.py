@@ -18,7 +18,7 @@ class ProductProduct(models.Model):
             ('product_id', '=', self.id),
             ('product_tmpl_id', '=', self.product_tmpl_id.id)]).ids
 
-    @api.onchange('coef_item_ids', 'standard_price')
+    @api.onchange('standard_price')
     def onchange_cost_price(self):
         _logger.warning('onchange______________')
         for product in self:
