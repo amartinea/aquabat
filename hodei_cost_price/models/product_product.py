@@ -5,6 +5,7 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
@@ -14,7 +15,7 @@ class ProductProduct(models.Model):
     @api.one
     def _get_coeflist_items(self):
         self.coef_item_ids = self.env['product.coeflist.item'].search([
-            '|','|',
+            '|', '|',
             ('product_id', '=', self.id),
             ('product_tmpl_id', '=', self.product_tmpl_id.id)]).ids
 
@@ -40,12 +41,9 @@ class ProductProduct(models.Model):
                 coef = coef_product
             _logger.warning('self.env.user.company_id.id______________')
             _logger.warning(self.env.user.company_id.id)
-            product.with_context(force_company=self.env.user.company_id.id).cost_price = product.with_context(
-                force_company=self.env.user.company_id.id).standard_price * coef
+            product.cost_price = product.standard_price * coef
             if product.product_tmpl_id:   #Not exist when create product
-                product.product_tmpl_id.with_context(
-                    force_company=self.env.user.company_id.id).cost_price = product.with_context(
-                    force_company=self.env.user.company_id.id).standard_price * coef
+                product.product_tmpl_id.cost_price = product.standard_price * coef
 
 
 class ProductTemplate(models.Model):
