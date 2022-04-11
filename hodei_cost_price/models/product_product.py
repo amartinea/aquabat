@@ -59,4 +59,3 @@ class ProductTemplate(models.Model):
             template.cost_price = template.product_variant_ids.cost_price
         for template in (self - unique_variants):
             template.cost_price = 0.0
-
