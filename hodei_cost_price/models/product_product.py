@@ -35,12 +35,9 @@ class ProductProduct(models.Model):
                 coef = coef_categ
             if coef_product != 0:
                 coef = coef_product
-            product.with_context(force_company=self.env.user.company_id.id).cost_price = product.with_context(
-                force_company=self.env.user.company_id.id).standard_price * coef
+            product.cost_price = product.standard_price * coef
             if product.product_tmpl_id:   #Not exist when create product
-                product.product_tmpl_id.with_context(
-                    force_company=self.env.user.company_id.id).cost_price = product.with_context(
-                    force_company=self.env.user.company_id.id).standard_price * coef
+                product.product_tmpl_id.cost_price = product.standard_price * coef
 
 
 class ProductTemplate(models.Model):
