@@ -46,15 +46,13 @@ class ProductProduct(models.Model):
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    cost_price = fields.Float('Cost price', company_dependent=True)
+    cost_price = fields.Float('Cost price', compute='_compute_cost_price')
 
-    @api.onchange('product_variant_ids', 'product_variant_ids.standard_price')
-    def onchange_cost_price(self):
+    @api.depends('product_variant_ids', 'product_variant_ids.standard_price')
+    def _compute_cost_price(self):
         unique_variants = self.filtered(lambda template: len(template.product_variant_ids) == 1)
         for template in unique_variants:
-            template.with_context(
-                force_company=self.env.user.company_id.id).cost_price = template.product_variant_ids.with_context(
-                force_company=self.env.user.company_id.id).cost_price
+            template.cost_price = template.product_variant_ids.cost_price
         for template in (self - unique_variants):
-            template.with_context(force_company=self.env.user.company_id.id).cost_price = 0.0
+            template.cost_price = 0.0
 
