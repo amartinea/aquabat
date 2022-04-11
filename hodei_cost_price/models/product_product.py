@@ -20,6 +20,7 @@ class ProductProduct(models.Model):
 
     @api.onchange('coef_item_ids', 'standard_price')
     def onchange_cost_price(self):
+        _logger.warning('onchange______________')
         for product in self:
             coeflist_items = self.env['product.coeflist.item'].search([
                 '|', '|', ('categ_id', '=', product.categ_id.id),
@@ -54,6 +55,7 @@ class ProductTemplate(models.Model):
 
     @api.depends('product_variant_ids', 'product_variant_ids.standard_price')
     def _compute_cost_price(self):
+        _logger.warning('oui______________')
         unique_variants = self.filtered(lambda template: len(template.product_variant_ids) == 1)
         for template in unique_variants:
             template.cost_price = template.product_variant_ids.cost_price
