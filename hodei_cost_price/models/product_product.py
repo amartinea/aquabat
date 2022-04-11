@@ -6,7 +6,7 @@ from odoo import api, fields, models, _
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
-    cost_price = fields.Float('Cost price', company_dependent=True, store=True)
+    cost_price = fields.Float('Cost price', company_dependent=True)
     coef_item_ids = fields.Many2many('product.coeflist.item', 'Coeflist Items', compute='_get_coeflist_items')
 
     @api.one
@@ -46,7 +46,7 @@ class ProductProduct(models.Model):
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    cost_price = fields.Float('Cost price', company_dependent=True, store=True)
+    cost_price = fields.Float('Cost price', company_dependent=True)
 
     @api.onchange('product_variant_ids', 'product_variant_ids.standard_price')
     def onchange_cost_price(self):
