@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class ProductProduct(models.Model):
     _inherit = "product.product"
@@ -35,9 +37,14 @@ class ProductProduct(models.Model):
                 coef = coef_categ
             if coef_product != 0:
                 coef = coef_product
-            product.cost_price = product.standard_price * coef
+            _logger.warning('self.env.user.company_id.id______________')
+            _logger.warning(self.env.user.company_id.id)
+            product.with_context(force_company=self.env.user.company_id.id).cost_price = product.with_context(
+                force_company=self.env.user.company_id.id).standard_price * coef
             if product.product_tmpl_id:   #Not exist when create product
-                product.product_tmpl_id.cost_price = product.standard_price * coef
+                product.product_tmpl_id.with_context(
+                    force_company=self.env.user.company_id.id).cost_price = product.with_context(
+                    force_company=self.env.user.company_id.id).standard_price * coef
 
 
 class ProductTemplate(models.Model):
@@ -52,3 +59,4 @@ class ProductTemplate(models.Model):
             template.cost_price = template.product_variant_ids.cost_price
         for template in (self - unique_variants):
             template.cost_price = 0.0
+
