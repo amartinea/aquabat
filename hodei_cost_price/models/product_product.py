@@ -44,6 +44,11 @@ class ProductProduct(models.Model):
             if product.product_tmpl_id:   #Not exist when create product
                 product.product_tmpl_id.cost_price = product.standard_price * coef
 
+    @api.multi
+    def do_change_standard_price(self, new_price, account_id):
+        _logger.warning('do_change_standard_price________________________')
+        tmp_value = super(StockMove, self).do_change_standard_price(new_price, account_id)
+        return tmp_value
 
 class ProductTemplate(models.Model):
     _inherit = "product.template"
