@@ -51,6 +51,19 @@ class ProductProduct(models.Model):
         tmp_value = super(ProductProduct, self).do_change_standard_price(new_price, account_id)
         return tmp_value
 
+    @api.multi
+    def write(self, values):
+        _logger.warning('write________________________')
+        res = super(ProductProduct, self).write(values)
+        if 'standard_price' in values:
+            self._set_standard_price(values['standard_price'])
+        return res
+
+    @api.multi
+    def _set_standard_price(self, value):
+        _logger.warning('_set_standard_price________________________')
+        super(ProductProduct, self)._set_standard_price(values)
+
 
 class ProductTemplate(models.Model):
     _inherit = "product.template"
