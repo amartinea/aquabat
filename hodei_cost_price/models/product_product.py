@@ -19,9 +19,8 @@ class ProductProduct(models.Model):
             ('product_id', '=', self.id),
             ('product_tmpl_id', '=', self.product_tmpl_id.id)]).ids
 
-    @api.onchange('standard_price')
-    def _onchange_cost_price(self):
-        _logger.warning('onchange______________')
+    def calcul_cost_price(self):
+        _logger.warning('calcul______________')
         for product in self:
             coeflist_items = self.env['product.coeflist.item'].search([
                 '|', '|', ('categ_id', '=', product.categ_id.id),
@@ -46,23 +45,12 @@ class ProductProduct(models.Model):
                 product.product_tmpl_id.cost_price = product.standard_price * coef
 
     @api.multi
-    def do_change_standard_price(self, new_price, account_id):
-        _logger.warning('do_change_standard_price________________________')
-        tmp_value = super(ProductProduct, self).do_change_standard_price(new_price, account_id)
-        return tmp_value
-
-    @api.multi
     def write(self, values):
         _logger.warning('write________________________')
         res = super(ProductProduct, self).write(values)
         if 'standard_price' in values:
-            self._set_standard_price(values['standard_price'])
+            self.calcul_cost_price(values['standard_price'])
         return res
-
-    @api.multi
-    def _set_standard_price(self, value):
-        _logger.warning('_set_standard_price________________________')
-        super(ProductProduct, self)._set_standard_price(value)
 
 
 class ProductTemplate(models.Model):
