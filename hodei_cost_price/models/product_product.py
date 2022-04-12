@@ -62,7 +62,7 @@ class ProductProduct(models.Model):
     @api.multi
     def _set_standard_price(self, value):
         _logger.warning('_set_standard_price________________________')
-        super(ProductProduct, self)._set_standard_price(values)
+        super(ProductProduct, self)._set_standard_price(value)
 
 
 class ProductTemplate(models.Model):
