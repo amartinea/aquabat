@@ -47,7 +47,7 @@ class ProductProduct(models.Model):
     @api.multi
     def do_change_standard_price(self, new_price, account_id):
         _logger.warning('do_change_standard_price________________________')
-        tmp_value = super(StockMove, self).do_change_standard_price(new_price, account_id)
+        tmp_value = super(ProductProduct, self).do_change_standard_price(new_price, account_id)
         return tmp_value
 
 class ProductTemplate(models.Model):
