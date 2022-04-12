@@ -5,6 +5,7 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
@@ -50,6 +51,7 @@ class ProductProduct(models.Model):
         tmp_value = super(ProductProduct, self).do_change_standard_price(new_price, account_id)
         return tmp_value
 
+
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
@@ -63,3 +65,8 @@ class ProductTemplate(models.Model):
             template.cost_price = template.product_variant_ids.cost_price
         for template in (self - unique_variants):
             template.cost_price = 0.0
+
+    @api.one
+    def _set_cost_method(self):
+        _logger.warning('_set_cost_method________________________')
+        return super(ProductTemplate, self)._set_cost_method()
