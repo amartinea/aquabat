@@ -19,7 +19,7 @@ class ProductProduct(models.Model):
             ('product_id', '=', self.id),
             ('product_tmpl_id', '=', self.product_tmpl_id.id)]).ids
 
-    def calcul_cost_price(self):
+    def calcul_cost_price(self, standard_price):
         _logger.warning('calcul______________')
         for product in self:
             coeflist_items = self.env['product.coeflist.item'].search([
@@ -40,9 +40,9 @@ class ProductProduct(models.Model):
                 coef = coef_product
             _logger.warning('self.env.user.company_id.id______________')
             _logger.warning(self.env.user.company_id.id)
-            product.cost_price = product.standard_price * coef
+            product.cost_price = standard_price * coef
             if product.product_tmpl_id:   #Not exist when create product
-                product.product_tmpl_id.cost_price = product.standard_price * coef
+                product.product_tmpl_id.cost_price = standard_price * coef
 
     @api.multi
     def write(self, values):
