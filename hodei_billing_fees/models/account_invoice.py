@@ -190,8 +190,9 @@ class AccountInvoice(models.Model):
                             if values.get('tax_line_ids'):
                                 values['tax_line_ids'][0][2]['amount'] += fee_price * 20/100
                     values['fee_price'] = fee_price
-            _logger.warning(values)
-            return super(AccountInvoice, order).write(values)
+                    _logger.warning(values)
+                    return super(AccountInvoice, order).write(values)
+        return super(AccountInvoice, self).write(values)
 
     @api.model
     def _refund_cleanup_lines(self, lines):
