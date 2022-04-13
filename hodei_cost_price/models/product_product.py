@@ -67,7 +67,3 @@ class ProductTemplate(models.Model):
         for template in (self - unique_variants):
             template.cost_price = 0.0
 
-    @api.one
-    def _set_cost_method(self):
-        _logger.warning('_set_cost_method________________________')
-        return super(ProductTemplate, self)._set_cost_method()
