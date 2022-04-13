@@ -95,7 +95,7 @@ class AccountInvoice(models.Model):
     @api.multi
     def write(self, values):
         if values.get('type') == 'out_refund':
-            values.apply_fee = False
+            values['apply_fee'] = False
         elif 'type' in self and self.type != 'out_refund':
             for order in self:
                 amount_change = 0
