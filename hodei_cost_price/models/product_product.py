@@ -38,15 +38,12 @@ class ProductProduct(models.Model):
                 coef = coef_categ
             if coef_product != 0:
                 coef = coef_product
-            _logger.warning('self.env.user.company_id.id______________')
-            _logger.warning(self.env.user.company_id.id)
             product.cost_price = standard_price * coef
             if product.product_tmpl_id:   #Not exist when create product
                 product.product_tmpl_id.cost_price = standard_price * coef
 
     @api.multi
     def write(self, values):
-        _logger.warning('write________________________')
         res = super(ProductProduct, self).write(values)
         if 'standard_price' in values:
             self.calcul_cost_price(values['standard_price'])
@@ -60,7 +57,6 @@ class ProductTemplate(models.Model):
 
     @api.depends('product_variant_ids', 'product_variant_ids.standard_price')
     def _compute_cost_price(self):
-        _logger.warning('oui______________')
         unique_variants = self.filtered(lambda template: len(template.product_variant_ids) == 1)
         for template in unique_variants:
             template.cost_price = template.product_variant_ids.cost_price
