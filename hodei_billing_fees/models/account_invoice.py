@@ -94,99 +94,102 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def write(self, values):
-        for order in self:
-            amount_change = 0
-            if values.get('invoice_line_ids'):
-                for line in values['invoice_line_ids']:
-                    _logger.warning(line[0])
-                    if line[0] == 0:
-                        if not 'discount' in line[2] or line[2]['discount'] == 0:
-                            amount_change += line[2]['quantity'] * line[2]['price_unit']
-                        else:
-                            amount_change += line[2]['quantity'] * line[2]['price_unit'] * line[2]['discount'] / 100
-                        _logger.warning(amount_change)
-                    elif line[0] == 2:
-                        amount_change -= self.env['account.invoice.line'].search([('id', '=', line[1])])['price_subtotal']
-                        _logger.warning(amount_change)
-                _logger.warning('_________________amount_change')
-                _logger.warning(amount_change)
-            if ('apply_fee' not in values and not order.apply_fee) or ('apply_fee' in values and not values['apply_fee']):
-                fee_price = 0
-            else:
-                if order.company_id.id == order.partner_id.fee_id.company_id.id:
-                    fee_line = order.partner_id.fee_id._check_condition_to_apply(order.amount_untaxed + amount_change)
-                else:
-                    fee_line = order.partner_id.fee_id.fee_linked._check_condition_to_apply(order.amount_untaxed + amount_change)
-                if fee_line:
-                    if fee_line.value_type == 'perc':
-                        fee_price = order.amount_untaxed * fee_line.value_apply / 100
-                    elif fee_line.value_type == 'fix':
-                        fee_price = fee_line.value_apply
-                else:
+        if values.get('type') == 'out_refund':
+            values.apply_fee = False
+        elif 'type' in self and self.type != 'out_refund':
+            for order in self:
+                amount_change = 0
+                if values.get('invoice_line_ids'):
+                    for line in values['invoice_line_ids']:
+                        _logger.warning(line[0])
+                        if line[0] == 0:
+                            if not 'discount' in line[2] or line[2]['discount'] == 0:
+                                amount_change += line[2]['quantity'] * line[2]['price_unit']
+                            else:
+                                amount_change += line[2]['quantity'] * line[2]['price_unit'] * line[2]['discount'] / 100
+                            _logger.warning(amount_change)
+                        elif line[0] == 2:
+                            amount_change -= self.env['account.invoice.line'].search([('id', '=', line[1])])['price_subtotal']
+                            _logger.warning(amount_change)
+                    _logger.warning('_________________amount_change')
+                    _logger.warning(amount_change)
+                if ('apply_fee' not in values and not order.apply_fee) or ('apply_fee' in values and not values['apply_fee']):
                     fee_price = 0
-            _logger.warning(order.fee_price)
-            _logger.warning('_________________fee_price')
-            _logger.warning(fee_price)
-            if order.fee_price != fee_price:
-                product_fee = self.env['product.product'].search([('fee_product', '=', True)])
-                billing_line = self.env['account.invoice.line'].search(
-                    [('invoice_id', '=', order.id), ('product_id', '=', product_fee.id)])
-                _logger.warning('_________________billing_line')
-                _logger.warning(billing_line)
-                if billing_line:
-                    invoice_line_data = {
-                        'price_unit': fee_price
-                    }
-                    if values.get('invoice_line_ids'):
-                        values['invoice_line_ids'] += [(1, billing_line.id, invoice_line_data)]
+                else:
+                    if order.company_id.id == order.partner_id.fee_id.company_id.id:
+                        fee_line = order.partner_id.fee_id._check_condition_to_apply(order.amount_untaxed + amount_change)
                     else:
-                        values['invoice_line_ids'] = [(1, billing_line.id, invoice_line_data)]
-                        _logger.warning('invoice_line_data')
-                        _logger.warning(invoice_line_data)
-                    if fee_price == 0:
-                        if values.get('tax_line_ids'):
-                            values['tax_line_ids'][0][2]['amount'] -= order.fee_price * order.partner_id.fee_id.tax_id.amount
+                        fee_line = order.partner_id.fee_id.fee_linked._check_condition_to_apply(order.amount_untaxed + amount_change)
+                    if fee_line:
+                        if fee_line.value_type == 'perc':
+                            fee_price = order.amount_untaxed * fee_line.value_apply / 100
+                        elif fee_line.value_type == 'fix':
+                            fee_price = fee_line.value_apply
+                    else:
+                        fee_price = 0
+                _logger.warning(order.fee_price)
+                _logger.warning('_________________fee_price')
+                _logger.warning(fee_price)
+                if order.fee_price != fee_price:
+                    product_fee = self.env['product.product'].search([('fee_product', '=', True)])
+                    billing_line = self.env['account.invoice.line'].search(
+                        [('invoice_id', '=', order.id), ('product_id', '=', product_fee.id)])
+                    _logger.warning('_________________billing_line')
+                    _logger.warning(billing_line)
+                    if billing_line:
+                        invoice_line_data = {
+                            'price_unit': fee_price
+                        }
+                        if values.get('invoice_line_ids'):
+                            values['invoice_line_ids'] += [(1, billing_line.id, invoice_line_data)]
+                        else:
+                            values['invoice_line_ids'] = [(1, billing_line.id, invoice_line_data)]
+                            _logger.warning('invoice_line_data')
+                            _logger.warning(invoice_line_data)
+                        if fee_price == 0:
+                            if values.get('tax_line_ids'):
+                                values['tax_line_ids'][0][2]['amount'] -= order.fee_price * order.partner_id.fee_id.tax_id.amount
+                            else:
+                                tax_line = self.env['account.invoice.tax'].search(
+                                    [('id', 'in', order.tax_line_ids.ids), ('tax_id', '=', order.partner_id.fee_id.tax_id.id)])
+                                tax_line.write({'amount': tax_line['amount'] - order.fee_price * order.partner_id.fee_id.tax_id.amount/100})
                         else:
                             tax_line = self.env['account.invoice.tax'].search(
                                 [('id', 'in', order.tax_line_ids.ids), ('tax_id', '=', order.partner_id.fee_id.tax_id.id)])
-                            tax_line.write({'amount': tax_line['amount'] - order.fee_price * order.partner_id.fee_id.tax_id.amount/100})
+                            tax_line.write({'amount': tax_line['amount'] + fee_price * order.partner_id.fee_id.tax_id.amount/100 - order.fee_price * order.partner_id.fee_id.tax_id.amount / 100})
                     else:
-                        tax_line = self.env['account.invoice.tax'].search(
-                            [('id', 'in', order.tax_line_ids.ids), ('tax_id', '=', order.partner_id.fee_id.tax_id.id)])
-                        tax_line.write({'amount': tax_line['amount'] + fee_price * order.partner_id.fee_id.tax_id.amount/100 - order.fee_price * order.partner_id.fee_id.tax_id.amount / 100})
-                else:
-                    _logger.warning('add________________________')
-                    invoice_line_data = {
-                        'name': 'Billing Fee',
-                        'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
-                        'uom_id': 1,
-                        'origin': order.origin,
-                        'invoice_id': order.id,
-                        'partner_id': order.partner_id.id,
-                        'price_unit': fee_price,
-                        'price_subtotal': fee_price,
-                        'price_total': fee_price,
-                        'price_subtotal_signed': fee_price,
-                        'quantity': 1,
-                        'discount': 0,
-                        'company_id': order.company_id.id,
-                        'currency_id': 1
-                    }
-                    _logger.warning(order.company_id.id)
-                    if order.company_id.id == order.partner_id.fee_id.company_id.id:
-                        invoice_line_data['account_id'] = order.partner_id.fee_id.account_id.id
-                        invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [order.partner_id.fee_id.tax_id.id])]
-                    else:
-                        invoice_line_data['account_id'] = order.partner_id.fee_id.fee_linked.account_id.id
-                        invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [order.partner_id.fee_id.fee_linked.tax_id.id])]
-                    if invoice_line_data:
-                        if values.get('invoice_line_ids'):
-                            values['invoice_line_ids'] += [(0, 0, invoice_line_data)]
+                        _logger.warning('add________________________')
+                        invoice_line_data = {
+                            'name': 'Billing Fee',
+                            'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
+                            'uom_id': 1,
+                            'origin': order.origin,
+                            'invoice_id': order.id,
+                            'partner_id': order.partner_id.id,
+                            'price_unit': fee_price,
+                            'price_subtotal': fee_price,
+                            'price_total': fee_price,
+                            'price_subtotal_signed': fee_price,
+                            'quantity': 1,
+                            'discount': 0,
+                            'company_id': order.company_id.id,
+                            'currency_id': 1
+                        }
+                        _logger.warning(order.company_id.id)
+                        if order.company_id.id == order.partner_id.fee_id.company_id.id:
+                            invoice_line_data['account_id'] = order.partner_id.fee_id.account_id.id
+                            invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [order.partner_id.fee_id.tax_id.id])]
                         else:
-                            values['invoice_line_ids'] = [(0, 0, invoice_line_data)]
-                        if values.get('tax_line_ids'):
-                            values['tax_line_ids'][0][2]['amount'] += fee_price * 20/100
-                values['fee_price'] = fee_price
+                            invoice_line_data['account_id'] = order.partner_id.fee_id.fee_linked.account_id.id
+                            invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [order.partner_id.fee_id.fee_linked.tax_id.id])]
+                        if invoice_line_data:
+                            if values.get('invoice_line_ids'):
+                                values['invoice_line_ids'] += [(0, 0, invoice_line_data)]
+                            else:
+                                values['invoice_line_ids'] = [(0, 0, invoice_line_data)]
+                            if values.get('tax_line_ids'):
+                                values['tax_line_ids'][0][2]['amount'] += fee_price * 20/100
+                    values['fee_price'] = fee_price
             _logger.warning(values)
             return super(AccountInvoice, order).write(values)
 
