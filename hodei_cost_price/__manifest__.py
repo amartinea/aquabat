@@ -8,7 +8,9 @@
     'depends': [
         'product',
         'sale',
-        'sale_margin'
+        'sale_margin',
+        'stock_account',
+
     ],
     'external_dependencies': {
     },

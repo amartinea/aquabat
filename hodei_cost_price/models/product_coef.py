@@ -54,7 +54,7 @@ class ProductCoeflistItem(models.Model):
         default='3_global', required=True,
         help='Coeflist Item applicable on selected option')
 
-    base_coeflist_id = fields.Many2one('product.coefelist', 'Other Coeflist')
+    base_coeflist_id = fields.Many2one('product.coeflist', 'Other Coeflist')
     coeflist_id = fields.Many2one('product.coeflist', 'Coeflist', index=True, ondelete='cascade')
 
     company_id = fields.Many2one(
