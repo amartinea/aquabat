@@ -52,7 +52,13 @@ class ProductProduct(models.Model):
     def write(self, values):
         res = super(ProductProduct, self).write(values)
         if 'standard_price' in values or 'categ_id' in values:
-            self.calcul_cost_price(values['standard_price'], values['categ_id'])
+            standard_price = False
+            categ = False
+            if 'standard_price' in values:
+                standard_price = values['standard_price']
+            if 'categ_id' in values:
+                categ = values['categ_id']
+            self.calcul_cost_price(standard_price, categ)
         return res
 
 
