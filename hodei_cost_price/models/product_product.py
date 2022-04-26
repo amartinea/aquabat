@@ -50,6 +50,8 @@ class ProductProduct(models.Model):
 
     @api.multi
     def write(self, values):
+        _logger.warning('values______________')
+        _logger.warning(values)
         res = super(ProductProduct, self).write(values)
         if 'standard_price' in values or 'categ_id' in values:
             standard_price = False
