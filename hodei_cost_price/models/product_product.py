@@ -19,13 +19,19 @@ class ProductProduct(models.Model):
             ('product_id', '=', self.id),
             ('product_tmpl_id', '=', self.product_tmpl_id.id)]).ids
 
-    def calcul_cost_price(self, standard_price):
+    def calcul_cost_price(self, standard_price, new_categ):
         _logger.warning('calcul______________')
         for product in self:
-            coeflist_items = self.env['product.coeflist.item'].search([
-                '|', '|', ('categ_id', '=', product.categ_id.id),
-                ('product_id', '=', product.id),
-                ('product_tmpl_id', '=', product.product_tmpl_id.id)])
+            if new_categ:
+                coeflist_items = self.env['product.coeflist.item'].search([
+                    '|', '|', ('categ_id', '=', new_categ.id),
+                    ('product_id', '=', product.id),
+                    ('product_tmpl_id', '=', product.product_tmpl_id.id)])
+            else:
+                coeflist_items = self.env['product.coeflist.item'].search([
+                    '|', '|', ('categ_id', '=', product.categ_id.id),
+                    ('product_id', '=', product.id),
+                    ('product_tmpl_id', '=', product.product_tmpl_id.id)])
             coef_categ = 0
             coef_product = 0
             coef = 1
@@ -45,8 +51,8 @@ class ProductProduct(models.Model):
     @api.multi
     def write(self, values):
         res = super(ProductProduct, self).write(values)
-        if 'standard_price' in values:
-            self.calcul_cost_price(values['standard_price'])
+        if 'standard_price' in values or 'categ_id' in values:
+            self.calcul_cost_price(values['standard_price'], values['categ_id'])
         return res
 
 
