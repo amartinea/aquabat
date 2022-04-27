@@ -47,9 +47,13 @@ class ProductProduct(models.Model):
             if coef_product != 0:
                 coef = coef_product
             _logger.warning(coef)
-            product.cost_price = standard_price * coef
+            if standard_price != 0:
+                price = standard_price
+            else:
+                price = self.standard_price
+            product.cost_price = price * coef
             if product.product_tmpl_id:   #Not exist when create product
-                product.product_tmpl_id.cost_price = standard_price * coef
+                product.product_tmpl_id.cost_price = price * coef
 
     @api.multi
     def write(self, values):
