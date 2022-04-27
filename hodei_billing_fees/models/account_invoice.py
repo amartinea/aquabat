@@ -185,10 +185,10 @@ class AccountInvoice(models.Model):
                         _logger.warning(order.company_id.id)
                         if order.company_id.id == order.partner_id.fee_id.company_id.id:
                             invoice_line_data['account_id'] = order.partner_id.fee_id.account_id.id
-                            invoice_line_data['invoice_line_tax_ids'] = [(6, False, [order.partner_id.fee_id.tax_id.id])]
+                            invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [order.partner_id.fee_id.tax_id.id])]
                         else:
                             invoice_line_data['account_id'] = order.partner_id.fee_id.fee_linked.account_id.id
-                            invoice_line_data['invoice_line_tax_ids'] = [(6, False, [order.partner_id.fee_id.fee_linked.tax_id.id])]
+                            invoice_line_data['invoice_line_tax_ids'] = [(6, 0, [order.partner_id.fee_id.fee_linked.tax_id.id])]
                         if invoice_line_data:
                             if values.get('invoice_line_ids'):
                                 values['invoice_line_ids'] += [(0, 0, invoice_line_data)]
