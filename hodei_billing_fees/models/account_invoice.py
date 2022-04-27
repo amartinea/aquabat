@@ -94,6 +94,7 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def write(self, values):
+        _logger.warning(values)
         if values.get('type') == 'out_refund':
             values['apply_fee'] = False
         elif 'type' in self and self.type != 'out_refund':
