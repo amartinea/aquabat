@@ -199,6 +199,7 @@ class AccountInvoice(models.Model):
                     values['fee_price'] = fee_price
                     _logger.warning(values)
                     return super(AccountInvoice, order).write(values)
+                    order.compute_taxes()
         return super(AccountInvoice, self).write(values)
 
     @api.model
