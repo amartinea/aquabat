@@ -89,6 +89,6 @@ class ProductTemplate(models.Model):
                 standard_price = values['standard_price']
             if 'categ_id' in values:
                 categ = values['categ_id']
-            for product in self.env['product.product'].search([('product_tmpl_id', '=', self)]):
+            for product in self.env['product.product'].search([('product_tmpl_id', '=', self.id)]):
                 product.calcul_cost_price(standard_price, categ)
         return res
