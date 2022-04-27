@@ -19,13 +19,18 @@ class ProductProduct(models.Model):
             ('product_id', '=', self.id),
             ('product_tmpl_id', '=', self.product_tmpl_id.id)]).ids
 
-    def calcul_cost_price(self, standard_price):
-        _logger.warning('calcul______________')
+    def calcul_cost_price(self, standard_price, new_categ):
         for product in self:
-            coeflist_items = self.env['product.coeflist.item'].search([
-                '|', '|', ('categ_id', '=', product.categ_id.id),
-                ('product_id', '=', product.id),
-                ('product_tmpl_id', '=', product.product_tmpl_id.id)])
+            if new_categ:
+                coeflist_items = self.env['product.coeflist.item'].search([
+                    '|', '|', ('categ_id', '=', new_categ),
+                    ('product_id', '=', product.id),
+                    ('product_tmpl_id', '=', product.product_tmpl_id.id)])
+            else:
+                coeflist_items = self.env['product.coeflist.item'].search([
+                    '|', '|', ('categ_id', '=', product.categ_id.id),
+                    ('product_id', '=', product.id),
+                    ('product_tmpl_id', '=', product.product_tmpl_id.id)])
             coef_categ = 0
             coef_product = 0
             coef = 1
@@ -38,15 +43,25 @@ class ProductProduct(models.Model):
                 coef = coef_categ
             if coef_product != 0:
                 coef = coef_product
-            product.cost_price = standard_price * coef
+            if standard_price != 0:
+                price = standard_price
+            else:
+                price = self.standard_price
+            product.cost_price = price * coef
             if product.product_tmpl_id:   #Not exist when create product
-                product.product_tmpl_id.cost_price = standard_price * coef
+                product.product_tmpl_id.cost_price = price * coef
 
     @api.multi
     def write(self, values):
         res = super(ProductProduct, self).write(values)
-        if 'standard_price' in values:
-            self.calcul_cost_price(values['standard_price'])
+        if 'standard_price' in values or 'categ_id' in values:
+            standard_price = False
+            categ = False
+            if 'standard_price' in values:
+                standard_price = values['standard_price']
+            if 'categ_id' in values:
+                categ = values['categ_id']
+            self.calcul_cost_price(standard_price, categ)
         return res
 
 
@@ -63,3 +78,16 @@ class ProductTemplate(models.Model):
         for template in (self - unique_variants):
             template.cost_price = 0.0
 
+    @api.multi
+    def write(self, values):
+        res = super(ProductTemplate, self).write(values)
+        if 'standard_price' in values or 'categ_id' in values:
+            standard_price = False
+            categ = False
+            if 'standard_price' in values:
+                standard_price = values['standard_price']
+            if 'categ_id' in values:
+                categ = values['categ_id']
+            for product in self.env['product.product'].search([('product_tmpl_id', '=', self.id)]):
+                product.calcul_cost_price(standard_price, categ)
+        return res

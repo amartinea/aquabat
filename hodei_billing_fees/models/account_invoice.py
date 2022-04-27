@@ -94,9 +94,10 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def write(self, values):
+        _logger.warning(values)
         if values.get('type') == 'out_refund':
             values['apply_fee'] = False
-        elif 'type' in self and self.type != 'out_refund':
+        elif 'type' in self:
             for order in self:
                 amount_change = 0
                 if values.get('invoice_line_ids'):
@@ -154,6 +155,8 @@ class AccountInvoice(models.Model):
                                     [('id', 'in', order.tax_line_ids.ids), ('tax_id', '=', order.partner_id.fee_id.tax_id.id)])
                                 tax_line.write({'amount': tax_line['amount'] - order.fee_price * order.partner_id.fee_id.tax_id.amount/100})
                         else:
+                            _logger.warning('_________________tax_line')
+
                             tax_line = self.env['account.invoice.tax'].search(
                                 [('id', 'in', order.tax_line_ids.ids), ('tax_id', '=', order.partner_id.fee_id.tax_id.id)])
                             tax_line.write({'amount': tax_line['amount'] + fee_price * order.partner_id.fee_id.tax_id.amount/100 - order.fee_price * order.partner_id.fee_id.tax_id.amount / 100})
@@ -187,8 +190,25 @@ class AccountInvoice(models.Model):
                                 values['invoice_line_ids'] += [(0, 0, invoice_line_data)]
                             else:
                                 values['invoice_line_ids'] = [(0, 0, invoice_line_data)]
+                            _logger
                             if values.get('tax_line_ids'):
                                 values['tax_line_ids'][0][2]['amount'] += fee_price * 20/100
+                            else:
+                                new_tax_amount = order.amount_tax + fee_price * 20 / 100
+                                tax_line = self.env['account.invoice.tax'].search(
+                                    [('id', 'in', order.tax_line_ids.ids),
+                                     ('tax_id', '=', order.partner_id.fee_id.tax_id.id)])
+                                tax_line.write({'amount': new_tax_amount})
+                                # tax_line_data = {
+                                #     'name': order.partner_id.fee_id.tax_id.name,
+                                #     'tax_id': order.partner_id.fee_id.tax_id.id,
+                                #     'account_id': order.partner_id.fee_id.tax_id.refund_account_id,
+                                #     'account_analytic_id': False,
+                                #     'analytic_tag_ids': [6, 0, []],
+                                #     'amount': new_tax_amount,
+                                #     'currency_id': order.currency_id,
+                                # }
+                                # values['tax_line_ids'] = [(0, 0, tax_line_data), (2, , False)]
                     values['fee_price'] = fee_price
                     _logger.warning(values)
                     return super(AccountInvoice, order).write(values)
