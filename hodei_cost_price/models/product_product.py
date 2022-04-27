@@ -24,7 +24,7 @@ class ProductProduct(models.Model):
         for product in self:
             if new_categ:
                 coeflist_items = self.env['product.coeflist.item'].search([
-                    '|', '|', ('categ_id', '=', new_categ.id),
+                    '|', '|', ('categ_id', '=', new_categ),
                     ('product_id', '=', product.id),
                     ('product_tmpl_id', '=', product.product_tmpl_id.id)])
             else:
