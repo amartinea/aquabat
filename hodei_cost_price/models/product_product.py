@@ -35,15 +35,18 @@ class ProductProduct(models.Model):
             coef_categ = 0
             coef_product = 0
             coef = 1
+            _logger.warning(coeflist_items)
             for coeflist_item in coeflist_items:
                 if coeflist_item.product_tmpl_id:
                     coef_product = coeflist_item.coef_value
                 if coeflist_item.categ_id:
                     coef_categ = coeflist_item.coef_value
+            _logger.warning(coef_categ)
             if coef_categ != 0:
                 coef = coef_categ
             if coef_product != 0:
                 coef = coef_product
+            _logger.warning(coef)
             product.cost_price = standard_price * coef
             if product.product_tmpl_id:   #Not exist when create product
                 product.product_tmpl_id.cost_price = standard_price * coef
