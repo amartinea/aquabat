@@ -97,7 +97,7 @@ class AccountInvoice(models.Model):
         _logger.warning(values)
         if values.get('type') == 'out_refund':
             values['apply_fee'] = False
-        elif 'type' in self and (self.type != 'out_refund' or values['apply_fee']):
+        elif 'type' in self:
             for order in self:
                 amount_change = 0
                 if values.get('invoice_line_ids'):
