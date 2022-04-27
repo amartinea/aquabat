@@ -77,3 +77,18 @@ class ProductTemplate(models.Model):
         for template in (self - unique_variants):
             template.cost_price = 0.0
 
+    @api.multi
+    def write(self, values):
+        _logger.warning('values______________')
+        _logger.warning(values)
+        res = super(ProductTemplate, self).write(values)
+        if 'standard_price' in values or 'categ_id' in values:
+            standard_price = False
+            categ = False
+            if 'standard_price' in values:
+                standard_price = values['standard_price']
+            if 'categ_id' in values:
+                categ = values['categ_id']
+            for product in self.env['product.product'].search([('product_tmpl_id', '=', self)]):
+                product.calcul_cost_price(standard_price, categ)
+        return res
