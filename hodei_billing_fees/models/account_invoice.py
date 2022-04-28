@@ -190,7 +190,6 @@ class AccountInvoice(models.Model):
                                 values['invoice_line_ids'] += [(0, 0, invoice_line_data)]
                             else:
                                 values['invoice_line_ids'] = [(0, 0, invoice_line_data)]
-                            _logger
                             if values.get('tax_line_ids'):
                                 values['tax_line_ids'][0][2]['amount'] += fee_price * 20/100
                             else:
