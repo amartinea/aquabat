@@ -5,14 +5,6 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
-# mapping invoice type to refund type
-TYPE2REFUND = {
-    'out_invoice': 'out_refund',        # Customer Invoice
-    'in_invoice': 'in_refund',          # Vendor Bill
-    'out_refund': 'out_invoice',        # Customer Credit Note
-    'in_refund': 'in_invoice',          # Vendor Credit Note
-}
-
 MAGIC_COLUMNS = ('id', 'create_uid', 'create_date', 'write_uid', 'write_date')
 
 
@@ -24,7 +16,7 @@ class AccountInvoice(models.Model):
 
     @api.model
     def create(self, vals):
-        if type == 'out_refund':
+        if type != 'out_invoice':
             vals.apply_fee = False
         else:
             amount_change = 0
@@ -95,7 +87,7 @@ class AccountInvoice(models.Model):
     @api.multi
     def write(self, values):
         _logger.warning(values)
-        if values.get('type') == 'out_refund':
+        if values.get('type') != 'out_invoice':
             values['apply_fee'] = False
         elif 'type' in self:
             for order in self:
