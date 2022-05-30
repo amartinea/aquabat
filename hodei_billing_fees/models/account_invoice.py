@@ -17,7 +17,10 @@ class AccountInvoice(models.Model):
     @api.model
     def create(self, vals):
         if type != 'out_invoice':
-            vals.apply_fee = False
+            if vals.get('apply_fee'):
+                vals.apply_fee = False
+            else:
+                vals['apply_fee'] = False
         else:
             amount_change = 0
             if vals.get('invoice_line_ids'):
