@@ -86,7 +86,9 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def write(self, values):
+        _logger.warning('write')
         _logger.warning(values)
+        _logger.warning(self)
         if values.get('type') != 'out_invoice' and self.type != 'out_invoice':
             values['apply_fee'] = False
         elif 'type' in self:
