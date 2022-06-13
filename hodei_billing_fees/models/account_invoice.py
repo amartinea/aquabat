@@ -89,7 +89,7 @@ class AccountInvoice(models.Model):
         _logger.warning('write')
         _logger.warning(values)
         _logger.warning(self)
-        if values.get('type') != 'out_invoice' and self.type != 'out_invoice':
+        if values.get('state') != 'open' and values.get('type') != 'out_invoice' and self.type != 'out_invoice':
             values['apply_fee'] = False
         elif 'type' in self:
             for order in self:
