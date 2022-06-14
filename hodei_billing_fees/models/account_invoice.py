@@ -16,7 +16,7 @@ class AccountInvoice(models.Model):
 
     @api.model
     def create(self, vals):
-        if type != 'out_invoice':
+        if vals['type'] != 'out_invoice':
             vals['apply_fee'] = False
         else:
             amount_change = 0
@@ -86,8 +86,11 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def write(self, values):
+        _logger.warning('write')
         _logger.warning(values)
-        if values.get('type') != 'out_invoice':
+        _logger.warning(self)
+        if values.get('state') != 'open' and values.get('type') != 'out_invoice' and self.type != 'out_invoice':
+            _logger.warning('yes')
             values['apply_fee'] = False
         elif 'type' in self:
             for order in self:
