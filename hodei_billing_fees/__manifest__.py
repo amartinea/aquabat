@@ -8,7 +8,6 @@
     'depends': [
         'account',
         'sale',
-        'sale_stock',
     ],
     'external_dependencies': {
     },
