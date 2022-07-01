@@ -18,16 +18,13 @@ class SaleOrder(models.Model):
         amount_change = 0
         if vals.get('order_line'):
             for line in vals['order_line']:
-                _logger.warning(line[0])
                 if line[0] == 0:
                     if not 'discount' in line[2] or line[2]['discount'] == 0:
                         amount_change += line[2]['product_uom_qty'] * line[2]['price_unit']
                     else:
                         amount_change += line[2]['product_uom_qty'] * line[2]['price_unit'] * line[2]['discount']/100
-                    _logger.warning(amount_change)
                 elif line[0] == 2:
                     amount_change -= self.env['sale.order.line'].search([('id', '=', line[1])])['price_subtotal']
-        _logger.warning(vals['partner_id'])
         if vals['apply_fee']:
             partner = self.env['res.partner'].search([('id', '=', vals['partner_id'])])
             if self.company_id.id == partner.fee_id.company_id.id:
@@ -77,18 +74,13 @@ class SaleOrder(models.Model):
             no_order_line = 1
         if values.get('order_line'):
             for line in values['order_line']:
-                _logger.warning(line[0])
                 if line[0] == 0:
                     if not 'discount' in line[2] or line[2]['discount'] == 0:
                         amount_change += line[2]['product_uom_qty'] * line[2]['price_unit']
                     else:
                         amount_change += line[2]['product_uom_qty'] * line[2]['price_unit'] * line[2]['discount'] / 100
-                    _logger.warning(amount_change)
                 elif line[0] == 2:
                     amount_change -= self.env['sale.order.line'].search([('id', '=', line[1])])['price_subtotal']
-                    _logger.warning(amount_change)
-            _logger.warning('_________________amount_change')
-            _logger.warning(amount_change)
 
         if ('apply_fee' not in values and not self.apply_fee) or ('apply_fee' in values and not values['apply_fee']):
             fee_price = 0
@@ -104,15 +96,10 @@ class SaleOrder(models.Model):
                     fee_price = fee_line.value_apply
             else:
                 fee_price = 0
-        _logger.warning(self.fee_price)
-        _logger.warning('_________________fee_price')
-        _logger.warning(fee_price)
         if self.fee_price != fee_price:
             product_fee = self.env['product.product'].search([('fee_product', '=', True)])
             billing_line = self.env['sale.order.line'].search(
                 [('order_id', '=', self.id), ('product_id', '=', product_fee.id)])
-            _logger.warning('_________________billing_line')
-            _logger.warning(billing_line)
             if billing_line:
                 sale_line_data = {
                     'price_unit': fee_price
@@ -127,8 +114,6 @@ class SaleOrder(models.Model):
                 #     'price_total': fee_price,
                 #     'price_subtotal_signed': fee_price,
                 # }
-                _logger.warning('_________________sale_line_data')
-                _logger.warning(sale_line_data)
             else:
                 sale_line_data = {
                     'name': 'Billing Fee',
@@ -142,8 +127,6 @@ class SaleOrder(models.Model):
                     'company_id': self.company_id.id,
                     'currency_id': 1
                 }
-                _logger.warning('_________________sale_line_data2')
-                _logger.warning(sale_line_data)
                 if self.company_id.id == self.partner_id.fee_id.company_id.id:
                     sale_line_data['tax_id'] = [(6, 0, [self.partner_id.fee_id.tax_id.id])]
                 else:
@@ -153,8 +136,6 @@ class SaleOrder(models.Model):
                         values['order_line'] += [(0, 0, sale_line_data)]
                     else:
                         values['order_line'] = [(0, 0, sale_line_data)]
-                    _logger.warning('_________________values')
-                    _logger.warning(values)
             values['fee_price'] = fee_price
             if 'order_line' in values:
                 line_to_delete = False
@@ -173,6 +154,7 @@ class SaleOrder(models.Model):
                     [('order_id', '=', self.id), ('product_id', '!=', product_fee.id)])
                 for line in lines:
                     values['order_line'] += [[4, line.id, False]]
+        _logger.warning(values)
         return super(SaleOrder, self).write(values)
 
     @api.depends('invoice_lines.invoice_id.state', 'invoice_lines.quantity')
