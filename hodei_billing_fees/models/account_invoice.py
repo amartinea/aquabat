@@ -90,8 +90,7 @@ class AccountInvoice(models.Model):
         _logger.warning(values)
         _logger.warning(self)
         for order in self:
-            if values.get('state') != 'open' and values.get('type') != 'out_invoice' and order.type != 'out_invoice':
-                _logger.warning('yes')
+            if values.get('state') != 'open' and values.get('type') not in ['out_invoice', 'out_refund'] and order.type not in ['out_invoice', 'out_refund']:
                 values['apply_fee'] = False
             elif 'type' in self:
                 amount_change = 0
