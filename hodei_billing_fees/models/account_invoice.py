@@ -238,7 +238,7 @@ class AccountInvoice(models.Model):
             values['reconciled'] = True
         else:
             values['reconciled'] = False
-        return
+        return values
 
     @api.model
     def _refund_cleanup_lines(self, lines):
