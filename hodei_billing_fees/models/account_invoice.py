@@ -204,37 +204,8 @@ class AccountInvoice(models.Model):
                                 # }
                                 # values['tax_line_ids'] = [(0, 0, tax_line_data), (2, , False)]
                     values['fee_price'] = fee_price
-                    _logger.warning(values)
-                    res = super(AccountInvoice, order).write(values)
-                    if not values['apply_fee']:
-                        self._compute_residual()
-                    return res
+                    return super(AccountInvoice, order).write(values)
         return super(AccountInvoice, self).write(values)
-
-    def update_residual(self, vals):
-        residual = -self.fee_price
-        residual_company_signed = -self.fee_price
-        sign = self.type in ['in_refund', 'out_refund'] and -1 or 1
-        for line in self._get_aml_for_amount_residual():
-            residual_company_signed += line.amount_residual
-            if line.currency_id == self.currency_id:
-                residual += line.amount_residual_currency if line.currency_id else line.amount_residual
-            else:
-                if line.currency_id:
-                    residual += line.currency_id._convert(line.amount_residual_currency, self.currency_id, line.company_id, line.date or fields.Date.today())
-                else:
-                    residual += line.company_id.currency_id._convert(line.amount_residual, self.currency_id, line.company_id, line.date or fields.Date.today())
-        values = {
-            'residual_company_signed': abs(residual_company_signed) * sign,
-            'residual_signed': abs(residual) * sign,
-            'residual': abs(residual)
-        }
-        digits_rounding_precision = self.currency_id.rounding
-        if float_is_zero(values['residual'], precision_rounding=digits_rounding_precision):
-            values['reconciled'] = True
-        else:
-            values['reconciled'] = False
-        return values
 
     @api.model
     def _refund_cleanup_lines(self, lines):
