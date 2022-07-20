@@ -205,10 +205,10 @@ class AccountInvoice(models.Model):
                                 # values['tax_line_ids'] = [(0, 0, tax_line_data), (2, , False)]
                     values['fee_price'] = fee_price
                     _logger.warning(values)
+                    res = super(AccountInvoice, order).write(values)
                     if not values['apply_fee']:
-                        values.update(order.update_residual(values))
-                    _logger.warning(values)
-                    return super(AccountInvoice, order).write(values)
+                        self._compute_residual
+                    return res
         return super(AccountInvoice, self).write(values)
 
     def update_residual(self, vals):
