@@ -87,7 +87,6 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def write(self, values):
-        residual_values = []
         _logger.warning('write')
         _logger.warning(values)
         _logger.warning(self)
@@ -206,12 +205,10 @@ class AccountInvoice(models.Model):
                                 # values['tax_line_ids'] = [(0, 0, tax_line_data), (2, , False)]
                     values['fee_price'] = fee_price
                     _logger.warning(values)
-                    residual_values.append(order.update_residual())
-                    _logger.warning(residual_values)
+                    values.update(order.update_residual())
                     _logger.warning(values)
                     return super(AccountInvoice, order).write(values)
-            residual_values.append(order.update_residual())
-            _logger.warning(residual_values)
+            values.update(order.update_residual())
             _logger.warning(values)
         return super(AccountInvoice, self).write(values)
 
