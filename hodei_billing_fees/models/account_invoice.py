@@ -216,6 +216,8 @@ class AccountInvoice(models.Model):
         residual_company_signed = 0.0
         sign = self.type in ['in_refund', 'out_refund'] and -1 or 1
         for line in self._get_aml_for_amount_residual():
+            _logger.warning(vals['invoice_line_ids'][0][1])
+            _logger.warning(line.id)
             if not vals['invoice_line_ids'][0][1] == line.id:
                 residual_company_signed += line.amount_residual
                 if line.currency_id == self.currency_id:
