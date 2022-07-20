@@ -87,6 +87,7 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def write(self, values):
+        residual_values = []
         _logger.warning('write')
         _logger.warning(values)
         _logger.warning(self)
@@ -205,9 +206,13 @@ class AccountInvoice(models.Model):
                                 # values['tax_line_ids'] = [(0, 0, tax_line_data), (2, , False)]
                     values['fee_price'] = fee_price
                     _logger.warning(values)
-                    order.update_residual()
+                    residual_values.append(order.update_residual())
+                    _logger.warning(residual_values)
+                    _logger.warning(values)
                     return super(AccountInvoice, order).write(values)
-            order.update_residual()
+            residual_values.append(order.update_residual())
+            _logger.warning(residual_values)
+            _logger.warning(values)
         return super(AccountInvoice, self).write(values)
 
     def update_residual(self):
@@ -223,14 +228,17 @@ class AccountInvoice(models.Model):
                     residual += line.currency_id._convert(line.amount_residual_currency, self.currency_id, line.company_id, line.date or fields.Date.today())
                 else:
                     residual += line.company_id.currency_id._convert(line.amount_residual, self.currency_id, line.company_id, line.date or fields.Date.today())
-        self.residual_company_signed = abs(residual_company_signed) * sign
-        self.residual_signed = abs(residual) * sign
-        self.residual = abs(residual)
+        values = {
+            'residual_company_signed': abs(residual_company_signed) * sign,
+            'residual_signed': abs(residual) * sign,
+            'residual': abs(residual)
+        }
         digits_rounding_precision = self.currency_id.rounding
         if float_is_zero(self.residual, precision_rounding=digits_rounding_precision):
-            self.reconciled = True
+            values['reconciled'] = True
         else:
-            self.reconciled = False
+            values['reconciled'] = False
+        return
 
     @api.model
     def _refund_cleanup_lines(self, lines):
