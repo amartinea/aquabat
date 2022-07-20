@@ -205,26 +205,26 @@ class AccountInvoice(models.Model):
                                 # values['tax_line_ids'] = [(0, 0, tax_line_data), (2, , False)]
                     values['fee_price'] = fee_price
                     _logger.warning(values)
-                    values.update(order.update_residual())
+                    if not values['apply_fee']:
+                        values.update(order.update_residual(values))
                     _logger.warning(values)
                     return super(AccountInvoice, order).write(values)
-            values.update(order.update_residual())
-            _logger.warning(values)
         return super(AccountInvoice, self).write(values)
 
-    def update_residual(self):
+    def update_residual(self, vals):
         residual = 0.0
         residual_company_signed = 0.0
         sign = self.type in ['in_refund', 'out_refund'] and -1 or 1
         for line in self._get_aml_for_amount_residual():
-            residual_company_signed += line.amount_residual
-            if line.currency_id == self.currency_id:
-                residual += line.amount_residual_currency if line.currency_id else line.amount_residual
-            else:
-                if line.currency_id:
-                    residual += line.currency_id._convert(line.amount_residual_currency, self.currency_id, line.company_id, line.date or fields.Date.today())
+            if not vals['invoice_line_ids'][0][1] == line.id:
+                residual_company_signed += line.amount_residual
+                if line.currency_id == self.currency_id:
+                    residual += line.amount_residual_currency if line.currency_id else line.amount_residual
                 else:
-                    residual += line.company_id.currency_id._convert(line.amount_residual, self.currency_id, line.company_id, line.date or fields.Date.today())
+                    if line.currency_id:
+                        residual += line.currency_id._convert(line.amount_residual_currency, self.currency_id, line.company_id, line.date or fields.Date.today())
+                    else:
+                        residual += line.company_id.currency_id._convert(line.amount_residual, self.currency_id, line.company_id, line.date or fields.Date.today())
         values = {
             'residual_company_signed': abs(residual_company_signed) * sign,
             'residual_signed': abs(residual) * sign,
