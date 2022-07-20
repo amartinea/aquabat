@@ -212,28 +212,25 @@ class AccountInvoice(models.Model):
         return super(AccountInvoice, self).write(values)
 
     def update_residual(self, vals):
-        residual = 0.0
-        residual_company_signed = 0.0
+        residual = -self.fee_price
+        residual_company_signed = -self.fee_price
         sign = self.type in ['in_refund', 'out_refund'] and -1 or 1
         for line in self._get_aml_for_amount_residual():
-            _logger.warning(vals['invoice_line_ids'][0][1])
-            _logger.warning(line.id)
-            if not vals['invoice_line_ids'][0][1] == line.id:
-                residual_company_signed += line.amount_residual
-                if line.currency_id == self.currency_id:
-                    residual += line.amount_residual_currency if line.currency_id else line.amount_residual
+            residual_company_signed += line.amount_residual
+            if line.currency_id == self.currency_id:
+                residual += line.amount_residual_currency if line.currency_id else line.amount_residual
+            else:
+                if line.currency_id:
+                    residual += line.currency_id._convert(line.amount_residual_currency, self.currency_id, line.company_id, line.date or fields.Date.today())
                 else:
-                    if line.currency_id:
-                        residual += line.currency_id._convert(line.amount_residual_currency, self.currency_id, line.company_id, line.date or fields.Date.today())
-                    else:
-                        residual += line.company_id.currency_id._convert(line.amount_residual, self.currency_id, line.company_id, line.date or fields.Date.today())
+                    residual += line.company_id.currency_id._convert(line.amount_residual, self.currency_id, line.company_id, line.date or fields.Date.today())
         values = {
             'residual_company_signed': abs(residual_company_signed) * sign,
             'residual_signed': abs(residual) * sign,
             'residual': abs(residual)
         }
         digits_rounding_precision = self.currency_id.rounding
-        if float_is_zero(self.residual, precision_rounding=digits_rounding_precision):
+        if float_is_zero(values['residual'], precision_rounding=digits_rounding_precision):
             values['reconciled'] = True
         else:
             values['reconciled'] = False
