@@ -207,7 +207,7 @@ class AccountInvoice(models.Model):
                     _logger.warning(values)
                     res = super(AccountInvoice, order).write(values)
                     if not values['apply_fee']:
-                        self._compute_residual
+                        self._compute_residual()
                     return res
         return super(AccountInvoice, self).write(values)
 
