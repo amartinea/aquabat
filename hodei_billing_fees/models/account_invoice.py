@@ -2,6 +2,7 @@
 import logging
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
+from odoo.tools import float_is_zero
 
 _logger = logging.getLogger(__name__)
 
@@ -204,10 +205,32 @@ class AccountInvoice(models.Model):
                                 # values['tax_line_ids'] = [(0, 0, tax_line_data), (2, , False)]
                     values['fee_price'] = fee_price
                     _logger.warning(values)
-                    self._compute_residual()
+                    self.update_residual()
                     return super(AccountInvoice, order).write(values)
-        self._compute_residual()
+        self.update_residual()
         return super(AccountInvoice, self).write(values)
+
+    def update_residual(self):
+        residual = 0.0
+        residual_company_signed = 0.0
+        sign = self.type in ['in_refund', 'out_refund'] and -1 or 1
+        for line in self._get_aml_for_amount_residual():
+            residual_company_signed += line.amount_residual
+            if line.currency_id == self.currency_id:
+                residual += line.amount_residual_currency if line.currency_id else line.amount_residual
+            else:
+                if line.currency_id:
+                    residual += line.currency_id._convert(line.amount_residual_currency, self.currency_id, line.company_id, line.date or fields.Date.today())
+                else:
+                    residual += line.company_id.currency_id._convert(line.amount_residual, self.currency_id, line.company_id, line.date or fields.Date.today())
+        self.residual_company_signed = abs(residual_company_signed) * sign
+        self.residual_signed = abs(residual) * sign
+        self.residual = abs(residual)
+        digits_rounding_precision = self.currency_id.rounding
+        if float_is_zero(self.residual, precision_rounding=digits_rounding_precision):
+            self.reconciled = True
+        else:
+            self.reconciled = False
 
     @api.model
     def _refund_cleanup_lines(self, lines):
