@@ -2,6 +2,7 @@
 import logging
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
+from odoo.tools import float_is_zero
 
 _logger = logging.getLogger(__name__)
 
@@ -90,8 +91,7 @@ class AccountInvoice(models.Model):
         _logger.warning(values)
         _logger.warning(self)
         for order in self:
-            if values.get('state') != 'open' and values.get('type') != 'out_invoice' and order.type != 'out_invoice':
-                _logger.warning('yes')
+            if values.get('state') != 'open' and values.get('type') not in ['out_invoice', 'out_refund'] and order.type not in ['out_invoice', 'out_refund']:
                 values['apply_fee'] = False
             elif 'type' in self:
                 amount_change = 0
@@ -204,7 +204,6 @@ class AccountInvoice(models.Model):
                                 # }
                                 # values['tax_line_ids'] = [(0, 0, tax_line_data), (2, , False)]
                     values['fee_price'] = fee_price
-                    _logger.warning(values)
                     return super(AccountInvoice, order).write(values)
         return super(AccountInvoice, self).write(values)
 
