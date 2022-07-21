@@ -13,8 +13,9 @@ class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     fee_price = fields.Float('Billing Fee', store=True, default="0")
-    apply_fee = fields.Boolean(string='Apply Fee', default=True)
-
+    apply_fee = fields.Boolean(string='Apply Fee',
+                               states={'open': [('readonly', True)], 'in_payment': [('readonly', True)],
+                                       'paid': [('readonly', True)]}, default=True)
     @api.model
     def create(self, vals):
         if vals['type'] != 'out_invoice':
