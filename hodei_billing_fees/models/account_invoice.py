@@ -155,7 +155,9 @@ class AccountInvoice(models.Model):
 
                             tax_line = self.env['account.invoice.tax'].search(
                                 [('id', 'in', order.tax_line_ids.ids), ('tax_id', '=', order.partner_id.fee_id.tax_id.id)])
+                            _logger.warning(tax_line)
                             tax_line.write({'amount': tax_line['amount'] + fee_price * order.partner_id.fee_id.tax_id.amount/100 - order.fee_price * order.partner_id.fee_id.tax_id.amount / 100})
+                            _logger.warning(tax_line)
                     else:
                         _logger.warning('add________________________')
                         invoice_line_data = {
