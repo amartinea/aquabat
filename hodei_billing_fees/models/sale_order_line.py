@@ -29,11 +29,7 @@ class SaleOrderLine(models.Model):
             if line.state not in ('sale', 'done'):
                 line.invoice_status = 'no'
             elif line.product_id == self.env.ref('hodei_billing_fees.product_fees'):
-                line.invoice_status = 'to invoice'
-                for invoice in line.order_id.invoice_ids:
-                    for invoice_line in invoice.invoice_line_ids:
-                        if invoice_line.product_id == self.env.ref('hodei_billing_fees.product_fees'):
-                            line.invoice_status = 'invoiced'
+                line.invoice_status = 'no'
             else:
                 if not float_is_zero(line.qty_to_invoice, precision_digits=precision):
                     line.invoice_status = 'to invoice'
@@ -44,4 +40,4 @@ class SaleOrderLine(models.Model):
                     line.invoice_status = 'invoiced'
                 else:
                     line.invoice_status = 'no'
-
+ 
