@@ -135,7 +135,8 @@ class AccountInvoice(models.Model):
                     _logger.warning(billing_line)
                     if billing_line:
                         invoice_line_data = {
-                            'price_unit': fee_price
+                            'price_unit': fee_price,
+                            'quantity': 1
                         }
                         if values.get('invoice_line_ids'):
                             values['invoice_line_ids'] += [(1, billing_line.id, invoice_line_data)]
