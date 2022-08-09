@@ -263,13 +263,19 @@ class AccountInvoiceLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        _logger.warning('vals_list__________________')
+        _logger.warning('create account invoice line __________________')
         for vals in vals_list:
+            _logger.warning(vals['product_id'])
+            _logger.warning(self.env.ref('hodei_billing_fees.product_fees')['id'])
             if vals['product_id'] == self.env.ref('hodei_billing_fees.product_fees')['id']:
                 invoice = self.env['account.invoice'].search([('id', '=', vals['invoice_id'])])
                 for line in invoice.invoice_line_ids:
+                    _logger.warning(line['product_id'])
+                    _logger.warning(self.env.ref('hodei_billing_fees.product_fees'))
                     if line['product_id'] == self.env.ref('hodei_billing_fees.product_fees'):
+                        _logger.warning(vals_list)
                         vals_list.remove(vals)
+                        _logger.warning(vals_list)
         _logger.warning(vals_list)
 
         return super(AccountInvoiceLine, self).create(vals_list)
