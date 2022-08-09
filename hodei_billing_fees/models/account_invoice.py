@@ -93,6 +93,9 @@ class AccountInvoice(models.Model):
         _logger.warning(self)
         if values.get('type') and values['type'] == 'out_refund':
             values['apply_fee'] = False
+            fee_line_to_null = self.env['account.invoice.line'].search([('invoice_id', '=', self.id), ('product_id', '=', self.env.ref('hodei_billing_fees.product_fees').id)])
+            if values.get('invoice_line_ids'):
+                values['invoice_line_ids'] += [(1, fee_line_to_null.id, {'quantity': 0})]
         for order in self:
             if values.get('state') != 'open' and values.get('type') not in ['out_invoice', 'out_refund'] and order.type not in ['out_invoice', 'out_refund']:
                 values['apply_fee'] = False
@@ -265,17 +268,11 @@ class AccountInvoiceLine(models.Model):
     def create(self, vals_list):
         _logger.warning('create account invoice line __________________')
         for vals in vals_list:
-            _logger.warning(vals['product_id'])
-            _logger.warning(self.env.ref('hodei_billing_fees.product_fees')['id'])
             if vals['product_id'] == self.env.ref('hodei_billing_fees.product_fees')['id']:
                 invoice = self.env['account.invoice'].search([('id', '=', vals['invoice_id'])])
                 for line in invoice.invoice_line_ids:
-                    _logger.warning(line['product_id'])
-                    _logger.warning(self.env.ref('hodei_billing_fees.product_fees'))
                     if line['product_id'] == self.env.ref('hodei_billing_fees.product_fees'):
-                        _logger.warning(vals_list)
                         vals_list.remove(vals)
-                        _logger.warning(vals_list)
         _logger.warning(vals_list)
 
         return super(AccountInvoiceLine, self).create(vals_list)
