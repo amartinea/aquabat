@@ -97,7 +97,7 @@ class AccountInvoice(models.Model):
             _logger.warning('line to delete')
             _logger.warning(fee_line_to_null)
             if fee_line_to_null:
-                values['invoice_line_ids'] += [(1, fee_line_to_null.id, {'quantity': 0})]
+                values['invoice_line_ids'] = [(1, fee_line_to_null.id, {'quantity': 0})]
                 _logger.warning(values)
         for order in self:
             if values.get('state') != 'open' and values.get('type') not in ['out_invoice', 'out_refund'] and order.type not in ['out_invoice', 'out_refund']:
