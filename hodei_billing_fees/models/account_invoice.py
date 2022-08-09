@@ -52,33 +52,38 @@ class AccountInvoice(models.Model):
             else:
                 fee_price = 0
             if fee_price != 0:
-                invoice_line_data = {
-                    'name': 'Billing Fee',
-                    'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
-                    'uom_id': 1,
-                    'partner_id': partner.id,
-                    'price_unit': fee_price,
-                    'quantity': 1,
-                    'discount': 0,
-                    'company_id': vals['company_id'],
-                    'currency_id': 1
-                }
-                _logger.warning(vals)
-                _logger.warning('_______________debut')
-                _logger.warning(vals['company_id'])
-                _logger.warning(partner.fee_id.company_id.id)
-                if vals['company_id'] == partner.fee_id.company_id.id:
-                    invoice_line_data['account_id'] = partner.fee_id.account_id.id
-                    invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.tax_id.id])]
-                else:
-                    invoice_line_data['account_id'] = partner.fee_id.fee_linked.account_id.id
-                    invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.fee_linked.tax_id.id])]
-                _logger.warning(invoice_line_data['account_id'])
-                _logger.warning(invoice_line_data['invoice_line_tax_ids'])
-                if vals.get('invoice_line_ids'):
-                    vals['invoice_line_ids'] += [(0, 0, invoice_line_data)]
-                else:
-                    vals['invoice_line_ids'] = [(0, 0, invoice_line_data)]
+                flag_fee = 0
+                for line in vals['invoice_line_ids']:
+                    if line[2]['product_id'] == self.env.ref('hodei_billing_fees.product_fees').id:
+                        flag_fee = 1
+                if flag_fee == 0:
+                    invoice_line_data = {
+                        'name': 'Billing Fee',
+                        'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
+                        'uom_id': 1,
+                        'partner_id': partner.id,
+                        'price_unit': fee_price,
+                        'quantity': 1,
+                        'discount': 0,
+                        'company_id': vals['company_id'],
+                        'currency_id': 1
+                    }
+                    _logger.warning(vals)
+                    _logger.warning('_______________debut')
+                    _logger.warning(vals['company_id'])
+                    _logger.warning(partner.fee_id.company_id.id)
+                    if vals['company_id'] == partner.fee_id.company_id.id:
+                        invoice_line_data['account_id'] = partner.fee_id.account_id.id
+                        invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.tax_id.id])]
+                    else:
+                        invoice_line_data['account_id'] = partner.fee_id.fee_linked.account_id.id
+                        invoice_line_data['invoice_line_tax_ids'] = [(6, False, [partner.fee_id.fee_linked.tax_id.id])]
+                    _logger.warning(invoice_line_data['account_id'])
+                    _logger.warning(invoice_line_data['invoice_line_tax_ids'])
+                    if vals.get('invoice_line_ids'):
+                        vals['invoice_line_ids'] += [(0, 0, invoice_line_data)]
+                    else:
+                        vals['invoice_line_ids'] = [(0, 0, invoice_line_data)]
             #invoice.compute_taxes()
             vals['fee_price'] = fee_price
         _logger.warning(vals)
