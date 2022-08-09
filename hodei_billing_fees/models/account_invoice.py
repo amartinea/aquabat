@@ -94,8 +94,11 @@ class AccountInvoice(models.Model):
         if values.get('type') and values['type'] == 'out_refund':
             values['apply_fee'] = False
             fee_line_to_null = self.env['account.invoice.line'].search([('invoice_id', '=', self.id), ('product_id', '=', self.env.ref('hodei_billing_fees.product_fees').id)])
+            _logger.warning('line to delete')
+            _logger.warning(fee_line_to_null)
             if values.get('invoice_line_ids'):
                 values['invoice_line_ids'] += [(1, fee_line_to_null.id, {'quantity': 0})]
+                _logger.warning(values)
         for order in self:
             if values.get('state') != 'open' and values.get('type') not in ['out_invoice', 'out_refund'] and order.type not in ['out_invoice', 'out_refund']:
                 values['apply_fee'] = False
