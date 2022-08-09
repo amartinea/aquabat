@@ -91,7 +91,7 @@ class AccountInvoice(models.Model):
         _logger.warning('write')
         _logger.warning(values)
         _logger.warning(self)
-        if values['type'] == 'out_refund':
+        if values.get('type') and values.get['type'] == 'out_refund':
             values['apply_fee'] = False
         for order in self:
             if values.get('state') != 'open' and values.get('type') not in ['out_invoice', 'out_refund'] and order.type not in ['out_invoice', 'out_refund']:
