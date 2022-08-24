@@ -10,7 +10,7 @@ class ResPartner(models.Model):
     def write(self, values):
         res = super(ResPartner, self).write(values)
         company_id = self.env.user.company_id.id
-        _logger('company_id :' + company_id)
+        _logger('company_id :' + str(company_id))
         o_company = self.env['res.company'].search([('id', '!=', company_id)])[0]
         _logger('o_company :' + o_company)
         res_id = 'res.partner,' + str(self.id)
