@@ -19,7 +19,7 @@ class ResPartner(models.Model):
         if vals.get('property_payment_term_id'):
             _logger.warning('oui')
             term = self.env['account.payment.term'].search([('id', '=', vals['property_payment_term_id'])])
-            self.env['ir.property'].create({
+            self.env['ir.property'].sudo().create({
                 'name': 'property_payment_term_id, test',
                 'company_id': o_company['id'],
                 'res_id': res_id,
@@ -30,7 +30,7 @@ class ResPartner(models.Model):
         if vals.get('property_supplier_payment_term_id'):
             _logger.warning('oui')
             term = self.env['account.payment.term'].search([('id', '=', vals['property_supplier_payment_term_id'])])
-            self.env['ir.property'].write({
+            self.env['ir.property'].sudo().create({
                 'name': 'property_supplier_payment_term_id, test',
                 'company_id': company_id,
                 'res_id': res_id,
