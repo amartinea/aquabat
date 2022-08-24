@@ -9,7 +9,7 @@ class ResPartner(models.Model):
     def write(self, values):
         res = super(ResPartner, self).write(values)
         company_id = self.env.user.company_id.id
-        res_id = 'res.partner,' + self.id
+        res_id = 'res.partner,' + str(self.id)
         if values.get('property_payment_term_id'):
             term = self.env['account.payment.term'].search([('id', '=', values['property_payment_term_id'])])
             self.env['ir.property'].write({
