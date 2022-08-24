@@ -13,14 +13,18 @@ class ResPartner(models.Model):
         _logger.warning('company_id :')
         _logger.warning(company_id)
         o_company = self.env['res.company'].search([('id', '!=', company_id)])[0]
-        _logger.warning('o_company :' + o_company)
+        _logger.warning('o_company :')
+        _logger.warning(o_company)
         res_id = 'res.partner,' + str(self.id)
-        _logger.warning('res_id :' + res_id)
-        _logger.warning('values :' + values)
+        _logger.warning('res_id :')
+        _logger.warning(res_id)
+        _logger.warning('values :')
+        _logger.warning(values)
         if values.get('property_payment_term_id'):
             _logger.warning('oui')
             term = self.env['account.payment.term'].search([('id', '=', values['property_payment_term_id'])])
-            _logger.warning('values :' + term)
+            _logger.warning('values :')
+            _logger.warning(term)
             self.env['ir.property'].write({
                 'name': 'property_payment_term_id',
                 'company_id': o_company['id'],
