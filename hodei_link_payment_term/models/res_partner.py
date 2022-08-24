@@ -26,7 +26,7 @@ class ResPartner(models.Model):
             _logger.warning('values :')
             _logger.warning(term)
             self.env['ir.property'].write({
-                'name': 'property_payment_term_id',
+                'name': 'property_payment_term_id, test',
                 'company_id': o_company['id'],
                 'res_id': res_id,
                 'fields_id': 2435,
@@ -37,7 +37,7 @@ class ResPartner(models.Model):
             _logger.warning('oui')
             term = self.env['account.payment.term'].search([('id', '=', values['property_supplier_payment_term_id'])])
             self.env['ir.property'].write({
-                'name': 'property_supplier_payment_term_id',
+                'name': 'property_supplier_payment_term_id, test',
                 'company_id': company_id,
                 'res_id': res_id,
                 'fields_id': 2422,
