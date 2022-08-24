@@ -30,7 +30,7 @@ class ResPartner(models.Model):
                 'company_id': o_company['id'],
                 'res_id': res_id,
                 'fields_id': 2435,
-                'value_reference': 'account.payment.term' + term['link_payment_term_id']['id'],
+                'value_reference': 'account.payment.term' + str(term['link_payment_term_id']['id']),
                 'type': 'many2one'
             })
         if values.get('property_supplier_payment_term_id'):
@@ -41,7 +41,7 @@ class ResPartner(models.Model):
                 'company_id': company_id,
                 'res_id': res_id,
                 'fields_id': 2422,
-                'value_reference': 'account.payment.term' + term['link_payment_term_id']['id'],
+                'value_reference': 'account.payment.term' + str(term['link_payment_term_id']['id']),
                 'type': 'many2one'
             })
         return res
