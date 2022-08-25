@@ -18,7 +18,7 @@ class ResPartner(models.Model):
                 'company_id': o_company['id'],
                 'res_id': res_id,
                 'fields_id': 2435,
-                'value_reference': 'product.pricelist,' + pricelist['id'],
+                'value_reference': 'product.pricelist,' + str(pricelist['id']),
                 'type': 'many2one'
             })
         return res
