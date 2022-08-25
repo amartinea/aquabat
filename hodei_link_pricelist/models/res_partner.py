@@ -13,7 +13,7 @@ class ResPartner(models.Model):
         res_id = 'res.partner,' + str(res.id)
         if vals.get('property_product_pricelist'):
             pricelist = self.env['product_pricelist'].search([('id', '=', vals['property_product_pricelist'])])
-            self.env['ir.property'].write({
+            self.env['ir.property'].create({
                 'name': 'property_payment_term_id',
                 'company_id': o_company['id'],
                 'res_id': res_id,
@@ -22,3 +22,4 @@ class ResPartner(models.Model):
                 'type': 'many2one'
             })
         return res
+
