@@ -9,18 +9,13 @@ class ResPartner(models.Model):
 
     def create(self, vals):
         res = super(ResPartner, self).create(vals)
-        _logger.warning('res :')
-        _logger.warning(res)
-        _logger.warning('vals :')
-        _logger.warning(vals)
         company_id = self.env.user.company_id.id
         o_company = self.env['res.company'].search([('id', '!=', company_id)])[0]
         res_id = 'res.partner,' + str(res.id)
         if vals.get('property_payment_term_id'):
-            _logger.warning('oui')
             term = self.env['account.payment.term'].search([('id', '=', vals['property_payment_term_id'])])
             self.env['ir.property'].sudo().create({
-                'name': 'property_payment_term_id, test',
+                'name': 'property_payment_term_id',
                 'company_id': o_company['id'],
                 'res_id': res_id,
                 'fields_id': 2435,
@@ -28,11 +23,10 @@ class ResPartner(models.Model):
                 'type': 'many2one'
             })
         if vals.get('property_supplier_payment_term_id'):
-            _logger.warning('oui')
             term = self.env['account.payment.term'].search([('id', '=', vals['property_supplier_payment_term_id'])])
             self.env['ir.property'].sudo().create({
-                'name': 'property_supplier_payment_term_id, test',
-                'company_id': company_id,
+                'name': 'property_supplier_payment_term_id',
+                'company_id': o_company['id'],
                 'res_id': res_id,
                 'fields_id': 2422,
                 'value_reference': 'account.payment.term,' + str(term['link_payment_term_id']['id']),
@@ -53,10 +47,8 @@ class ResPartner(models.Model):
         _logger.warning('values :')
         _logger.warning(values)
         if values.get('property_payment_term_id'):
-            _logger.warning('oui')
             term = self.env['account.payment.term'].search([('id', '=', values['property_payment_term_id'])])
-            _logger.warning('values :')
-            _logger.warning(term)
+            ir_property_to_update = self.env['ir.property'].search([('company_id', '=', o_company['id'], )])
             self.env['ir.property'].write({
                 'name': 'property_payment_term_id, test',
                 'company_id': o_company['id'],
