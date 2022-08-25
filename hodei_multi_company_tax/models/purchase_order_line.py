@@ -15,6 +15,4 @@ class PurchaseOrderLine(models.Model):
             # If company_id is set, always filter taxes by the company
             taxes = line.product_id.supplier_taxes_id.filtered(
                 lambda r: not line.order_id.company_id or r.company_id == line.order_id.company_id)
-            logger.warning('taxes:')
-            logger.warning(taxes)
             line.taxes_id = fpos.map_tax(taxes, line.product_id, line.order_id.partner_id) if fpos else taxes
