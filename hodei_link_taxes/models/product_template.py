@@ -14,6 +14,6 @@ class ProductTemplate(models.Model):
             _logger.warning(vals['taxes_id'])
             _logger.warning(vals['taxes_id'][0])
             if 'taxes_id' in vals and len(vals['taxes_id'][0][2]) == 1:
-                vals['taxes_id'][0][2] += self.env['account.tax'].search([('id', '!=',vals['taxes_id'][0][2])])['link_tax_id']['id']
+                vals['taxes_id'][0][2] += self.env['account.tax'].search([('id', '=', vals['taxes_id'][0][2])])['link_tax_id']['id']
             _logger.warning(vals)
         return super(ProductTemplate, self).create(vals_list)
