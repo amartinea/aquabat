@@ -9,6 +9,7 @@ class ProductTemplate(models.Model):
 
     @api.model_create_multi
     def create(self, vals):
+        _logger.warning(vals)
         _logger.warning(vals['taxes_id'])
         _logger.warning(vals['taxes_id'][0])
         if 'taxes_id' in vals and len(vals['taxes_id'][0][2]) == 1:
