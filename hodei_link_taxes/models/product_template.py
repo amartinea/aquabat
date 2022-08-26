@@ -9,12 +9,12 @@ class ProductTemplate(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        _logger.warning(vals_list)
         for vals in vals_list:
-            _logger.warning(vals['taxes_id'])
-            _logger.warning(vals['taxes_id'][0][2])
             if 'taxes_id' in vals and len(vals['taxes_id'][0][2]) == 1:
                 vals['taxes_id'][0][2].append(
-                    self.env['account.tax'].search([('id', '=', vals['taxes_id'][0][2])])['link_tax_id']['id'])
-            _logger.warning(vals)
+                    self.env['account.tax'].search([('id', 'in', vals['taxes_id'][0][2])])['link_tax_id']['id'])
+            if 'supplier_taxes_id' in vals and len(vals['supplier_taxes_id'][0][2]) == 1:
+                vals['supplier_taxes_id'][0][2].append(
+                    self.env['account.tax'].search([('id', 'in', vals['supplier_taxes_id'][0][2])])['link_tax_id'][
+                        'id'])
         return super(ProductTemplate, self).create(vals_list)
