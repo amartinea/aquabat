@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'Hodei link between same payment term for different company module',
+    'name': 'Hodei link between same tax for different company module',
     'version': '1.0.0',
     'category': '',
     'description': """ """,
