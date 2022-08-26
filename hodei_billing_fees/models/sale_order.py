@@ -42,7 +42,7 @@ class SaleOrder(models.Model):
             fee_price = 0
         if fee_price != 0:
             flag_fee = 0
-            for line in vals['invoice_line_ids']:
+            for line in vals['order_line']:
                 if line[2]['product_id'] == self.env.ref('hodei_billing_fees.product_fees').id:
                     flag_fee = 1
             if flag_fee == 0:
