@@ -41,26 +41,31 @@ class SaleOrder(models.Model):
         else:
             fee_price = 0
         if fee_price != 0:
-            sale_line_data = {
-                'name': 'Billing Fee',
-                'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
-                'price_unit': fee_price,
-                'price_subtotal': fee_price,
-                'price_total': fee_price,
-                'product_uom_qty': 1,
-                'qty_delivered': 1,
-                'discount': 0,
-                'company_id': vals['company_id'],
-                'currency_id': 1
-            }
-            if vals['company_id'] == partner.fee_id.company_id.id:
-                sale_line_data['tax_id'] = [(6, 0, [partner.fee_id.tax_id.id])]
-            else:
-                sale_line_data['tax_id'] = [(6, 0, [partner.fee_id.fee_linked.tax_id.id])]
-            if vals.get('order_line'):
-                vals['order_line'] += [(0, 0, sale_line_data)]
-            else:
-                vals['order_line'] = [(0, 0, sale_line_data)]
+            flag_fee = 0
+            for line in vals['invoice_line_ids']:
+                if line[2]['product_id'] == self.env.ref('hodei_billing_fees.product_fees').id:
+                    flag_fee = 1
+            if flag_fee == 0:
+                sale_line_data = {
+                    'name': 'Billing Fee',
+                    'product_id': self.env.ref('hodei_billing_fees.product_fees').id,
+                    'price_unit': fee_price,
+                    'price_subtotal': fee_price,
+                    'price_total': fee_price,
+                    'product_uom_qty': 1,
+                    'qty_delivered': 1,
+                    'discount': 0,
+                    'company_id': vals['company_id'],
+                    'currency_id': 1
+                }
+                if vals['company_id'] == partner.fee_id.company_id.id:
+                    sale_line_data['tax_id'] = [(6, 0, [partner.fee_id.tax_id.id])]
+                else:
+                    sale_line_data['tax_id'] = [(6, 0, [partner.fee_id.fee_linked.tax_id.id])]
+                if vals.get('order_line'):
+                    vals['order_line'] += [(0, 0, sale_line_data)]
+                else:
+                    vals['order_line'] = [(0, 0, sale_line_data)]
         vals['fee_price'] = fee_price
         return super(SaleOrder, self).create(vals)
 
