@@ -14,10 +14,10 @@ class ResPartner(models.Model):
         if vals.get('property_product_pricelist'):
             pricelist = self.env['product.pricelist'].search([('id', '=', vals['property_product_pricelist'])])
             self.env['ir.property'].sudo().create({
-                'name': 'property_payment_term_id',
+                'name': 'property_product_pricelist',
                 'company_id': o_company['id'],
                 'res_id': res_id,
-                'fields_id': 2435,
+                'fields_id': 2310,
                 'value_reference': 'product.pricelist,' + str(pricelist['id']),
                 'type': 'many2one'
             })
