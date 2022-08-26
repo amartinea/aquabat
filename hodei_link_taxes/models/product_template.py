@@ -9,6 +9,6 @@ class ProductTemplate(models.Model):
 
     @api.model_create_multi
     def create(self, vals):
-        if vals.get('taxes_id') and len(vals['taxes_id']) == 1:
+        if 'taxes_id' in vals and len(vals['taxes_id']) == 1:
             vals['taxes_id'] += self.env['account.tax'].search([('id', '!=', vals['taxes_id'])])['link_tax_id']['id']
         return super(ProductTemplate, self).create(vals)
