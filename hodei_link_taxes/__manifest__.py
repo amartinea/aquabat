@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'Hodei multi company tax',
+    'name': 'Hodei link between same tax for different company module',
     'version': '1.0.0',
     'category': '',
     'description': """ """,
     'depends': [
         'account',
-        'purchase',
     ],
     'external_dependencies': {
     },
     'data': [
-        #'views/purchase_order_views.xml'
+        'views/account_tax_views.xml',
     ],
     'demo': [],
     'test': [],
