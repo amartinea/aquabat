@@ -9,7 +9,7 @@ class ResPartner(models.Model):
     def create(self, vals):
         res = super(ResPartner, self).create(vals)
         company_id = self.env.user.company_id.id
-        o_company = self.env['res.company'].search([('id', '!=', company_id)])[0]
+        o_company = self.env['res.company'].sudo().search([('id', '!=', company_id)])[0]
         res_id = 'res.partner,' + str(res.id)
         if vals.get('property_product_pricelist'):
             pricelist = self.env['product.pricelist'].search([('id', '=', vals['property_product_pricelist'])])
