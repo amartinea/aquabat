@@ -27,10 +27,14 @@ class SaleOrder(models.Model):
                     amount_change -= self.env['sale.order.line'].search([('id', '=', line[1])])['price_subtotal']
         if vals['apply_fee']:
             partner = self.env['res.partner'].search([('id', '=', vals['partner_id'])])
+            _logger.warning('amount_change')
+            _logger.warning(amount_change)
             if self.company_id.id == partner.fee_id.company_id.id:
                 fee_line = partner.fee_id._check_condition_to_apply(amount_change)
             else:
                 fee_line = partner.fee_id.fee_linked._check_condition_to_apply(amount_change)
+            _logger.warning(fee_line)
+            _logger.warning(fee_line.value_apply)
             if fee_line:
                 if fee_line.value_type == 'perc':
                     fee_price = vals['amount_untaxed'] * fee_line.value_apply / 100
