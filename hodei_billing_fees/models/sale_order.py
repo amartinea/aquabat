@@ -27,6 +27,7 @@ class SaleOrder(models.Model):
                                                           quantity=line[2]['product_uom_qty'],
                                                           product=self.env['product.template'].browse(line[2]['product_id']),
                                                           partner=self.env['res.partner'].browse(vals['partner_shipping_id']))
+                    _logger.warning(taxes['total_excluded'])
                     amount_change += taxes['total_excluded']
                     # if not 'discount' in line[2] or line[2]['discount'] == 0:
                     #     price = line[2]['price_unit'] * (1 - line[2]['discount'] or 0.0 / 100)
@@ -36,6 +37,8 @@ class SaleOrder(models.Model):
                     #     amount_change += line[2]['product_uom_qty'] * line[2]['price_unit'] * line[2]['discount']/100
                 elif line[0] == 2:
                     amount_change -= self.env['sale.order.line'].search([('id', '=', line[1])])['price_subtotal']
+                _logger.warning('amount_change row')
+                _logger.warning(amount_change)
         if vals['apply_fee']:
             partner = self.env['res.partner'].search([('id', '=', vals['partner_id'])])
             _logger.warning('amount_change')
@@ -45,7 +48,6 @@ class SaleOrder(models.Model):
             else:
                 fee_line = partner.fee_id.fee_linked._check_condition_to_apply(amount_change)
             _logger.warning(fee_line)
-            _logger.warning(fee_line.value_apply)
             if fee_line:
                 if fee_line.value_type == 'perc':
                     fee_price = vals['amount_untaxed'] * fee_line.value_apply / 100
