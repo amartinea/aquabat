@@ -15,13 +15,21 @@ class SaleOrder(models.Model):
     def create(self, vals):
         _logger.warning(self)
         _logger.warning(vals)
+        _logger.warning(vals)
         amount_change = 0
         if vals.get('order_line'):
             for line in vals['order_line']:
                 if line[0] == 0:
-                    amount_change += line[2]['product_uom_qty'] * line[2]['price_reduce_taxexcl']
+                    price = line[2]['price_unit'] * (1 - line[2]['discount'] or 0.0 / 100)
+                    taxes = line[2]['tax_id'].compute_all(price, line[2].order_id.currency_id,
+                                                          quantity=line[2]['product_uom_qty'],
+                                                          product=line[2]['product_id'],
+                                                          partner=line['partner_shipping_id'])
+                    amount_change += taxes['total_excluded']
                     # if not 'discount' in line[2] or line[2]['discount'] == 0:
-                    #     amount_change += line[2]['product_uom_qty'] * line[2]['price_unit']
+                    #     price = line[2]['price_unit'] * (1 - line[2]['discount'] or 0.0 / 100)
+                    #     taxes = line[2]['tax_id'].compute_all(price, line[2].order_id.currency_id, quantity=line[2]['product_uom_qty'], product=line[2]['product_id'], partner=line['partner_shipping_id'])
+                    #     amount_change += taxes
                     # else:
                     #     amount_change += line[2]['product_uom_qty'] * line[2]['price_unit'] * line[2]['discount']/100
                 elif line[0] == 2:
