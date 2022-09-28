@@ -23,6 +23,10 @@ class SaleOrder(models.Model):
                     _logger.warning('tax_id')
                     _logger.warning(line[2]['tax_id'][0][2])
                     price = line[2]['price_unit'] * (1 - line[2]['discount'] or 0.0 / 100)
+                    _logger.warning(price)
+                    _logger.warning(line[2]['product_uom_qty'])
+                    _logger.warning(line[2]['product_id'])
+                    _logger.warning(vals['partner_shipping_id'])
                     taxes = self.env['account.tax'].browse(line[2]['tax_id'][0][2]).compute_all(price,
                                                           quantity=line[2]['product_uom_qty'],
                                                           product=self.env['product.template'].browse(line[2]['product_id']),
