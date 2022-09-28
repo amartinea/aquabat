@@ -26,12 +26,6 @@ class SaleOrder(models.Model):
                     _logger.warning(1 - (line[2]['discount'] or 0.0) / 100)
                     amount_change += line[2]['product_uom_qty'] * (
                                 line[2]['price_unit'] * (1 - (line[2]['discount'] or 0.0) / 100))
-                    # if not 'discount' in line[2] or line[2]['discount'] == 0:
-                    #     price = line[2]['price_unit'] * (1 - line[2]['discount'] or 0.0 / 100)
-                    #     taxes = line[2]['tax_id'].compute_all(price, line[2].order_id.currency_id, quantity=line[2]['product_uom_qty'], product=line[2]['product_id'], partner=line['partner_shipping_id'])
-                    #     amount_change += taxes
-                    # else:
-                    #     amount_change += line[2]['product_uom_qty'] * line[2]['price_unit'] * line[2]['discount']/100
                 elif line[0] == 2:
                     amount_change -= self.env['sale.order.line'].search([('id', '=', line[1])])['price_subtotal']
                 _logger.warning('amount_change row')
@@ -94,12 +88,13 @@ class SaleOrder(models.Model):
         if values.get('order_line'):
             for line in values['order_line']:
                 if line[0] == 0:
-                    if not 'discount' in line[2] or line[2]['discount'] == 0:
-                        amount_change += line[2]['product_uom_qty'] * line[2]['price_unit']
-                    else:
-                        amount_change += line[2]['product_uom_qty'] * line[2]['price_unit'] * line[2]['discount'] / 100
+                    amount_change += line[2]['product_uom_qty'] * (
+                                line[2]['price_unit'] * (1 - (line[2]['discount'] or 0.0) / 100))
                 elif line[0] == 2:
                     amount_change -= self.env['sale.order.line'].search([('id', '=', line[1])])['price_subtotal']
+                elif line[0] == 1 and 'product_uom_qty' in line[2]:
+                    amount_change -= (line[2]['product_uom_qty'] - self.env['sale.order.line'].browse(line[1])) * (
+                                line[2]['price_unit'] * (1 - (line[2]['discount'] or 0.0) / 100))
 
         if ('apply_fee' not in values and not self.apply_fee) or ('apply_fee' in values and not values['apply_fee']):
             fee_price = 0
