@@ -21,7 +21,7 @@ class SaleOrder(models.Model):
             for line in vals['order_line']:
                 if line[0] == 0:
                     price = line[2]['price_unit'] * (1 - line[2]['discount'] or 0.0 / 100)
-                    taxes = line[2]['tax_id'].compute_all(price, line[2].order_id.currency_id,
+                    taxes = self.env['account.tax'].browse('id', '=', line[2]['tax_id']).compute_all(price,
                                                           quantity=line[2]['product_uom_qty'],
                                                           product=line[2]['product_id'],
                                                           partner=line['partner_shipping_id'])
