@@ -19,10 +19,11 @@ class SaleOrder(models.Model):
         if vals.get('order_line'):
             for line in vals['order_line']:
                 if line[0] == 0:
-                    if not 'discount' in line[2] or line[2]['discount'] == 0:
-                        amount_change += line[2]['product_uom_qty'] * line[2]['price_unit']
-                    else:
-                        amount_change += line[2]['product_uom_qty'] * line[2]['price_unit'] * line[2]['discount']/100
+                    amount_change += line[2]['product_uom_qty'] * line[2]['price_reduce_taxexcl']
+                    # if not 'discount' in line[2] or line[2]['discount'] == 0:
+                    #     amount_change += line[2]['product_uom_qty'] * line[2]['price_unit']
+                    # else:
+                    #     amount_change += line[2]['product_uom_qty'] * line[2]['price_unit'] * line[2]['discount']/100
                 elif line[0] == 2:
                     amount_change -= self.env['sale.order.line'].search([('id', '=', line[1])])['price_subtotal']
         if vals['apply_fee']:
