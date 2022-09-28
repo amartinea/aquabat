@@ -24,7 +24,8 @@ class SaleOrder(models.Model):
                     _logger.warning(line[2]['price_unit'])
                     _logger.warning(line[2]['discount'])
                     _logger.warning(1 - (line[2]['discount'] or 0.0) / 100)
-                    amount_change += line[2]['price_unit'] * (1 - (line[2]['discount'] or 0.0) / 100)
+                    amount_change += line[2]['product_uom_qty'] * (
+                                line[2]['price_unit'] * (1 - (line[2]['discount'] or 0.0) / 100))
                     # if not 'discount' in line[2] or line[2]['discount'] == 0:
                     #     price = line[2]['price_unit'] * (1 - line[2]['discount'] or 0.0 / 100)
                     #     taxes = line[2]['tax_id'].compute_all(price, line[2].order_id.currency_id, quantity=line[2]['product_uom_qty'], product=line[2]['product_id'], partner=line['partner_shipping_id'])
