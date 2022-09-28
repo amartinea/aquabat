@@ -21,7 +21,9 @@ class SaleOrder(models.Model):
             for line in vals['order_line']:
                 if line[0] == 0:
                     _logger.warning('tax_id')
-                    _logger.warning(line[2]['tax_id'][0][2])
+                    _logger.warning(line[2]['price_unit'])
+                    _logger.warning(line[2]['discount'])
+                    _logger.warning(1 - (line[2]['discount'] or 0.0 / 100))
                     amount_change += line[2]['price_unit'] * (1 - (line[2]['discount'] or 0.0 / 100))
                     # if not 'discount' in line[2] or line[2]['discount'] == 0:
                     #     price = line[2]['price_unit'] * (1 - line[2]['discount'] or 0.0 / 100)
