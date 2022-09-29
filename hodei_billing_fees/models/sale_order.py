@@ -93,10 +93,9 @@ class SaleOrder(models.Model):
                 elif line[0] == 2:
                     amount_change -= self.env['sale.order.line'].search([('id', '=', line[1])])['price_subtotal']
                 elif line[0] == 1 and 'product_uom_qty' in line[2]:
-                    amount_change -= (line[2]['product_uom_qty'] - self.env['sale.order.line'].browse(line[1])[
-                                         'product_uom_qty']) * (
-                                                 line[2]['price_unit'] * (1 - (line[2]['discount'] or 0.0) / 100))
-
+                    order_line = self.env['sale.order.line'].browse(line[1])
+                    amount_change -= (line[2]['product_uom_qty'] - order_line['product_uom_qty']) * (
+                                order_line['price_unit'] * (1 - (order_line['discount'] or 0.0) / 100))
         if ('apply_fee' not in values and not self.apply_fee) or ('apply_fee' in values and not values['apply_fee']):
             fee_price = 0
         else:
