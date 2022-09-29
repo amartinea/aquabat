@@ -99,7 +99,7 @@ class SaleOrder(models.Model):
                     _logger.warning(order_line['product_uom_qty'])
                     _logger.warning(order_line['price_unit'])
                     _logger.warning(order_line['discount'])
-                    amount_change -= (line[2]['product_uom_qty'] - order_line['product_uom_qty']) * (
+                    amount_change = (line[2]['product_uom_qty'] - order_line['product_uom_qty']) * (
                                 order_line['price_unit'] * (1 - (order_line['discount'] or 0.0) / 100))
         if ('apply_fee' not in values and not self.apply_fee) or ('apply_fee' in values and not values['apply_fee']):
             fee_price = 0
