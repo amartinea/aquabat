@@ -41,3 +41,34 @@ class SaleOrderLine(models.Model):
                 else:
                     line.invoice_status = 'no'
  
+    def _compute_margin(self, order_id, product_id, product_uom_id):
+        frm_cur = self.env.user.company_id.currency_id
+        to_cur = order_id.pricelist_id.currency_id
+        if product_id.fee_product:
+            fee_line = self.env['sale.order.line'].search([('order_id', '=', order_id.id), ('product_id', '=', product_id.id)])
+            purchase_price = fee_line.price_unit
+        else:
+            purchase_price = product_id.cost_price
+        if product_uom_id != product_id.uom_id:
+            purchase_price = product_id.uom_id._compute_price(purchase_price, product_uom_id)
+        price = frm_cur._convert(
+            purchase_price, to_cur, order_id.company_id or self.env.user.company_id,
+            order_id.date_order or fields.Date.today(), round=False)
+        return price
+
+    @api.model
+    def _get_purchase_price(self, pricelist, product, product_uom, date):
+        frm_cur = self.env.user.company_id.currency_id
+        to_cur = pricelist.currency_id
+        if product.fee_product:
+            fee_line = self.env['sale.order.line'].search([('order_id', '=', self.order_id.id), ('product_id', '=', product.id)])
+            purchase_price = fee_line.price_unit
+        else:
+            purchase_price = product.cost_price
+        if product_uom != product.uom_id:
+            purchase_price = product.uom_id._compute_price(purchase_price, product_uom)
+        price = frm_cur._convert(
+            purchase_price, to_cur,
+            self.order_id.company_id or self.env.user.company_id,
+            date or fields.Date.today(), round=False)
+        return {'purchase_price': price}
