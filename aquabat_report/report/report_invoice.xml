@@ -209,8 +209,8 @@
                 <div class="row" style="margin-left:5px;">
                     <div class="col-12" style="font-size: 12px;">
                       <div class="row" style="margin-left:2px;">
-                        <div t-if="o.partner_bank_id.journal_id.bank_acc_number">IBAN:  <span t-field="o.partner_bank_id.journal_id.bank_acc_number"/><br/></div>
-                        <div t-if="o.partner_bank_id.journal_id.bank_id.bic">BIC: <span t-field="o.partner_bank_id.journal_id.bank_id.bic"/></div>
+                        <div t-if="o.partner_bank_id.acc_number">IBAN:  <span t-field="o.partner_bank_id.acc_number"/><br/></div>
+                        <div t-if="o.partner_bank_id.bank_id.bic">BIC: <span t-field="o.partner_bank_id.bank_id.bic"/></div>
                         
                       </div>
                       <div class="row">
