@@ -123,7 +123,8 @@ class SaleOrder(models.Model):
                 [('order_id', '=', self.id), ('product_id', '=', product_fee.id)])
             if billing_line:
                 sale_line_data = {
-                    'price_unit': fee_price
+                    'price_unit': fee_price,
+                    'purchase_price': fee_price,
                 }
                 if values.get('order_line'):
                     values['order_line'] += [(1, billing_line.id, sale_line_data)]
@@ -166,12 +167,13 @@ class SaleOrder(models.Model):
                     if values['order_line'][x][1] == billing_line.id:
                         if values['order_line'][x][2]:
                             values['order_line'][x][2]['price_unit'] = fee_price
+                            values['order_line'][x][2]['purchase_price'] = fee_price
                         else:
                             line_to_delete = x
                 if line_to_delete:
                     del values['order_line'][line_to_delete]
             else:
-                values['order_line'] = [1, billing_line.id, {'price_unit': fee_price}]
+                values['order_line'] = [1, billing_line.id, {'price_unit': fee_price, 'purchase_price': fee_price}]
             if no_order_line == 1:
                 lines = self.env['sale.order.line'].search(
                     [('order_id', '=', self.id), ('product_id', '!=', product_fee.id)])
