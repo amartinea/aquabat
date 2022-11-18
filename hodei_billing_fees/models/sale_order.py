@@ -60,6 +60,7 @@ class SaleOrder(models.Model):
                     'price_unit': fee_price,
                     'price_subtotal': fee_price,
                     'price_total': fee_price,
+                    'purchase_price': fee_price,
                     'product_uom_qty': 1,
                     'qty_delivered': 1,
                     'discount': 0,
@@ -75,6 +76,7 @@ class SaleOrder(models.Model):
                 else:
                     vals['order_line'] = [(0, 0, sale_line_data)]
         vals['fee_price'] = fee_price
+        vals['purchase_price'] = fee_price
         return super(SaleOrder, self).create(vals)
 
     @api.multi
@@ -121,7 +123,8 @@ class SaleOrder(models.Model):
                 [('order_id', '=', self.id), ('product_id', '=', product_fee.id)])
             if billing_line:
                 sale_line_data = {
-                    'price_unit': fee_price
+                    'price_unit': fee_price,
+                    'purchase_price': fee_price,
                 }
                 if values.get('order_line'):
                     values['order_line'] += [(1, billing_line.id, sale_line_data)]
@@ -140,6 +143,7 @@ class SaleOrder(models.Model):
                     'price_unit': fee_price,
                     'price_subtotal': fee_price,
                     'price_total': fee_price,
+                    'purchase_price': fee_price,
                     'product_uom_qty': 1,
                     'qty_delivered': 1,
                     'discount': 0,
@@ -156,18 +160,20 @@ class SaleOrder(models.Model):
                     else:
                         values['order_line'] = [(0, 0, sale_line_data)]
             values['fee_price'] = fee_price
+            values['purchase_price'] = fee_price
             if 'order_line' in values:
                 line_to_delete = False
                 for x in range(len(values['order_line'])):
                     if values['order_line'][x][1] == billing_line.id:
                         if values['order_line'][x][2]:
                             values['order_line'][x][2]['price_unit'] = fee_price
+                            values['order_line'][x][2]['purchase_price'] = fee_price
                         else:
                             line_to_delete = x
                 if line_to_delete:
                     del values['order_line'][line_to_delete]
             else:
-                values['order_line'] = [1, billing_line.id, {'price_unit': fee_price}]
+                values['order_line'] = [1, billing_line.id, {'price_unit': fee_price, 'purchase_price': fee_price}]
             if no_order_line == 1:
                 lines = self.env['sale.order.line'].search(
                     [('order_id', '=', self.id), ('product_id', '!=', product_fee.id)])

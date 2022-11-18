@@ -16,7 +16,6 @@
     'external_dependencies': {
     },
     'data': [
-        'report/report_sale.xml',
         'report/report_picking.xml',
         'report/report_invoice.xml',
         'views/account_invoice_views.xml',

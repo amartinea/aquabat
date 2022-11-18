@@ -40,4 +40,3 @@ class SaleOrderLine(models.Model):
                     line.invoice_status = 'invoiced'
                 else:
                     line.invoice_status = 'no'
- 
