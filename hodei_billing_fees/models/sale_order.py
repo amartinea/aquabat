@@ -60,6 +60,7 @@ class SaleOrder(models.Model):
                     'price_unit': fee_price,
                     'price_subtotal': fee_price,
                     'price_total': fee_price,
+                    'purchase_price': fee_price,
                     'product_uom_qty': 1,
                     'qty_delivered': 1,
                     'discount': 0,
@@ -75,6 +76,7 @@ class SaleOrder(models.Model):
                 else:
                     vals['order_line'] = [(0, 0, sale_line_data)]
         vals['fee_price'] = fee_price
+        vals['purchase_price'] = fee_price
         return super(SaleOrder, self).create(vals)
 
     @api.multi
@@ -140,6 +142,7 @@ class SaleOrder(models.Model):
                     'price_unit': fee_price,
                     'price_subtotal': fee_price,
                     'price_total': fee_price,
+                    'purchase_price': fee_price,
                     'product_uom_qty': 1,
                     'qty_delivered': 1,
                     'discount': 0,
@@ -156,6 +159,7 @@ class SaleOrder(models.Model):
                     else:
                         values['order_line'] = [(0, 0, sale_line_data)]
             values['fee_price'] = fee_price
+            values['purchase_price'] = fee_price
             if 'order_line' in values:
                 line_to_delete = False
                 for x in range(len(values['order_line'])):
