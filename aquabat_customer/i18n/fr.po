@@ -37,12 +37,6 @@ msgid "Invoice"
 msgstr "Facture"
 
 #. module: aquabat_customer
-#: model_terms:ir.ui.view,arch_db:aquabat_customer.report_saleorder_document_customer_ref
-#: model_terms:ir.ui.view,arch_db:aquabat_customer.report_invoice_customer_ref
-msgid "Customer Name :"
-msgstr "Nom du client :"
-
-#. module: aquabat_customer
 #: model:ir.model,name:aquabat_customer.model_sale_order
 msgid "Sale Order"
 msgstr "Bon de commande"
