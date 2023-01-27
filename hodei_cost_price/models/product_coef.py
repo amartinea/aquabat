@@ -106,7 +106,8 @@ class ProductCoeflistItem(models.Model):
             products = self.env['product.product'].search([('categ_id', '=', self.categ_id.id)])
         if 'applied_on' in self and self.applied_on == '3_global':
             products = self.env['product.product'].search([])
-        products._compute_cost_price()
+        for product in products:
+            product.product_tmpl_id._compute_cost_price()
         return product_coef_list
 
     def unlink(self):
