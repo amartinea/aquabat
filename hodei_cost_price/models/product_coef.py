@@ -111,7 +111,9 @@ class ProductCoeflistItem(models.Model):
         return product_coef_list
 
     def unlink(self):
-        products = self.env['product.product'].search([])._compute_cost_price()
+        products = self.env['product.product'].search([])
+        for product in products:
+            product.product_tmpl_id._compute_cost_price()
         return super(ProductCoeflistItem, self).unlink()
 
     def create(self, vals):
@@ -122,5 +124,6 @@ class ProductCoeflistItem(models.Model):
             products = self.env['product.product'].search([('categ_id', '=', vals[0]['categ_id'])])
         if 'applied_on' in vals[0] and vals[0]['applied_on'] == '3_global':
             products = self.env['product.product'].search([])
-        products._compute_cost_price()
+        for product in products:
+            product.product_tmpl_id._compute_cost_price()
         return product_coef_list
